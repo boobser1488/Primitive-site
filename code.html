@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Структура кода — Primitive</title>
-<meta name="description" content="Как устроен код Primitive: четыре крейта, границы слоёв, сервер как источник истины, освещение, мешинг в фоновых потоках.">
+<meta name="description" content="Как устроен код Primitive: четыре крейта, кто источник истины, жёсткие пределы рендера и как здесь пишут код и тесты.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
@@ -31,203 +31,173 @@
 <div class="wrap">
 
   <h1>СТРУКТУРА КОДА</h1>
-  <p class="lead">Четыре крейта в одном рабочем пространстве, одно правило на все границы
-  и объяснение рядом с каждой из них.</p>
+  <p class="lead">Четыре крейта, никакого движка под ними: рендер, мешер, свет, физика, звук
+  и генератор мира — всё в этом репозитории, и всё читается.</p>
 
   <div class="toc">
     <ul>
-      <li><a href="#rule">Правило границ</a></li>
-      <li><a href="#workspace">Рабочее пространство</a></li>
-      <li><a href="#shared">primitive_shared</a></li>
-      <li><a href="#server">primitive_server</a></li>
-      <li><a href="#client">primitive_client</a></li>
+      <li><a href="#crates">Крейты</a></li>
+      <li><a href="#where">Где что лежит</a></li>
       <li><a href="#authority">Кто источник истины</a></li>
-      <li><a href="#lighting">Освещение</a></li>
-      <li><a href="#meshing">Мешинг и потоки</a></li>
-      <li><a href="#tests">Что проверено</a></li>
+      <li><a href="#rules">Что знать до правки</a></li>
+      <li><a href="#limits">Жёсткие пределы</a></li>
+      <li><a href="#style">Как здесь пишут</a></li>
+      <li><a href="#tests">Проверки</a></li>
     </ul>
   </div>
 
-  <h2 id="rule">Правило границ</h2>
-
-  <div class="note">
-    <p><strong>Движок не знает про игрока, интерфейс ничего не решает, а логика клиента
-    ни на что не влияет — истина у сервера, а общие правила лежат в
-    <code>primitive_shared</code>.</strong></p>
-  </div>
-
-  <p>Это одно предложение объясняет, почему файлы лежат именно так. Границы слоёв описаны
-  не в общей документации, а в <code>mod.rs</code> каждого каталога: что в него входит,
-  чего в нём быть не должно, и почему. Комментарий рядом с границей переживает переезд
-  файла; отдельный документ про архитектуру — нет.</p>
-
-  <h2 id="workspace">Рабочее пространство</h2>
+  <h2 id="crates">Крейты</h2>
 
   <div class="tablewrap">
   <table>
     <tr><th>Крейт</th><th>Что в нём</th><th>Размер</th></tr>
-    <tr><td>primitive_shared</td><td>правила, о которых обе стороны обязаны договориться</td><td>21 файл, ~30 000 строк</td></tr>
-    <tr><td>primitive_server</td><td>авторитативный сервер: сеть и логика</td><td>30 файлов, ~37 000 строк</td></tr>
-    <tr><td>primitive_client</td><td>клиент: звук, движок, сеть, интерфейс, своя логика</td><td>63 файла, ~86 000 строк</td></tr>
-    <tr><td>primitive_modapi</td><td>контракт для нативных модов через C ABI</td><td>2 файла, ~2 700 строк</td></tr>
+    <tr><td>primitive_shared</td><td>правила: блоки, крафт, генератор мира, свет, инвентарь, звери, тело, снаряжение. Без ввода-вывода и графики. От него зависят и клиент, и сервер — поэтому они не расходятся</td><td>241 файл, ~155 тыс. строк</td></tr>
+    <tr><td>primitive_server</td><td>власть: владеет миром, проверяет каждое действие игрока, отдаёт чанки. Работает и внутри клиента для одиночной игры, и отдельно — один и тот же код</td><td>154 файла, ~125 тыс. строк</td></tr>
+    <tr><td>primitive_client</td><td>окно, рендер, интерфейс, звук, предсказание. Говорит с сервером, даже когда сервер внутри него</td><td>385 файлов, ~306 тыс. строк</td></tr>
+    <tr><td>primitive_modapi</td><td>граница для нативных модов через C ABI</td><td>2 файла, ~2,7 тыс. строк</td></tr>
   </table>
   </div>
 
-  <p>Плюс сами моды — <code>mods/greeter</code>, <code>mods/flight</code>,
-  <code>mods/sandbox</code>, <code>mods/dypt</code> — они лежат <strong>внутри</strong>
-  рабочего пространства, а не рядом с ним. Причина в этом и есть: изменение мод-API,
-  ломающее мод, ломает <em>сборку</em>, а не чьи-то планы на выходные.
-  Подробнее — на странице <a href="modding">для разработчиков модов</a>.</p>
+  <p class="dim">Строки — всё в <code>.rs</code>, вместе с тестами и комментариями, по исходникам
+  на октябрь 2026 года; примерно треть из них — тесты.</p>
 
-  <h2 id="shared">primitive_shared — правила</h2>
+  <p>Моды лежат <strong>внутри</strong> рабочего пространства, а не рядом:
+  <code>greeter</code>, <code>flight</code>, <code>sandbox</code>, <code>dypt</code> (C ABI) и
+  <code>low_gravity</code>, <code>marble_block</code>, <code>ping_pong</code>, <code>sepia</code>
+  (Rust-моды). Изменение, ломающее мод, ломает <em>сборку</em>, а не чью-то игру. Подробнее —
+  на странице <a href="modding">для разработчиков модов</a>.</p>
 
-  <p>Всё, о чём клиент и сервер обязаны думать одинаково. Если правило живёт здесь,
-  разойтись двум сторонам негде.</p>
+  <h2 id="where">Где что лежит</h2>
 
-<pre><code>primitive_shared/src/
-├── blocks.rs      <span class="tok-comment"># ТАБЛИЦА БЛОКОВ: строка на блок, все его свойства подряд</span>
-├── types.rs       <span class="tok-comment"># идентификаторы, размеры чанка, поля ячейки, запросы к таблице</span>
-├── worldgen.rs    <span class="tok-comment"># рельеф, биомы, климат, пещеры, деревья, жилы, реки</span>
-├── lighting.rs    <span class="tok-comment"># инкрементальный свет в мировых координатах</span>
-├── protocol.rs    <span class="tok-comment"># рукопожатие, батчи, тик-снапшоты, версия протокола</span>
-├── inventory.rs   <span class="tok-comment"># слоты и стопки</span>
-├── crafting.rs    <span class="tok-comment"># таблица рецептов: меню и сервер читают одну и ту же</span>
-├── geometry.rs    <span class="tok-comment"># коллайдер игрока, коробки блоков, шаг</span>
-├── combat.rs      <span class="tok-comment"># что стоит удар и куда он дотягивается</span>
-├── fluid.rs       <span class="tok-comment"># вода как уровень: сколько в ячейке и куда оно пойдёт</span>
-├── load.rs        <span class="tok-comment"># чем обходится тяжёлый рюкзак</span>
-└── net.rs         <span class="tok-comment"># bincode с префиксом длины</span></code></pre>
+<pre><code>primitive_shared/src/     lib.rs переэкспортирует каждый модуль под старым именем
+  world/                  worldgen.rs (+ worldgen/) fluid.rs ground.rs weather.rs season.rs ...
+  voxel/                  types.rs blocks.rs packed.rs lighting.rs geometry.rs dig.rs
+  plants/ fire/           garden.rs wood.rs opuntia.rs ... / hearth.rs pit.rs wildfire.rs
+  craft/                  crafting.rs discovery.rs quality.rs minigame.rs tools.rs ...
+    crafting/             рецепты, по файлу на мастерскую: hands.rs heat.rs forge.rs ...
+  creatures/ survival/    animals.rs horse.rs fishing.rs ... / body.rs food.rs injury.rs ...
+  items/ fight/           inventory.rs equipment.rs ... / combat.rs archery.rs arms.rs hit.rs
+  building/ wire/         build.rs raft.rs rack.rs ... / protocol.rs net.rs secure.rs ...
+primitive_client/src/
+  engine/                 renderer.rs mesh.rs mesher.rs texture.rs *.wgsl
+  logic/                  physics.rs chunk_manager.rs entities.rs animal_model.rs
+  ui/                     widgets.rs menu.rs hud.rs inventory_screen.rs lang.rs
+  platform/               mod.rs winit_backend.rs android.rs touch.rs
+  audio/                  bank.rs recorded.rs music.rs mixer.rs soundscape.rs
+  scenario/               игра, сыгранная сценарием
+primitive_server/src/     lib.rs game/ logic/ net/
+assets/textures/          blocks.toml и картинки</code></pre>
 
-  <p><strong>Таблица блоков — это данные, а не код.</strong> Строка на блок, все свойства
-  подряд, имена совпадают с именами в <code>assets/textures/blocks.toml</code> и в
-  сохранениях. Поэтому имена блоков и рецептов остались английскими даже в русском
-  интерфейсе: перевести их значит перевести формат файла.</p>
-
-  <h2 id="server">primitive_server — решения</h2>
-
-<pre><code>primitive_server/src/
-├── lib.rs           <span class="tok-comment"># процесс: приём соединений, тик-луп, метрики, автосохранение</span>
-├── main.rs          <span class="tok-comment"># тонкий бинарник поверх lib.rs</span>
-├── settings.rs      <span class="tok-comment"># ~30 параметров + секция [anticheat]</span>
-├── net/             <span class="tok-comment"># СЕТЬ</span>
-│   ├── connection.rs   <span class="tok-comment"># рукопожатие, чтение, запись, подкачка чанков</span>
-│   └── players.rs      <span class="tok-comment"># реестр, очереди, индекс подписок на чанки</span>
-└── logic/           <span class="tok-comment"># ЛОГИКА: всё, о чём сервер решает сам</span>
-    ├── world.rs        <span class="tok-comment"># 32 шарда, LRU-кэш, оверлей правок, сохранение</span>
-    ├── survival.rs     <span class="tok-comment"># здоровье, падения, утопление, респавн</span>
-    ├── items.rs        <span class="tok-comment"># выпавшие стопки и их подбор</span>
-    ├── containers.rs   <span class="tok-comment"># содержимое сундуков и рюкзаков смерти</span>
-    ├── falling.rs      <span class="tok-comment"># падающие блоки как сущности</span>
-    ├── water.rs        <span class="tok-comment"># течение: вниз, потом вбок, и высыхание без источника</span>
-    ├── simulation.rs   <span class="tok-comment"># форма любой механики, следящей за ячейками</span>
-    ├── anticheat.rs    <span class="tok-comment"># скорость, полёт, телепорт, дальность, рейт-лимиты</span>
-    ├── commands.rs     <span class="tok-comment"># команды консоли и чата с уровнями прав</span>
-    ├── profiles.rs     <span class="tok-comment"># что у игрока было, когда он вышел</span>
-    └── plugins.rs      <span class="tok-comment"># хост плагинов на Rhai, за cargo-фичей `plugins`</span></code></pre>
-
-  <p>Деление на <code>net/</code> и <code>logic/</code> не косметическое:
-  в <code>net/</code> нет ни одного решения о мире, в <code>logic/</code> — ни одного
-  чтения из сокета. Мир нарезан на <strong>32 шарда</strong> с LRU-кэшем и оверлеем
-  правок сверху, поэтому два игрока в разных концах карты не ждут друг друга.</p>
-
-  <h2 id="client">primitive_client — рабочая копия</h2>
-
-<pre><code>primitive_client/src/
-├── main.rs          <span class="tok-comment"># цикл: ввод -> физика -> сеть -> меш -> рендер</span>
-├── audio/           <span class="tok-comment"># ЗВУК: всё, что говорит с колонкой</span>
-│   ├── synth.rs        <span class="tok-comment"># осцилляторы, фильтры, огибающие — примитивы DSP</span>
-│   ├── bank.rs         <span class="tok-comment"># рецепт на каждый звук + материал каждого блока</span>
-│   ├── music.rs        <span class="tok-comment"># композитор: пишет музыку, пока играет</span>
-│   ├── mixer.rs        <span class="tok-comment"># голоса, панорама, мастер-шина</span>
-│   └── soundscape.rs   <span class="tok-comment"># шаги, погода, выбор настроения</span>
-├── engine/          <span class="tok-comment"># ДВИЖОК: всё, что говорит с GPU</span>
-│   ├── renderer.rs     <span class="tok-comment"># проходы: сплошной, вырез, смешивание, актёры, UI</span>
-│   ├── arena.rs        <span class="tok-comment"># весь террейн в двух буферах: одна привязка на кадр</span>
-│   ├── item_model.rs   <span class="tok-comment"># 3D-модель предмета из его спрайта</span>
-│   ├── mesh.rs         <span class="tok-comment"># отсечение граней, AO, упакованная вершина, тинт листвы</span>
-│   ├── mesher.rs       <span class="tok-comment"># построение мешей и света в фоновых потоках</span>
-│   ├── texture.rs      <span class="tok-comment"># массив текстур блоков и глифов</span>
-│   └── *.wgsl          <span class="tok-comment"># шейдеры: террейн, актёры, небо, интерфейс, рука</span>
-├── net/             <span class="tok-comment"># сокет, фоновые чтение и запись, интерполяция игроков</span>
-├── ui/              <span class="tok-comment"># ИНТЕРФЕЙС: меню, HUD, чат, инвентарь, четыре языка</span>
-└── logic/           <span class="tok-comment"># ЛОГИКА клиента — рабочая копия, не истина</span></code></pre>
-
-  <p>Слово «рабочая копия» здесь техническое. Клиент считает физику у себя, иначе каждый
-  шаг стоил бы круга по сети; но всё, что он посчитал, сервер вправе отменить.
-  Поэтому в <code>logic/</code> клиента нет ни одного места, которое что-то окончательно
-  решает — там только предсказание и его коррекция.</p>
+  <p><code>mod.rs</code> каждой папки говорит, что решают её модули. Тесты модуля — в
+  <code>foo_tests.rs</code> рядом с <code>foo.rs</code>. Раскладка <code>primitive_shared</code>
+  по папкам появилась после 1.5.2; в выпуске он ещё плоский.</p>
 
   <h2 id="authority">Кто источник истины</h2>
 
-  <p>Одиночная игра не имеет отдельного пути в коде. Кнопка Play поднимает
-  <strong>настоящий сервер внутри процесса клиента</strong>, на <code>127.0.0.1</code>
-  и на порту, который выдаёт система.</p>
+  <div class="note">
+    <p><strong>Клиент никогда не решает.</strong> Он предсказывает, сервер решает, и несогласие —
+    это поправка, которую клиент применяет. Всё, что меняет правду о мире, живёт в
+    <code>primitive_server</code> или <code>primitive_shared</code>.</p>
+  </div>
 
-  <p>Альтернатива — офлайн-режим в клиенте — это второй генератор мира, вторая физика
-  и вторая симуляция песка, и они расходятся. Здесь реализация мира ровно одна,
-  а одиночная игра отличается от сетевой только тем, чей это процесс.</p>
+  <p>Одиночная игра не имеет отдельного пути в коде: она поднимает <strong>настоящий сервер
+  внутри процесса клиента</strong>. Офлайн-режим в клиенте значил бы второй генератор мира,
+  вторую физику и вторую симуляцию воды, и они бы разошлись.</p>
 
   <div class="tablewrap">
   <table>
     <tr><th>Локальный мир</th><th>Почему</th></tr>
-    <tr><td>порт 0 на loopback</td><td>мир недоступен из сети, две копии игры работают рядом</td></tr>
-    <tr><td>без плагинов</td><td>не «отключены», а не собраны: движка скриптов в бинарнике игры нет вовсе</td></tr>
+    <tr><td>loopback, порт от системы</td><td>мир недоступен из сети, две копии игры работают рядом</td></tr>
+    <tr><td>без плагинов</td><td>не «отключены», а не собраны: движка скриптов в бинарнике игры нет</td></tr>
     <tr><td>без античита</td><td>один процесс не может уличить сам себя во лжи</td></tr>
-    <tr><td>моды загружаются</td><td>с 1.5: единственный игрок своего мира — оператор</td></tr>
+    <tr><td>моды загружаются</td><td>единственный игрок своего мира — оператор</td></tr>
   </table>
   </div>
 
-  <h2 id="lighting">Освещение</h2>
-
-  <p>Свет живёт в <strong>мировых координатах</strong> и сохраняется между построениями
-  мешей: считается один раз при загрузке чанка, дальше обновляется инкрементально.
-  Один байт на ячейку — небесный свет в младшем полубайте, блочный в старшем.</p>
-
-  <p>Прошлую версию пришлось переписать, и это записано в README как журнал, а не как
-  итог: старый вариант освещал по одному чанку в объём «чанк плюс рамка в один блок»,
-  пересобирая его при каждом ремеше — одновременно неверно и медленно. Две ошибки
-  в новой версии нашёл property-тест, третью — расхождение между тем, как считали
-  колонка и заливка.</p>
-
-  <h2 id="meshing">Мешинг и потоки</h2>
-
-  <p>Построение мешей уехало в фоновые потоки, и это видно по числам в F3: время кадра,
-  число вызовов отрисовки, сколько чанков отсечено, сколько мешей построено за секунду.</p>
+  <h2 id="rules">Что знать до правки</h2>
 
   <ul>
-    <li><strong>Весь террейн в двух буферах</strong> — одна привязка на кадр вместо
-    привязки на чанк</li>
-    <li><strong>Мешер шагает, а не считает индекс</strong> — соседняя ячейка находится
-    прибавлением, а не умножением</li>
-    <li><strong>Покадровая геометрия в постоянных буферах</strong> — то, что меняется
-    каждый кадр, не выделяется каждый кадр</li>
-    <li><strong>Интерес по сетке вместо перебора</strong> — сервер не спрашивает
-    у каждого игрока про каждую сущность</li>
+    <li><strong>Слой платформы.</strong> Игра говорит на <code>platform::{Event, Key, Size, Window}</code>;
+    winit упоминается только в <code>platform::winit_backend</code>. Android — тот же бэкенд
+    с пальцами вместо мыши и поверхностью, которая исчезает вместе с активностью.</li>
+    <li><strong>Кадр сначала ждёт.</strong> <code>GraphicsState::acquire()</code> ждёт картинку
+    свопчейна в <em>начале</em> кадра, до чтения мыши. Ожидание в конце значило, что всё
+    нарисованное решено кадром раньше, чем показано.</li>
+    <li><strong>Потоковая загрузка на пайке.</strong> Приём чанков, отправка в мешер и загрузка
+    мешей получают свою долю кадра (<code>streaming_budget</code>), ближние к игроку — первыми.
+    Без пайка одна фаза кладёт сорок чанков в один кадр, и игра запинается.</li>
+    <li><strong>Интерфейс в своём пространстве</strong>: y от −1 до 1, x от −aspect до aspect.
+    <strong>Всё, что ловит нажатия, — точная обратная функция того, что рисует</strong>, и на это
+    есть тесты: иначе интерфейс выглядит верно и перестаёт отвечать там, где нарисован.</li>
+    <li><strong>Свет — в мировых координатах</strong>, один байт на клетку (небо и блоки по
+    полубайту), считается при загрузке чанка и дальше обновляется только там, где что-то
+    изменилось. Смена дня и ночи не стоит перестройки мешей.</li>
   </ul>
 
-  <h2 id="tests">Что проверено</h2>
+  <h2 id="limits">Жёсткие пределы</h2>
 
-  <p>Всё, что можно запустить руками, чтобы убедиться, что дерево живое:</p>
+  <div class="grid">
+    <div class="panel">
+      <h3>2048 слоёв текстур</h3>
+      <p>Номер слоя занимает в вершине одиннадцать бит, разложенных по трём местам; вершина
+      по-прежнему 20 байт. Когда-то потолок был 256, потом 512 — атлас дошёл до обоих.
+      Тест валит сборку, когда атлас полон, и объясняет, что делать.</p>
+    </div>
+    <div class="panel">
+      <h3>256 слоёв на массив в GLES</h3>
+      <p>Атлас уже больше. Где устройство даёт меньше, <code>texture::AtlasSplit</code> раскладывает
+      его на массивы до восьми штук, а <code>specialise</code> переписывает выборки в шейдерах.
+      Всё, что строит конвейер над атласом, обязано идти через них — иначе на телефоне
+      рисуется не та картинка.</p>
+    </div>
+    <div class="panel">
+      <h3>ASCII в путях APK</h3>
+      <p><code>AAssetManager_open</code> принимает C-строку, поэтому скрипт упаковки громко
+      пропускает файлы с другими символами в имени.</p>
+    </div>
+    <div class="panel">
+      <h3>Координаты чанков — i32</h3>
+      <p>Начало координат рендера сдвигается целыми блоками, поэтому ни одна координата
+      на видеокарте не бывает семизначной.</p>
+    </div>
+  </div>
 
-<pre><code><span class="tok-cmd">cargo</span> test <span class="tok-flag">--workspace</span>
-<span class="tok-cmd">cargo</span> run <span class="tok-flag">-p</span> primitive_server <span class="tok-flag">--example</span> verify_broadcast    <span class="tok-comment"># сервер должен быть запущен</span>
-<span class="tok-cmd">cargo</span> run <span class="tok-flag">-p</span> primitive_client <span class="tok-flag">--example</span> gen_placeholder_textures
-<span class="tok-cmd">cargo</span> build <span class="tok-flag">-p</span> flight  <span class="tok-op">&amp;&amp;</span> <span class="tok-cmd">cargo</span> test <span class="tok-flag">-p</span> primitive_server <span class="tok-flag">--test</span> flight
-<span class="tok-cmd">cargo</span> build <span class="tok-flag">-p</span> sandbox <span class="tok-op">&amp;&amp;</span> <span class="tok-cmd">cargo</span> test <span class="tok-flag">-p</span> primitive_server <span class="tok-flag">--test</span> sandbox
-<span class="tok-cmd">cargo</span> run <span class="tok-flag">-p</span> primitive_server <span class="tok-flag">--example</span> verify_flight</code></pre>
+  <h2 id="style">Как здесь пишут</h2>
 
-  <p>Два последних — не формальность. Мод собирается настоящим компилятором и грузится
-  через настоящий C ABI, а <code>verify_flight</code> проходит ещё и через настоящий
-  сокет: граница, проверенная только с одной стороны, — это граница, про которую
-  ничего не известно.</p>
+  <p><strong>Каждое неочевидное решение несёт комментарий: почему — и какую поломку оно
+  предотвращает.</strong> Не что делает код — это видно из кода. Комментарий нужен, чтобы
+  следующий человек не «упростил» его обратно в баг. Строка «раньше было X, и это ломало Y» —
+  самая ценная в файле. Отвергнутый вариант записывается рядом с выбранным.</p>
 
-  <h2>Дальше</h2>
+  <p><strong>Тесты названы предложениями</strong>, которые говорят, что сломалось, когда тест
+  покраснел:</p>
+
+<pre class="lang-rust"><code><span class="tok-cmd">fn</span> a_sheep_cannot_outrun_a_walking_player()
+<span class="tok-cmd">fn</span> a_bigger_interface_is_still_clicked_where_it_is_drawn()</code></pre>
+
+  <p><strong>Ни одной правки производительности без замера до и после</strong> в одних и тех же
+  условиях. Игра меряет себя сама: переменные окружения открывают мир, гоняют бенчмарк,
+  снимают кадр и включают по одному выключателю на гипотезу — потому что телефон нельзя
+  водить руками, и всё, что надо проверить на нём, должно быть достижимо без меню.</p>
+
+  <h2 id="tests">Проверки</h2>
+
+<pre><code><span class="tok-cmd">cargo</span> clippy <span class="tok-flag">--workspace</span> <span class="tok-flag">--all-targets</span>      <span class="tok-comment"># должно молчать</span>
+<span class="tok-cmd">cargo</span> test <span class="tok-flag">--workspace</span>
+<span class="tok-cmd">cargo</span> build <span class="tok-flag">--release</span> <span class="tok-flag">-p</span> primitive_client
+<span class="tok-cmd">cargo</span> test <span class="tok-flag">-p</span> primitive_client <span class="tok-flag">--lib</span> scenario::</code></pre>
+
+  <p><strong>Каждый выпуск проходит сценарии.</strong> Сценарий поднимает настоящий сервер
+  внутри процесса с включённым античитом, подключает настоящий клиент без окна и играет то,
+  что делает игрок: поднимается по лестнице, выплывает из пруда, работает на наковальне.
+  Они появились потому, что все модульные тесты проходили, а игрок нашёл лестницу, которая
+  поднимала на целый блок. Время сценария — его счётчик кадров, и такты сервера идут от него,
+  а не от часов на стене.</p>
 
   <p>Полный журнал решений — в
-  <a href="https://github.com/boobser1488/Primitive/blob/master/README.md">README.md</a>:
-  там про каждую заметную вещь написано, какой вариант был первым, почему он не подошёл
-  и что стоило переписать. Как расширять игру, не трогая её код, —
-  на странице <a href="modding">для разработчиков модов</a>.</p>
+  <a href="https://github.com/boobser1488/Primitive/blob/master/README.md">README.md</a>,
+  история с механизмами — в
+  <a href="https://github.com/boobser1488/Primitive/blob/master/CHANGELOG.md">CHANGELOG.md</a>.</p>
 
 </div>
 

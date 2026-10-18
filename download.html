@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Скачать — Primitive</title>
-<meta name="description" content="Скачать Primitive: сборки под Windows и Linux, сборка из исходников, Android APK.">
+<meta name="description" content="Скачать Primitive 1.5.2: сборки под Windows, Linux и Android, сборка из исходников, что нового.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
@@ -31,14 +31,27 @@
 <div class="wrap">
 
   <h1>СКАЧАТЬ</h1>
-  <p class="lead">Текущая версия — <strong>1.5.0</strong>. Все сборки лежат на странице релизов GitHub.</p>
+  <p class="lead">Текущая версия — <strong>1.5.2</strong> от 30 сентября 2026 года.
+  Сборки лежат на странице релизов GitHub и на itch.io.</p>
 
   <p>
     <a class="btn" href="https://github.com/boobser1488/Primitive/releases/latest">Последний релиз</a>
     <a class="btn ghost" href="https://github.com/boobser1488/Primitive/releases">Все релизы</a>
+    <a class="btn ghost" href="https://primitivesurvival.itch.io/primitive">itch.io</a>
   </p>
 
-  <h2>Готовые сборки</h2>
+  <div class="toc">
+    <ul>
+      <li><a href="#builds">Готовые сборки</a></li>
+      <li><a href="#source">Сборка из исходников</a></li>
+      <li><a href="#android">Android</a></li>
+      <li><a href="#new">Что нового</a></li>
+      <li><a href="#soon">Скоро</a></li>
+      <li><a href="#requirements">Системные требования</a></li>
+    </ul>
+  </div>
+
+  <h2 id="builds">Готовые сборки</h2>
 
   <div class="tablewrap">
   <table>
@@ -53,31 +66,44 @@
       <td><code>primitive_linux64.tar.gz</code></td>
       <td>Распаковать, запустить <code>./primitive_client</code></td>
     </tr>
+    <tr>
+      <td>Android arm64</td>
+      <td><code>primitive-1.5.2-android-arm64.apk</code></td>
+      <td>Установить; ставится поверх прошлой версии без потери миров</td>
+    </tr>
   </table>
   </div>
 
-  <p>Обе платформы собираются нативно, а не кросс-компиляцией: клиент линкует настоящий графический
-  стек, и архивы делаются из дерева, которое <strong>прошло свои тесты</strong>, а не просто скомпилировалось.</p>
+  <p>Имена архивов не содержат версию намеренно: на них ссылаются, и ссылка не должна ломаться
+  с каждым выпуском. Версия написана в меню самой игры.</p>
+
+  <p>Windows и Linux собираются нативно, а не кросс-компиляцией: клиент линкует настоящий
+  графический стек, и архивы делаются из дерева, которое <strong>прошло свои тесты</strong>,
+  а не просто скомпилировалось.</p>
 
   <h3>Что внутри архива</h3>
 
   <div class="tablewrap">
   <table>
-    <tr><td><code>primitive_client</code></td><td>игра</td></tr>
+    <tr><td><code>primitive_client</code></td><td>игра; текстуры, модели и звуки встроены в неё</td></tr>
     <tr><td><code>primitive_server</code></td><td>выделенный сервер для сетевой игры</td></tr>
-    <tr><td><code>assets/</code></td><td>текстуры — <em>не обязательны</em>, встроены в бинарник</td></tr>
-    <tr><td><code>plugins/</code></td><td>примеры скриптовых плагинов</td></tr>
-    <tr><td><code>README.md</code>, <code>GUIDE.md</code>, <code>CHANGELOG.md</code></td><td>документация</td></tr>
+    <tr><td><code>plugins/</code></td><td>примеры скриптовых плагинов для сервера</td></tr>
+    <tr><td><code>GUIDE.md</code></td><td>инструкция игрока</td></tr>
+    <tr><td><code>LICENSE</code>, <code>LICENSE-APACHE</code>, <code>LICENSE-ASSETS</code>, <code>NOTICE</code></td><td>лицензии</td></tr>
   </table>
   </div>
 
-  <p><strong>Файлов настроек в архиве нет намеренно.</strong> Оба бинарника пишут свои при первом
+  <p><strong>Папки <code>assets</code> в архиве нет</strong>: всё уже внутри исполняемого файла.
+  Свои текстуры и звуки кладутся в папку <code>assets</code> рядом с игрой — только то, что
+  меняете (<a href="guide#files">как</a>).</p>
+
+  <p><strong>Файлов настроек в архиве тоже нет.</strong> Оба бинарника пишут свои при первом
   запуске — со всеми значениями по умолчанию. Конфиг с машины разработчика — это как релиз
   навсегда указывает на <code>127.0.0.1</code>.</p>
 
-  <h2>Сборка из исходников</h2>
+  <h2 id="source">Сборка из исходников</h2>
 
-  <p>Нужен <a href="https://rustup.rs">Rust</a> (стабильный). Больше ничего.</p>
+  <p>Нужен <a href="https://rustup.rs">Rust</a> (стабильный).</p>
 
 <pre><code><span class="tok-cmd">git</span> clone https://github.com/boobser1488/Primitive.git
 <span class="tok-cmd">cd</span> Primitive
@@ -90,66 +116,117 @@
 
 <pre><code><span class="tok-cmd">cargo</span> run <span class="tok-flag">--release</span> <span class="tok-flag">-p</span> primitive_server</code></pre>
 
-  <p>На Linux для линковки клиента нужны заголовки X11:</p>
+  <p>На Linux для сборки нужны заголовки X11 и ALSA:</p>
 
-<pre><code><span class="tok-cmd">sudo</span> apt-get install <span class="tok-flag">-y</span> libx11-dev</code></pre>
+<pre><code><span class="tok-cmd">sudo</span> apt-get install <span class="tok-flag">-y</span> libx11-dev libasound2-dev pkg-config</code></pre>
 
   <h3>Собрать архив, как это делает релиз</h3>
 
 <pre><code><span class="tok-cmd">pwsh</span> <span class="tok-flag">-File</span> package.ps1 <span class="tok-flag">-Zip</span>   <span class="tok-comment"># Windows -> dist\primitive_win64.zip</span>
 <span class="tok-cmd">bash</span> package.sh <span class="tok-flag">--tar</span>         <span class="tok-comment"># Linux   -> dist/primitive_linux64.tar.gz</span></code></pre>
 
-  <h2>Android</h2>
+  <h2 id="android">Android</h2>
 
-  <p>APK под arm64 собирается скриптом <code>package-android.sh</code> — без Gradle, пятью командами
-  из Android SDK: <code>aapt2 link</code>, <code>d8</code>, zip, <code>zipalign</code>, <code>apksigner</code>.</p>
+  <p>APK под arm64 собирается скриптом <code>package-android.sh</code> — без Gradle, инструментами
+  из Android SDK и JDK: <code>aapt2</code>, <code>javac</code>, <code>d8</code>, <code>jar</code>,
+  <code>zipalign</code>, <code>apksigner</code>. Игра — нативная библиотека, которую загружает
+  <code>GameActivity</code>.</p>
 
-<pre><code><span class="tok-cmd">./package-android.sh</span>   <span class="tok-comment"># -> dist/primitive-&lt;версия&gt;-android-arm64.apk</span></code></pre>
+<pre><code><span class="tok-cmd">./package-android.sh</span>                <span class="tok-comment"># -> dist/primitive-&lt;версия&gt;-android-arm64.apk</span>
+<span class="tok-cmd">./package-android.sh</span> <span class="tok-flag">--debuggable</span>   <span class="tok-comment"># оптимизированная, но с adb run-as</span></code></pre>
 
-  <p><strong>Это не релизный артефакт.</strong> APK подписан отладочным ключом — ключом, который есть
-  у всех, — так что Play Store его не примет. Установить можно через <code>adb install</code> или
-  тапом по файлу на устройстве, где разрешены неизвестные источники. Подпись для настоящего релиза
-  требует настоящего хранилища ключей, а оно принадлежит тому, кто игру выпускает.</p>
+  <p>Нужны Android 7.0 (API 24) и OpenGL ES 3.0. APK подписан отладочным ключом, поэтому
+  Play Store его не примет; ставится через <code>adb install</code> или тапом по файлу там,
+  где разрешены неизвестные источники.</p>
 
-  <h2>Проверки</h2>
+  <h2 id="new">Что нового</h2>
 
-  <p>Всё, что можно запустить, чтобы убедиться, что сборка живая:</p>
-
-<pre><code><span class="tok-cmd">cargo</span> test <span class="tok-flag">--workspace</span>
-<span class="tok-cmd">cargo</span> run <span class="tok-flag">-p</span> primitive_server <span class="tok-flag">--example</span> verify_broadcast    <span class="tok-comment"># сервер должен быть запущен</span>
-<span class="tok-cmd">cargo</span> run <span class="tok-flag">-p</span> primitive_client <span class="tok-flag">--example</span> gen_placeholder_textures
-<span class="tok-cmd">cargo</span> run <span class="tok-flag">--release</span> <span class="tok-flag">-p</span> primitive_client <span class="tok-flag">--</span> <span class="tok-flag">--export-sounds</span> sounds
-<span class="tok-cmd">cargo</span> build <span class="tok-flag">-p</span> flight  <span class="tok-op">&amp;&amp;</span> <span class="tok-cmd">cargo</span> test <span class="tok-flag">-p</span> primitive_server <span class="tok-flag">--test</span> flight
-<span class="tok-cmd">cargo</span> build <span class="tok-flag">-p</span> sandbox <span class="tok-op">&amp;&amp;</span> <span class="tok-cmd">cargo</span> test <span class="tok-flag">-p</span> primitive_server <span class="tok-flag">--test</span> sandbox
-<span class="tok-cmd">cargo</span> run <span class="tok-flag">-p</span> primitive_server <span class="tok-flag">--example</span> verify_flight</code></pre>
-
-  <h2>Что нового в 1.5.0</h2>
-
-  <p>Мир перестал быть местом, где можно стоять вечно. Появился голод — и всё остальное в этом
-  выпуске существует потому, что он появился: еда, которую надо где-то брать; животные, за которыми
-  надо ходить; огонь, который делает мясо втрое сытнее; погода, которая этот огонь гасит;
-  и металл, ради которого огонь оказалось выгодно держать зажжённым.</p>
+  <h3>1.5.2 — 30 сентября 2026</h3>
 
   <ul>
-    <li><strong>Голод</strong> — тратит не время, а работа: удары, бег, прыжки</li>
-    <li><strong>Что растёт</strong> — ягоды, поле, семена и то, что из них едят</li>
-    <li><strong>Костёр</strong> — вместо печи: экран, а не строчка в меню</li>
-    <li><strong>Металл</strong> — девять инструментов, из которых наконец что-то делают</li>
-    <li><strong>Животные</strong> — приходят группами, обходят стены, по-разному отвечают на удар</li>
-    <li><strong>Погода</strong> — ясно, дождь, гроза; дождь гасит огонь</li>
+    <li><strong>Луг стал лугом.</strong> На открытом дёрне — низкая трава, которую рисует только
+    видеокарта: её не сорвать и не задеть. Густоту выбирает строка ГУСТОТА ТРАВЫ, а строка
+    ВЕТЕР В ТРАВЕ качает траву, цветы и листву ветром мира.</li>
+    <li><strong>Перекати-поле</strong> отрывается в степи и катится по ветру, пока его не поймает куст
+    или изгородь. Это растопка там, где нет дерева.</li>
+    <li><strong>Девять новых растений</strong> и шиповник — единственная ягода, которую не снимает мороз.
+    Растут куртинами, только в новых мирах.</li>
+    <li><strong>У страны появились места</strong> (новые миры): скальные торы на гребнях, лощины и промоины
+    в холмах, речные террасы над поймой. Склоны больше не лестница одинаковых ступенек.</li>
+    <li><strong>Пять новых зверей.</strong> Лиса охотится на мелких и крыс, уносит добычу в зубах и
+    берёт брошенное мясо. Лось чует по ветру, на заре заходит в воду, а лосиха с телёнком бьёт
+    копытом. Бобр слышит текущую воду и запирает её плотиной. Утки взлетают всей стаей. Лягушки
+    ночью поют и замолкают, когда рядом опасность, а пойманная лягушка — наживка на щуку.</li>
+    <li><strong>Медведь</strong> осенью ходит к ягодникам и диким ульям и стережёт еду.</li>
+    <li><strong>Звери двигаются как звери:</strong> шаг, рысь и галоп, лёжка, поворот головы, испуг.</li>
+    <li><strong>Рыбалка стала решением.</strong> Рыба зависит от воды: форель — в холодной прозрачной,
+    щука — в тёплой торфяной. Рыба бывает мелкая, средняя и крупная. В полдень рыба уходит
+    с мелководья, лучший клёв — перед дождём, зимой ловят в лунке. Леска может лопнуть,
+    изношенная удочка — сломаться.</li>
+    <li><strong>Телефон без правой кнопки мыши:</strong> стопка делится кнопками — половина или любое
+    число; у кувшина — ВЫЛИТЬ, у рецепта — ВСЁ, стрелка переносит на пояс или в сундук.</li>
+    <li><strong>Рюкзак:</strong> страницы стоят полосой слева, панель — одна ткань, а не повторяющиеся пятна.</li>
   </ul>
 
-  <p>Полный список изменений — в
+  <h3>1.5.1 — 26 сентября 2026</h3>
+
+  <ul>
+    <li><strong>Набор графики</strong> одной строкой: МИНИМУМ, НИЗКИЙ, СРЕДНИЙ, ВЫСОКИЙ, УЛЬТРА.
+    Отдельные строки остались.</li>
+    <li><strong>Сглаживание</strong> — строка настроек (ВЫКЛ, 2x, 4x, 8x), меняется без перезапуска.
+    Тени от костров — своя строка; у резких теней край вместо ступеньки.</li>
+    <li><strong>Телефон:</strong> 53 кадра в секунду стали 60 на Adreno 710; кнопки на экране
+    двигаются пальцем, и раскладка доходит до игры; свёрнутая игра больше не играет звук
+    поверх звонка.</li>
+    <li><strong>Первый час ведёт место, а не текст</strong> (новые миры): у пресной воды — галечная
+    полоса, где треть находок — кремень; к прудам сходятся звериные тропы.</li>
+    <li><strong>Глина лежит пластом</strong> между почвой и породой под поймами и низкими лугами
+    (новые миры), и её видно в подмытом берегу.</li>
+    <li><strong>У воды свой цвет</strong> — по стране и глубине: торфяная бурая, ледниковая молочная.</li>
+    <li><strong>Удар чувствуется:</strong> вид клюёт при ударе, тяжёлый инструмент замахивается дольше.
+    У года появился голос: цикады в жару, птицы на рассвете и закате, весенняя капель.</li>
+    <li><strong>Список миров</strong> показывает день и время года в мире, когда в него заходили
+    и сколько он занимает на диске.</li>
+    <li><strong>Интерфейс нарисован текстурами</strong>, а не прямоугольниками заливки. Кнопки
+    «ПРИБРАТЬ» в рюкзаке больше нет.</li>
+    <li><strong>Загон:</strong> стог в углу загона десять на десять достаёт до каждой овцы.</li>
+    <li><strong>У земли снова есть зерно:</strong> на равнинах больше нет плоских террас-горизонталей.</li>
+  </ul>
+
+  <p>Полная история изменений, с замерами и отвергнутыми вариантами, — в
   <a href="https://github.com/boobser1488/Primitive/blob/master/CHANGELOG.md">CHANGELOG.md</a>.</p>
 
-  <h2>Системные требования</h2>
+  <h2 id="soon">Скоро</h2>
+
+  <p class="dim">Это уже в исходниках, но не в выпуске 1.5.2. Войдёт в следующую версию.</p>
+
+  <ul>
+    <li><strong>Мотыга снова пашет.</strong> В 1.5.2 правый клик мотыгой по дёрну не доходил до
+    сервера. На телефоне пашут коротким касанием; мотыга в руке сама говорит, каким жестом.</li>
+    <li><strong>Книга рецептов с первой минуты:</strong> на телефоне — кнопка РЕЦЕПТЫ на экране,
+    без условий; подсказка первой минуты говорит, где книга.</li>
+    <li><strong>Путь после меди</strong> говорит, что искать, где и чем — для меди, бронзы и железа.</li>
+    <li><strong>Бой:</strong> лук со стрелами, щиты, удар по частям тела, яд на стрелах.
+    Бросок — зажатая Q: сила копится, бросок неточен и стоит дыхания.</li>
+    <li><strong>Следы</strong> на снегу, песке, грязи и земле — их ставит сервер, и по ним выслеживают.</li>
+    <li><strong>Планета с орбиты</strong> в четырёх видах: пиксели, глобус, соты, старая карта.</li>
+    <li><strong>Гарь:</strong> после лесного пожара стоят обломанные стволы с голыми сучьями,
+    часть лежит у пней.</li>
+    <li><strong>Карта</strong> — зарисовка тушью и акварелью на пергаменте.</li>
+    <li><strong>Rust-моды</strong> — моды, собранные против исходников игры
+    (<a href="modding#rust">подробнее</a>).</li>
+    <li><strong>Сеть:</strong> соединение шифруется, у сервера может быть пароль.</li>
+    <li><strong>Убрано:</strong> меновой прилавок.</li>
+  </ul>
+
+  <h2 id="requirements">Системные требования</h2>
 
   <div class="tablewrap">
   <table>
-    <tr><td>ОС</td><td>Windows 10/11 x64, Linux x64, Android arm64</td></tr>
-    <tr><td>Видео</td><td>любая карта с Vulkan, DirectX 12 или Metal (через wgpu)</td></tr>
-    <tr><td>Место</td><td>несколько десятков мегабайт: игра — это один исполняемый файл</td></tr>
-    <tr><td>Главный рычаг FPS</td><td>RENDER DISTANCE в настройках</td></tr>
+    <tr><td>ОС</td><td>Windows 10/11 x64, Linux x64, Android 7.0+ arm64</td></tr>
+    <tr><td>Видео</td><td>Vulkan или DirectX 12 на компьютере; на телефоне — Vulkan или OpenGL ES 3.0</td></tr>
+    <tr><td>Место</td><td>несколько десятков мегабайт</td></tr>
+    <tr><td>Главный рычаг FPS</td><td>дальность прорисовки в настройках, затем набор графики</td></tr>
   </table>
   </div>
 

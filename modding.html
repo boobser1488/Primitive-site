@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Разработка модов — Primitive</title>
-<meta name="description" content="Как писать моды и плагины для Primitive: скриптовые плагины на Rhai и нативные моды через C ABI, хуки, события, правила границы.">
+<title>Моды — Primitive</title>
+<meta name="description" content="Расширения Primitive: Rust-моды против исходников игры с цепочками подмен, нативные моды через C ABI и плагины на Rhai.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
@@ -31,20 +31,29 @@
 <div class="wrap">
 
   <h1>РАЗРАБОТКА МОДОВ</h1>
-  <p class="lead">Две точки расширения, и они для разного. Плагин — это скрипт, который
-  кладут файлом. Мод — это собранная библиотека, которая может почти всё.</p>
+  <p class="lead">Три способа расширить игру. Rust-мод собирается против исходников самой игры
+  и получает её настоящие структуры. Нативный мод говорит с сервером через C ABI. Плагин —
+  скрипт на Rhai, который кладут файлом.</p>
+
+  <div class="note">
+    <p><strong>Rust-моды — в исходниках, но не в выпуске 1.5.2</strong>: они появились после него
+    и войдут в следующую версию. Плагины на Rhai и моды через C ABI есть и в 1.5.2. Старые
+    способы не убраны и не объявлены устаревшими: для простого мода C ABI по-прежнему
+    правильный ответ.</p>
+  </div>
 
   <div class="toc">
     <ul>
       <li><a href="#which">Что выбрать</a></li>
-      <li><a href="#plugin">Плагин: с чего начать</a></li>
-      <li><a href="#hooks">Хуки плагина</a></li>
-      <li><a href="#api">Что доступно скрипту</a></li>
-      <li><a href="#limits">Границы плагина</a></li>
-      <li><a href="#mod">Нативный мод</a></li>
-      <li><a href="#abi">Правила границы</a></li>
-      <li><a href="#events">События</a></li>
-      <li><a href="#examples">Моды в комплекте</a></li>
+      <li><a href="#rust">Rust-моды</a></li>
+      <li><a href="#chains">Цепочки вместо Mixin</a></li>
+      <li><a href="#registries">Реестры</a></li>
+      <li><a href="#door">Стороны и проверка при входе</a></li>
+      <li><a href="#build">Как собрать Rust-мод</a></li>
+      <li><a href="#examples">Примеры в mods/</a></li>
+      <li><a href="#cost">Цена</a></li>
+      <li><a href="#cabi">Нативные моды через C ABI</a></li>
+      <li><a href="#plugins">Плагины на Rhai</a></li>
       <li><a href="#install">Установка и выключение</a></li>
     </ul>
   </div>
@@ -53,132 +62,275 @@
 
   <div class="tablewrap">
   <table>
-    <tr><th></th><th>Плагин (<code>plugins/</code>)</th><th>Нативный мод (<code>mods/</code>)</th></tr>
-    <tr><td>Язык</td><td>Rhai — небольшой встраиваемый</td><td>что угодно с C ABI: Rust, C, C++, Zig</td></tr>
-    <tr><td>Сборка</td><td>не нужна</td><td>нужен тулчейн</td></tr>
-    <tr><td>Цена ошибки</td><td>строчка в логе</td><td>весь процесс</td></tr>
-    <tr><td>Скорость</td><td>интерпретация, лимит операций</td><td>нативная, без лимита</td></tr>
-    <tr><td>Дотягивается до</td><td>событий и десятка эффектов</td><td>181 вызова хоста в двадцати таблицах</td></tr>
+    <tr><th></th><th>Плагин</th><th>Мод через C ABI</th><th>Rust-мод</th></tr>
+    <tr><td>Где</td><td><code>plugins/</code>, только выделенный сервер</td><td><code>mods/</code> + <code>mod.ron</code>, сервер</td><td><code>mods/</code> + <code>rustmod.ron</code>, сервер и клиент</td></tr>
+    <tr><td>Язык</td><td>Rhai</td><td>что угодно с C ABI</td><td>Rust</td></tr>
+    <tr><td>Видит</td><td>события и десяток действий</td><td>около 180 функций хоста в таблицах <code>primitive_modapi</code></td><td>все публичные типы и функции игры</td></tr>
+    <tr><td>Привязка</td><td>нет</td><td>к мажорной версии API</td><td>к сборке игры и компилятору</td></tr>
+    <tr><td>Цена ошибки</td><td>строчка в логе</td><td>падение процесса</td><td>падение процесса</td></tr>
+    <tr><td>Android</td><td>—</td><td>нет</td><td>нет</td></tr>
   </table>
   </div>
 
-  <div class="note">
-    <p><strong>Если вы не уверены, чего хотите, — вам нужен плагин.</strong> Мод нужен для
-    того, чем плагин быть не может: генератор мира, ИИ зверя, механика, считающая
-    на каждый блок или на каждый тик.</p>
-  </div>
+  <p>Если сомневаетесь — начните с плагина. Мод через C ABI нужен для генератора, ИИ зверя,
+  работы на каждый блок или тик. Rust-мод — когда нужно поменять саму игру: физику тела,
+  вердикт античита, рельеф, кадр.</p>
 
-  <p>Почему скрипты вообще существуют, хотя есть нативная граница: для сервера, куда люди
-  просто кладут файлы, скрипт — правильный размен. Медленнее на вызов, зато сломанный
-  плагин — это строчка в логе, а не падение, а зациклившийся останавливается лимитом
-  операций, а не вешает тик-луп.</p>
+  <h2 id="rust">Rust-моды</h2>
 
-  <h2 id="plugin">Плагин: с чего начать</h2>
+  <p>Владелец решил: моды должны работать как в Minecraft — мод получает доступ ко всему коду
+  игры, как Fabric или Forge с Mixin. Поэтому Rust-мод — это крейт <code>cdylib</code>, который
+  зависит от <code>primitive_shared</code>, <code>primitive_server</code> и
+  <code>primitive_client</code> как от обычных библиотек.</p>
 
-  <p>Плагин — это папка с двумя файлами:</p>
+  <p><strong>Цена принята сознательно:</strong> мод привязан к версии игры и к компилятору,
+  работает только на ПК и может уронить игру — его код выполняется в процессе игры без
+  песочницы.</p>
 
-<pre><code>plugins/
-  мой_плагин/
-    plugin.toml     <span class="tok-comment"># метаданные</span>
-    main.rhai       <span class="tok-comment"># скрипт</span></code></pre>
+  <p>Игра передаёт моду <code>&amp;mut</code> на свои настоящие объекты — <code>&amp;mut Player</code>,
+  <code>&amp;Arc&lt;Context&gt;</code>, <code>&amp;mut AntiCheat</code>, — и мод читает любое поле,
+  меняет любое публичное, вызывает любую публичную функцию. Для этого модули клиента стали
+  публичными; закрыты только <code>frame</code> и <code>audio</code>.</p>
 
-<pre><code>name = <span class="tok-str">"мой_плагин"</span>          <span class="tok-comment"># обязательное</span>
-version = <span class="tok-str">"1.0"</span>              <span class="tok-comment"># необязательное</span>
-author = <span class="tok-str">"кто-то"</span>            <span class="tok-comment"># необязательное</span>
-description = <span class="tok-str">"что делает"</span>   <span class="tok-comment"># необязательное</span>
-script = <span class="tok-str">"main.rhai"</span>         <span class="tok-comment"># необязательное, это значение по умолчанию</span>
-enabled = true               <span class="tok-comment"># необязательное, по умолчанию true</span></code></pre>
+  <h2 id="chains">Цепочки вместо Mixin</h2>
 
-  <p>Скрипт определяет любое подмножество хуков; ненужные просто не пишутся —
-  отсутствующий хук не ошибка:</p>
+  <p>Mixin в Java переписывает байткод при загрузке. В Rust байткода нет, а патчить машинный код —
+  значит ломаться от каждой пересборки. Поэтому ключевые функции игры вызываются
+  <strong>через цепочку</strong>, объявленную макросом <code>primitive_shared::hook!</code>.
+  Так объявлена цена приземления (<code>primitive_server/src/rustmod.rs</code>):</p>
 
-<pre class="lang-rhai"><code><span class="tok-cmd">fn</span> on_join(player, username) {
-    broadcast(username + <span class="tok-str">" зашёл на сервер"</span>);
-    tell(player, <span class="tok-str">"Привет!"</span>);
+<pre class="lang-rust"><code>primitive_shared::<span class="tok-lit">hook!</span> {
+    <span class="tok-cmd">pub</span> <span class="tok-cmd">mod</span> fall_damage: <span class="tok-cmd">fn</span>(distance: f32, water_depth: u32, kilograms: f32) -&gt; f32;
 }</code></pre>
 
-  <p>Сервер сканирует каталог при запуске, путь настраивается через <code>plugin_dir</code>
-  в <code>settings.toml</code>. Порядок загрузки алфавитный — чтобы он не зависел от прихоти
-  файловой системы: от него зависит, какой плагин увидит событие первым. На лету плагины
-  не перезагружаются, правки подхватываются при перезапуске сервера.</p>
+  <p>Место вызова само называет функцию игры (<code>logic/survival.rs</code>). Пока модов нет,
+  это прямой вызов за одной проверкой:</p>
 
-  <h2 id="hooks">Хуки плагина</h2>
+<pre class="lang-rust"><code><span class="tok-cmd">fn</span> fall_through_mods(&amp;<span class="tok-cmd">self</span>, distance: f32, water_depth: u32) -&gt; f32 {
+    <span class="tok-cmd">match</span> &amp;<span class="tok-cmd">self</span>.fall_chain {
+        <span class="tok-cmd">None</span> =&gt; fall_damage(distance, water_depth, <span class="tok-cmd">self</span>.carried_kg),
+        <span class="tok-cmd">Some</span>(chain) =&gt; chain.call(fall_damage, distance, water_depth, <span class="tok-cmd">self</span>.carried_kg),
+    }
+}</code></pre>
+
+  <p>Мод вешает обёртку. Обёртка, которая зовёт <code>next</code>, — это <code>@Inject</code>
+  (до, после, вокруг); не зовущая — <code>@Overwrite</code>. Два мода на одну функцию оба
+  работают: каждый получает свой <code>next</code>. Так <code>low_gravity</code> берёт цену
+  приземления у игры — для падения вчетверо короче:</p>
+
+<pre class="lang-rust"><code><span class="tok-cmd">fn</span> landing(distance: f32, water_depth: u32, kilograms: f32, next: &amp;fall_damage::Next) -&gt; f32 {
+    next.call(distance * SHARE, water_depth, kilograms)
+}</code></pre>
+
+  <p>А на клиенте — делает шаг игры и возвращает три четверти гравитации, которую шаг применил.
+  Обёртка, а не копия шага: в шаге тысяча строк коллайдера, воды и ступенек.</p>
+
+<pre class="lang-rust"><code><span class="tok-arg">#[allow(clippy::too_many_arguments)]</span>
+<span class="tok-cmd">fn</span> step(
+    player: &amp;<span class="tok-cmd">mut</span> Player,
+    chunks: &amp;ChunkManager,
+    others: &amp;[DVec3],
+    wish_dir: Vec3,
+    look: Vec3,
+    jump_pressed: bool,
+    jump_held: bool,
+    sprinting: bool,
+    dt: f32,
+    next: &amp;player_step::Next,
+) {
+    next.call(player, chunks, others, wish_dir, look, jump_pressed, jump_held, sprinting, dt);
+    <span class="tok-cmd">if</span> !player.grounded &amp;&amp; !player.in_water &amp;&amp; !player.flying {
+        player.velocity.y -= GRAVITY * (1.0 - SHARE) * dt;
+    }
+}</code></pre>
+
+  <p>Открытые цепочки:</p>
 
   <div class="tablewrap">
   <table>
-    <tr><th>Функция</th><th>Когда вызывается</th><th><code>return false</code> означает</th></tr>
-    <tr><td>on_load()</td><td>старт сервера</td><td>—</td></tr>
-    <tr><td>on_join(player, username)</td><td>игрок подключился</td><td>—</td></tr>
-    <tr><td>on_leave(player, username)</td><td>игрок отключился</td><td>—</td></tr>
-    <tr><td>on_chat(player, text)</td><td>сообщение в чат</td><td>отменить сообщение</td></tr>
-    <tr><td>on_block_place(player, x, y, z, block)</td><td><strong>перед</strong> постановкой</td><td>отменить постановку</td></tr>
-    <tr><td>on_block_break(player, x, y, z)</td><td><strong>перед</strong> ломанием</td><td>отменить ломание</td></tr>
-    <tr><td>on_command(player, command, args)</td><td>неизвестная <code>/команда</code></td><td>«я обработал её»</td></tr>
-    <tr><td>on_tick(tick)</td><td>раз в секунду</td><td>—</td></tr>
+    <tr><th>Цепочка</th><th>Где</th><th>Что это</th></tr>
+    <tr><td><code>primitive::rustmod::player_step</code></td><td>клиент</td><td>шаг тела игрока, <code>Player::update</code></td></tr>
+    <tr><td><code>primitive_server::rustmod::judge_move</code></td><td>сервер</td><td>вердикт античита на одно перемещение — серверная половина физики игрока</td></tr>
+    <tr><td><code>primitive_server::rustmod::fall_damage</code></td><td>сервер</td><td>сколько стоит приземление</td></tr>
+    <tr><td><code>primitive_server::rustmod::generate_chunk</code></td><td>сервер</td><td>рельеф одного чанка до декораторов и правок игроков</td></tr>
   </table>
   </div>
 
-  <p><strong>Хуки блоков отменяющие, а не уведомляющие.</strong> Плагину защиты нужно успеть
-  сказать «нет» до изменения мира, а не откатывать уже случившееся. Вето одного плагина
-  достаточно — поэтому несколько защитных плагинов складываются между собой
-  без договорённостей.</p>
+  <p>Цепочки строятся на каждый сервер и каждый клиент и лежат на <code>Context</code>,
+  на <code>Player</code> и на сокете, а не в статиках: в одном процессе бывает несколько
+  серверов, и мод низкой гравитации в одном мире не должен опускать гравитацию в соседнем.</p>
 
-  <p><code>on_tick</code> вызывается раз в секунду, а не каждый такт: скрипт, который
-  запускается двадцать раз в секунду, — это ловушка для автора плагина, и ничему здесь
-  не нужна точность такта.</p>
+  <p><strong>Правило статиков.</strong> Мод линкует крейты игры как обычные библиотеки,
+  поэтому у него свои, пустые копии всех статиков игры. Состояние процесса мод получает только
+  в аргументах обёрток и реестров. Рантайм tokio из мода не трогать: мод увидит пустую копию.</p>
 
-  <h2 id="api">Что доступно скрипту</h2>
+  <h2 id="registries">Реестры</h2>
+
+  <p>Чем мод добавляет новое, а не подменяет старое:</p>
 
   <div class="tablewrap">
   <table>
-    <tr><th>Функция</th><th>Эффект</th></tr>
-    <tr><td>broadcast(text)</td><td>сообщение всем</td></tr>
-    <tr><td>tell(player, text)</td><td>сообщение одному игроку</td></tr>
-    <tr><td>log(text)</td><td>строка в лог сервера с именем плагина</td></tr>
-    <tr><td>set_block(x, y, z, block)</td><td>поставить блок; неизвестный id отбрасывается</td></tr>
-    <tr><td>get_block(x, y, z)</td><td>что в ячейке; вне события вернёт −1</td></tr>
-    <tr><td>block_name(id)</td><td>имя блока так, как его называет игра</td></tr>
-    <tr><td>fill(x0, y0, z0, x1, y1, z1, block)</td><td>залить параллелепипед, вернуть сколько поставлено</td></tr>
-    <tr><td>spawn_falling_block(x, y, z, block)</td><td>поставить блок и уронить его</td></tr>
-    <tr><td>teleport(player, x, y, z)</td><td>переместить игрока</td></tr>
-    <tr><td>player_position(player)</td><td>где он стоит</td></tr>
-    <tr><td>player_names() / player_count()</td><td>кто онлайн и сколько их</td></tr>
-    <tr><td>time_of_day() / set_time(t)</td><td>время суток, 0.0–1.0</td></tr>
-    <tr><td>kick(player, reason)</td><td>отключить игрока</td></tr>
-    <tr><td>store</td><td>постоянное хранилище: переживает вызовы</td></tr>
+    <tr><th>Реестр</th><th>Где</th><th>Что</th></tr>
+    <tr><td><code>Content::block</code></td><td>процесс</td><td>новый блок: строка <code>BlockDef</code>, картинка 16×16, модель из коробок</td></tr>
+    <tr><td><code>ServerRegistrar::on_tick</code></td><td>сервер</td><td>каждый тик, с <code>&amp;Arc&lt;Context&gt;</code></td></tr>
+    <tr><td><code>ServerRegistrar::on_message</code></td><td>сервер</td><td>свой сетевой канал от клиента; ответ — <code>rustmod::send_to</code></td></tr>
+    <tr><td><code>ClientRegistrar::on_frame</code></td><td>клиент</td><td>каждый кадр: игрок, камера, сокет</td></tr>
+    <tr><td><code>ClientRegistrar::on_message</code></td><td>клиент</td><td>свой канал от сервера; отправка — <code>rustmod::send</code></td></tr>
+    <tr><td><code>ClientRegistrar::render_pass</code></td><td>клиент</td><td>полноэкранный проход в своём WGSL поверх кадра</td></tr>
   </table>
   </div>
 
-  <p>Ни файлов, ни сети, ни процессов не зарегистрировано:
-  <strong>плагин не дотянется до того, чего сервер ему не дал.</strong> Это не песочница
-  поверх языка, а просто отсутствие таких функций в его словаре.</p>
+  <p><strong>Блоки модов</strong> получают виды 1008–1023, выше последнего вида игры.
+  Античит их принимает, сохранение пишет, <code>/give</code> находит по имени, атлас берёт
+  картинку, мешер — модель. Виды раздаются по порядку загрузки (папки по имени), поэтому
+  удалённый мод оставляет в мире неизвестные клетки — это записано как недоделка.</p>
 
-  <h2 id="limits">Границы плагина</h2>
+  <p><strong>Проход рендера</strong> — одна функция WGSL. Игра оборачивает её вершинным
+  шейдером, кадром как текстурой и атласом блоков и пропускает весь текст через
+  <code>AtlasSplit::specialise</code>, так что проход, читающий атлас, рисует правильный блок
+  и на телефоне с 256 слоями на массив. Проход мода <code>sepia</code> целиком:</p>
 
-  <ul>
-    <li><strong>Мир скрипт видит как снимок</strong>, собранный заранее. Хук вызывается,
-    когда сервер уже может держать блокировки мира и реестра, поэтому обращение скрипта
-    обратно в живое состояние привело бы к взаимоблокировке тик-лупа. По той же причине
-    действия скрипта возвращаются как данные и применяются после его завершения.</li>
-    <li><strong><code>get_block</code> отдаёт только ячейки, относящиеся к событию</strong>;
-    на остальные вернёт −1.</li>
-    <li><strong>Встроенные команды приоритетнее.</strong> <code>/players</code> — синоним
-    <code>/list</code>, поэтому до плагина он не дойдёт, и подменить <code>/stop</code>
-    нельзя.</li>
-    <li><strong>Плагин, который валится десять раз подряд, отключается.</strong></li>
-  </ul>
+<pre class="lang-rust"><code><span class="tok-cmd">fn</span> mod_pass(colour: vec4&lt;f32&gt;, uv: vec2&lt;f32&gt;) -&gt; vec4&lt;f32&gt; {
+    <span class="tok-cmd">let</span> c = colour.rgb;
+    <span class="tok-cmd">let</span> toned = vec3&lt;f32&gt;(
+        dot(c, vec3&lt;f32&gt;(0.393, 0.769, 0.189)),
+        dot(c, vec3&lt;f32&gt;(0.349, 0.686, 0.168)),
+        dot(c, vec3&lt;f32&gt;(0.272, 0.534, 0.131)),
+    );
+    <span class="tok-cmd">let</span> corner = distance(uv, vec2&lt;f32&gt;(0.5, 0.5));
+    <span class="tok-cmd">let</span> vignette = 1.0 - smoothstep(0.45, 0.85, corner) * 0.35;
+    <span class="tok-cmd">return</span> vec4&lt;f32&gt;(min(toned, vec3&lt;f32&gt;(1.0)) * vignette, 1.0);
+}</code></pre>
 
-  <p>В комплекте три примера: <code>welcome</code> (приветствия и своя команда
-  <code>/online</code>), <code>bedrock_guard</code> (защита дна мира и радиуса вокруг спавна)
-  и <code>daylight</code> (объявление заката; выключен по умолчанию — пример состояния
-  между вызовами). Полное руководство —
-  <a href="https://github.com/boobser1488/Primitive/blob/master/plugins/README.md">plugins/README.md</a>.</p>
+<pre class="lang-rust"><code><span class="tok-cmd">pub</span> <span class="tok-cmd">fn</span> client(registrar: &amp;<span class="tok-cmd">mut</span> ClientRegistrar) {
+    registrar.render_pass(<span class="tok-str">"sepia"</span>, WGSL);
+}</code></pre>
 
-  <h2 id="mod">Нативный мод</h2>
+  <h2 id="door">Стороны и проверка при входе</h2>
 
-  <p>Мод — это библиотека, которую сервер грузит при запуске. Она экспортирует ровно один
-  символ, <code>primitive_mod_register</code>, и макрос
-  <code>primitive_modapi::declare_mod!</code> пишет его за вас.</p>
+  <p>Как в Fabric, мод объявляет сторону:</p>
+
+  <div class="tablewrap">
+  <table>
+    <tr><th>Сторона</th><th>Где работает</th><th>Спрашивается при входе</th></tr>
+    <tr><td><code>Server</code></td><td>только сервер</td><td>нет — клиент без него входит</td></tr>
+    <tr><td><code>Client</code></td><td>только клиент</td><td>нет — игрок с ним входит на любой сервер</td></tr>
+    <tr><td><code>Both</code></td><td>оба конца</td><td><strong>да</strong>: тот же набор, те же версии</td></tr>
+  </table>
+  </div>
+
+  <p>Клиент называет свои <code>Both</code>-моды в сообщении входа (протокол 76), сервер сравнивает
+  их со своими <strong>до проверки пароля</strong> и отказывает с причиной, называющей каждый мод
+  и обе версии:</p>
+
+<pre><code>моды на сервере и у вас не совпадают: this server needs the mod
+low_gravity 1.0.0, and you do not have it</code></pre>
+
+  <p><strong>Совместимость решает отпечаток, а не номер версии.</strong> Мод экспортирует
+  C-структуру фиксированного вида со штампом: версия игры, версия компилятора, сторона и
+  отпечатки трёх крейтов игры — хеш компилятора, цели, features и каждого байта
+  <code>src/</code>. Поле, добавленное в ветке, сдвигает раскладку и не меняет версию, поэтому
+  версии мало. Загрузчик сравнивает штамп <strong>до первого вызова Rust-кода</strong>; при
+  расхождении мод не загружается, а в журнале строка, что не совпало.</p>
+
+  <h2 id="build">Как собрать Rust-мод</h2>
+
+  <p>Мод живёт в рабочем пространстве игры, как <code>mods/low_gravity</code>, — только так у мода
+  и игры один <code>Cargo.lock</code>. Внешний мод — это клон игры с вашим крейтом в
+  <code>mods/</code>. Из <code>mods/low_gravity/Cargo.toml</code>:</p>
+
+<pre><code><span class="tok-arg">[lib]</span>
+name = <span class="tok-str">"low_gravity"</span>
+crate-type = <span class="tok-arg">[</span><span class="tok-str">"cdylib"</span>]
+path = <span class="tok-str">"src/lib.rs"</span>
+
+<span class="tok-arg">[features]</span>
+dedicated = <span class="tok-arg">[</span><span class="tok-str">"primitive_server/plugins"</span>]
+
+<span class="tok-arg">[dependencies]</span>
+primitive_client = { path = <span class="tok-str">"../../primitive_client"</span> }
+primitive_server = { path = <span class="tok-str">"../../primitive_server"</span>, default-features = false, features = <span class="tok-arg">[</span><span class="tok-str">"mods"</span>] }
+primitive_shared = { path = <span class="tok-str">"../../primitive_shared"</span> }</code></pre>
+
+  <p><code>src/lib.rs</code> только ставит штамп; код мода — в <code>src/hooks.rs</code>:</p>
+
+<pre class="lang-rust"><code><span class="tok-cmd">pub</span> <span class="tok-cmd">mod</span> hooks;
+
+primitive::<span class="tok-lit">rust_mod!</span> {
+    side: Both,
+    server: hooks::server,
+    client: hooks::client,
+}</code></pre>
+
+<pre class="lang-rust"><code><span class="tok-cmd">pub</span> <span class="tok-cmd">fn</span> client(registrar: &amp;<span class="tok-cmd">mut</span> ClientRegistrar) {
+    registrar.player_step(step);
+}
+
+<span class="tok-cmd">pub</span> <span class="tok-cmd">fn</span> server(registrar: &amp;<span class="tok-cmd">mut</span> ServerRegistrar) {
+    registrar.judge_move(judge);
+    registrar.fall_damage(landing);
+}</code></pre>
+
+  <p>Рядом с библиотекой — <code>rustmod.ron</code>. Он говорит загрузчику «здесь Rust-мод»;
+  загрузчик C-модов такую папку пропускает. Версия и сторона вшиты в саму библиотеку.</p>
+
+<pre class="lang-rust"><code>(
+    name: <span class="tok-str">"low_gravity"</span>,
+    enabled: <span class="tok-cmd">true</span>,
+)</code></pre>
+
+  <p>Сборка — вместе с игрой. Мод для отдельного сервера — вторая сборка того же крейта
+  с фичей <code>dedicated</code>: <code>primitive_server.exe</code> собран с плагинами, сервер
+  внутри клиента — без них, и <code>Context</code> у них разный.</p>
+
+<pre><code><span class="tok-cmd">cargo</span> build <span class="tok-flag">--release</span> <span class="tok-flag">-p</span> primitive_client <span class="tok-flag">-p</span> low_gravity
+<span class="tok-cmd">copy</span> target\release\low_gravity.dll mods\low_gravity\
+
+<span class="tok-cmd">cargo</span> build <span class="tok-flag">--release</span> <span class="tok-flag">-p</span> primitive_server
+<span class="tok-cmd">cargo</span> build <span class="tok-flag">--release</span> <span class="tok-flag">-p</span> low_gravity <span class="tok-flag">--features</span> dedicated
+<span class="tok-cmd">copy</span> target\release\low_gravity.dll <span class="tok-arg">&lt;папка</span> сервера&gt;\mods\low_gravity\</code></pre>
+
+  <p>Собирать их отдельными вызовами cargo: в одном вызове фичи объединяются.
+  Загруженный мод пишет в журнал:</p>
+
+<pre><code><span class="tok-arg">[rust</span> mods] loaded Rust mod <span class="tok-str">'low_gravity 1.0.0'</span> (Both)
+<span class="tok-arg">[rust</span> mods] <span class="tok-str">'marble_block'</span> added blocks <span class="tok-arg">[1008]</span>
+<span class="tok-arg">[rust</span> mods] <span class="tok-str">'sepia'</span> draws its pass <span class="tok-str">'sepia'</span> over the frame</code></pre>
+
+  <h2 id="examples">Примеры в mods/</h2>
+
+  <div class="tablewrap">
+  <table>
+    <tr><th>Мод</th><th>Сторона</th><th>Что показывает</th></tr>
+    <tr><td>low_gravity</td><td>Both</td><td>подмена физики на обоих концах: шаг на клиенте, вердикт античита и цена падения на сервере. Прыжок 5,8 блока вместо 1,45 — и ни одной поправки от сервера</td></tr>
+    <tr><td>marble_block</td><td>Both</td><td>новый блок <code>marble_column</code>: строка, картинка из кода, модель из трёх коробок; ставится, ломается, переживает сохранение</td></tr>
+    <tr><td>ping_pong</td><td>Both</td><td>свой канал: клиент шлёт пинг каждые две секунды, сервер отвечает понгом</td></tr>
+    <tr><td>sepia</td><td>Client</td><td>свой проход рендера — сепия с виньеткой поверх кадра</td></tr>
+  </table>
+  </div>
+
+  <p>Все четыре — в рабочем пространстве: мод, который трогает структуры игры по имени,
+  должен ломать сборку, а не игру игрока. Сценарии клиента компилируют те же
+  <code>hooks.rs</code> и играют их с настоящим сервером и античитом.</p>
+
+  <h2 id="cost">Цена</h2>
+
+  <p><strong>Без модов игра ведёт себя как раньше</strong>: пустая цепочка — это прямой вызов
+  функции игры за проверкой пустого вектора, и компилятор её инлайнит. Замер из
+  <code>docs/modding.md</code>, 50 млн вызовов: напрямую 3,30 нс, через пустую цепочку 3,23,
+  через цепочку с одной обёрткой 3,51. Кадр без модов до и после — 6,987 и 6,988 мс GPU.</p>
+
+  <p>Чего пока нет: рецептов и предметов модов, своих экранов и звука, прохода внутри мира
+  до интерфейса, сохранения нумерации блоков модов, модов на Android. Горячей перезагрузки
+  и песочницы не будет: мод не выгружается никогда.</p>
+
+  <h2 id="cabi">Нативные моды через C ABI</h2>
+
+  <p>Есть и в 1.5.2. Мод — библиотека, которую загружает <strong>сервер</strong> (выделенный или
+  встроенный в одиночную игру). Она экспортирует один символ, <code>primitive_mod_register</code>;
+  его пишет макрос <code>primitive_modapi::declare_mod!</code>. Контракт — один файл,
+  <code>primitive_modapi/src/lib.rs</code>, версия API 2.2: таблицы функций хоста и события,
+  всё простыми данными.</p>
 
 <pre><code>mods/
   greeter/
@@ -187,175 +339,122 @@ enabled = true               <span class="tok-comment"># необязатель�
     libgreeter.so        <span class="tok-comment"># linux</span>
     libgreeter.dylib     <span class="tok-comment"># macos</span></code></pre>
 
-<pre><code>primitive_modapi::declare_mod! {
+<pre class="lang-rust"><code>primitive_modapi::<span class="tok-lit">declare_mod!</span> {
     name: <span class="tok-str">"greeter"</span>,
     version: <span class="tok-str">"1.0.0"</span>,
     load: load,
     event: event,
 }</code></pre>
 
-  <p>Манифест — <strong>RON, а не TOML</strong>, и это не вкусовщина: мод объявляет
-  в <code>settings</code> значения, типов которых хост не знает, а RON — нотация с типами
-  внутри. Версия API объявлена и в манифесте тоже, чтобы сервер мог отказать несовместимому
-  моду <strong>не загружая его код</strong>: открытие библиотеки запускает её инициализаторы,
-  и мод, собранный против другой мажорной версии контракта, — ровно тот, которому
-  не стоит дать что-либо выполнить до проверки.</p>
-
-  <p>Сборка и установка:</p>
-
-<pre><code><span class="tok-cmd">cargo</span> build <span class="tok-flag">-p</span> flight <span class="tok-flag">--release</span>
-<span class="tok-cmd">copy</span> target\release\flight.dll mods\flight\      <span class="tok-comment"># Windows</span>
-<span class="tok-cmd">cp</span>    target/release/libflight.so mods/flight/   <span class="tok-comment"># Linux</span></code></pre>
-
-  <p>Дальше запустить сервер и посмотреть в лог:</p>
-
-<pre><code><span class="tok-arg">[mods]</span> loaded mod <span class="tok-str">'greeter'</span> 1.0.0 (API 2.0)
-<span class="tok-arg">[mods]</span> 1 active</code></pre>
-
-  <p>Команда <code>/mods</code> перечисляет загруженное — плагины и моды вместе.</p>
-
-  <h2 id="abi">Правила границы</h2>
-
-  <p>Контракт — один файл, <code>primitive_modapi/src/lib.rs</code>: 181 функция хоста
-  в двадцати таблицах и 35 событий, всё через C ABI, всё простыми данными. Мод собирается
-  против него и больше ни против чего — иначе «стабильный API» был бы обещанием про сто
-  тысяч строк игрового кода вместо обещания про один файл.</p>
+  <p>Манифест — RON: мод объявляет в <code>settings</code> значения, типов которых хост
+  не знает. Версия API записана и в манифесте, чтобы сервер отказал несовместимому моду,
+  не загружая его код.</p>
 
   <div class="grid">
     <div class="panel">
-      <h3>Всё переходит границу простыми данными</h3>
-      <p>Ни <code>String</code>, ни <code>Vec</code>, ни <code>Result</code> — у них нет
-      стабильной раскладки между версиями компилятора. Текст — это <code>Str</code>
-      (указатель и длина), и он одолжен <strong>на время одного вызова</strong>.
-      Что хотите сохранить — копируйте.</p>
-    </div>
-    <div class="panel">
-      <h3>Проверяйте версию в обе стороны</h3>
-      <p>Хост проверяет вашу и откажет при расхождении. Проверяйте и его: мод, загруженный
-      <em>более старым</em> хостом, иначе прочитает за концом таблицы раньше, чем успеет
-      пожаловаться.</p>
-    </div>
-    <div class="panel">
-      <h3>Структуры-выходы заморожены</h3>
-      <p>Мод кладёт <code>BlockProperties</code> или <code>PlayerVitals</code> к себе
-      на стек и отдаёт хосту указатель. Дорастить такую структуру значит заставить хост
-      писать за конец чужого буфера — порча стека, которую проверка версии не поймает,
-      потому что проверка прошла. Новые колонки приезжают новыми структурами.</p>
+      <h3>Всё через границу — простыми данными</h3>
+      <p>Ни <code>String</code>, ни <code>Vec</code>: у них нет стабильной раскладки. Текст —
+      <code>Str</code>, одолженный на время одного вызова.</p>
     </div>
     <div class="panel">
       <h3>Операции, а не структуры</h3>
-      <p>Нет вызова, отдающего устройство чанка или очередь симуляции воды, и не будет:
-      операция переживает переписывание внутренностей, структура его замораживает.
-      Симуляцию воды здесь уже переписывали дважды.</p>
+      <p>Нет вызова, отдающего устройство чанка: операция переживает переписывание
+      внутренностей, структура его замораживает.</p>
     </div>
     <div class="panel">
-      <h3>Пустая таблица — «не в этом процессе»</h3>
-      <p><code>render</code>, <code>audio</code> и <code>ui</code> равны null на выделенном
-      сервере. Проверяйте их.</p>
+      <h3>Структуры-выходы заморожены</h3>
+      <p>Новые колонки приезжают новыми структурами, иначе хост пишет за конец буфера
+      старого мода.</p>
     </div>
     <div class="panel">
-      <h3>Подписывайтесь в <code>on_load</code></h3>
-      <p>Не в точке входа: там других модов ещё не существует.</p>
+      <h3>Подписка — в <code>on_load</code></h3>
+      <p>В точке входа других модов ещё нет. Таблицы <code>render</code>, <code>audio</code>
+      и <code>ui</code> на сервере пустые — проверяйте.</p>
     </div>
   </div>
-
-  <p>Таблицы контракта: <code>Core</code>, <code>World</code>, <code>Generation</code>,
-  <code>Blocks</code>, <code>Items</code>, <code>Entities</code>, <code>Players</code>,
-  <code>Inventory</code>, <code>Network</code>, <code>Events</code>, <code>Physics</code>,
-  <code>Save</code>, <code>Crafting</code>, <code>Lighting</code>, <code>Food</code>,
-  <code>Combat</code>, <code>Fluid</code>, <code>Containers</code>, <code>Stations</code>,
-  <code>Simulation</code> — плюс <code>Render</code>, <code>Audio</code> и <code>Ui</code>,
-  которых на сервере нет.</p>
-
-  <h2 id="events">События</h2>
 
   <div class="tablewrap">
   <table>
-    <tr><th>Группа</th><th>События</th></tr>
-    <tr><td>Сервер</td><td>ServerStarted, ServerStopping, Tick</td></tr>
-    <tr><td>Игрок</td><td>PlayerJoined, PlayerLeft, PlayerChat, PlayerDied, PlayerHurt, PlayerHealed, PlayerAte, PlayerDrank</td></tr>
-    <tr><td>Блоки</td><td>BlockPlace, BlockBreak, BlockChanged</td></tr>
-    <tr><td>Мир</td><td>ChunkGenerated, WeatherChanged, TimeChanged</td></tr>
-    <tr><td>Сущности</td><td>EntitySpawned, EntityRemoved</td></tr>
-    <tr><td>Вещи</td><td>ItemCrafted, HideCured, EquipmentChanged</td></tr>
-    <tr><td>Команды</td><td>Command</td></tr>
+    <tr><th>Мод</th><th>Что делает</th></tr>
+    <tr><td>greeter</td><td>рабочий пример: подписка, настройка из манифеста, состояние между перезапусками, отмена действия, ответ на команду</td></tr>
+    <tr><td>flight</td><td><code>/fly</code>: движок умеет разрешить игроку не падать, а кому и когда — решает мод; по умолчанию только операторам</td></tr>
+    <tr><td>sandbox</td><td><code>/sandbox</code>: зовёт каждую функцию каждой таблицы и считает каждое событие; поставляется выключенным</td></tr>
+    <tr><td>dypt</td><td><code>/dypt</code>: язык программирования внутри мира, моды на нём пишутся без сборки</td></tr>
   </table>
   </div>
 
-  <p>Список стоит читать вместе с историей: <strong>до версии 2.0 сервер поднимал двенадцать
-  из двадцати одного объявленного события</strong>, а зарегистрированный модом декоратор
-  чанков не вызывался ни разу. Всё это компилировалось и было покрыто тестами
-  со стороны хоста. Не хватало ровно одного — кого-то по ту сторону границы, кто скажет
-  «я подписался, и меня не позвали».</p>
+<pre><code><span class="tok-cmd">cargo</span> build <span class="tok-flag">-p</span> flight <span class="tok-flag">--release</span>
+<span class="tok-cmd">copy</span> target\release\flight.dll mods\flight\      <span class="tok-comment"># Windows</span>
+<span class="tok-cmd">cp</span> target/release/libflight.so mods/flight/      <span class="tok-comment"># Linux</span></code></pre>
 
-  <h2 id="examples">Моды в комплекте</h2>
+  <h2 id="plugins">Плагины на Rhai</h2>
+
+  <p>Есть и в 1.5.2. Плагин — папка в <code>plugins/</code> с <code>plugin.toml</code> и
+  <code>main.rhai</code>. Работает <strong>только на выделенном сервере</strong>: клиент собран
+  без движка скриптов, и в одиночной игре плагинов нет. Порядок загрузки алфавитный,
+  правки подхватываются при перезапуске сервера.</p>
+
+<pre><code>name = <span class="tok-str">"мой_плагин"</span>          <span class="tok-comment"># обязательное</span>
+version = <span class="tok-str">"1.0"</span>              <span class="tok-comment"># необязательное</span>
+author = <span class="tok-str">"кто-то"</span>            <span class="tok-comment"># необязательное</span>
+description = <span class="tok-str">"что делает"</span>   <span class="tok-comment"># необязательное</span>
+script = <span class="tok-str">"main.rhai"</span>        <span class="tok-comment"># необязательное, это значение по умолчанию</span>
+enabled = true               <span class="tok-comment"># необязательное, по умолчанию true</span></code></pre>
+
+<pre class="lang-rhai"><code><span class="tok-cmd">fn</span> on_join(player, username) {
+    broadcast(username + <span class="tok-str">" зашёл на сервер"</span>);
+    tell(player, <span class="tok-str">"Привет!"</span>);
+}</code></pre>
 
   <div class="tablewrap">
   <table>
-    <tr><td>greeter</td><td><strong>Рабочий пример.</strong> Всё, что автор мода делает хотя бы раз, сделано там по разу и с объяснением рядом: подписка, чтение настройки из манифеста, состояние, переживающее рестарт, отмена действия, ответ на команду.</td></tr>
-    <tr><td>flight</td><td><strong><code>/fly</code>.</strong> Первое, что пользуется возможностью, которую API отрастил ради него — <code>PlayersApi::set_flying</code>.</td></tr>
-    <tr><td>sandbox</td><td><strong><code>/sandbox</code>.</strong> Диагностика: зовёт каждую функцию каждой таблицы и считает каждое событие.</td></tr>
-    <tr><td>dypt</td><td><strong><code>/dypt</code>.</strong> Язык программирования внутри мира — точка расширения поверх точки расширения: моды на dypt пишутся без сборки и перечитываются по <code>/dypt reload</code>.</td></tr>
+    <tr><th>Хук</th><th>Когда</th><th><code>return false</code></th></tr>
+    <tr><td>on_load()</td><td>старт сервера</td><td>—</td></tr>
+    <tr><td>on_join(player, username)</td><td>игрок подключился</td><td>—</td></tr>
+    <tr><td>on_leave(player, username)</td><td>игрок отключился</td><td>—</td></tr>
+    <tr><td>on_chat(player, text)</td><td>сообщение в чат</td><td>отменить</td></tr>
+    <tr><td>on_block_place(player, x, y, z, block)</td><td><strong>перед</strong> постановкой</td><td>отменить</td></tr>
+    <tr><td>on_block_break(player, x, y, z)</td><td><strong>перед</strong> ломанием</td><td>отменить</td></tr>
+    <tr><td>on_command(player, command, args)</td><td>неизвестная <code>/команда</code></td><td>«я её обработал»</td></tr>
+    <tr><td>on_tick(tick)</td><td>раз в секунду</td><td>—</td></tr>
   </table>
   </div>
 
-  <p><strong><code>sandbox</code> поставляется выключенным</strong>, и это не осторожность,
-  а следствие его устройства: он подписан на <em>все</em> события — иначе он не скажет,
-  какие не приходят, — а мод, подписанный на всё, это диспатч на каждый тик, на каждую
-  ячейку, которую сдвинула вода, и на каждую вещь, которую кто-то поднял.
-  Включили, спросили <code>/sandbox</code>, выключили.</p>
+  <p>Скрипту доступны сообщения (<code>broadcast</code>, <code>tell</code>, <code>log</code>),
+  блоки (<code>set_block</code>, <code>get_block</code>, <code>fill</code>), игроки
+  (<code>teleport</code>, <code>kick</code>, <code>player_names</code>), время и
+  постоянное хранилище <code>store</code>. Ни файлов, ни сети, ни процессов: плагин не дотянется
+  до того, чего сервер ему не дал. Мир он видит снимком, зациклившийся скрипт обрывает лимит
+  операций, плагин, упавший десять раз подряд, отключается.</p>
 
-  <p><code>/sandbox events</code> печатает, сколько событий каждого рода пришло,
-  <strong>нулями вперёд</strong> — потому что ноль здесь и есть новость.</p>
-
-  <h3>Где проходит граница: полёт</h3>
-
-  <p><code>flight</code> заодно показывает, чего модом сделать нельзя.
-  <strong>Чистым модом полёт на этом сервере не сделать:</strong> клиент считает гравитацию
-  у себя, и ничто со стороны сервера не мешает игроку падать. Очевидный обход —
-  телепортировать его вверх каждый тик — ломается тремя способами сразу: телепорт обнуляет
-  скорость, ускорение в воздухе ограничено, а каждая коррекция пишет игроку на экран
-  «отброшен назад» двадцать раз в секунду.</p>
-
-  <p>Поэтому движок отрастил <strong>возможность</strong>, а мод владеет
-  <strong>политикой</strong>: сервер умеет разрешить игроку не падать, а кому и когда это
-  разрешено — решает мод. По умолчанию <code>/fly</code> доступен только операторам
-  (<code>operators_only</code> в <code>flight/mod.ron</code>). Это безопасное значение,
-  а не дружелюбное: мод, раздающий полёт всем на публичном сервере, изменил игру для всех,
-  кто его не ставил.</p>
+  <p>В комплекте: <code>welcome</code>, <code>bedrock_guard</code>, <code>daylight</code>.
+  В следующей версии к ним добавится <code>auth</code> — вход по паролю через окна до мира.</p>
 
   <h2 id="install">Установка и выключение</h2>
 
   <div class="tablewrap">
   <table>
     <tr><th>Что</th><th>Как</th></tr>
-    <tr><td>Поставить мод</td><td>папка в <code>mods/</code> с <code>mod.ron</code> и библиотекой</td></tr>
-    <tr><td>Поставить плагин</td><td>папка в <code>plugins/</code> с <code>plugin.toml</code> и скриптом</td></tr>
-    <tr><td>Выключить один</td><td><code>enabled: false</code> в его манифесте — не удаляя ничего</td></tr>
-    <tr><td>Выключить загрузчик</td><td>пустая строка в <code>mod_dir</code> или <code>plugin_dir</code></td></tr>
+    <tr><td>Rust-мод</td><td>папка в <code>mods/</code> с <code>rustmod.ron</code> и библиотекой, собранной с этой игрой</td></tr>
+    <tr><td>Мод через C ABI</td><td>папка в <code>mods/</code> с <code>mod.ron</code> и библиотекой</td></tr>
+    <tr><td>Плагин</td><td>папка в <code>plugins/</code> с <code>plugin.toml</code> и скриптом</td></tr>
+    <tr><td>Выключить один</td><td><code>enabled: false</code> в его манифесте — ничего не удаляя</td></tr>
+    <tr><td>Выключить загрузчик</td><td>пустая строка в <code>mod_dir</code> или <code>plugin_dir</code> настроек сервера</td></tr>
     <tr><td>Посмотреть загруженное</td><td><code>/mods</code></td></tr>
   </table>
   </div>
 
-  <p><strong>Одиночная игра тоже грузит моды</strong> — с версии 1.5. До этого не грузила,
-  и довод был такой: «в локальном мире нет оператора, для которого ставят моды».
-  Довод оказался неверен насчёт того, кто ставит мод: это сам играющий, на своей машине,
-  в папку, которую он видит. Поэтому клиент запрашивает фичу <code>mods</code> по имени —
-  и только её, движка скриптов он по-прежнему не линкует, — папка ищется рядом
-  с исполняемым файлом, а <strong>единственный игрок локального мира считается
-  оператором</strong>.</p>
-
-  <p>Android — намеренное исключение: мод это <code>.so</code>, который игрок кладёт
-  в папку, а в APK такой папки, доступной обычному человеку, нет.</p>
+  <p>Одиночная игра тоже грузит моды из папки <code>mods/</code> рядом с исполняемым файлом,
+  и единственный игрок локального мира считается оператором. На Android модов нет: в APK
+  нет папки, куда обычный человек положил бы библиотеку.</p>
 
   <h2>Дальше</h2>
 
-  <p>Как устроен сам код, в который всё это встраивается, —
-  на странице <a href="code">структуры кода</a>. Полные руководства —
-  <a href="https://github.com/boobser1488/Primitive/blob/master/mods/README.md">mods/README.md</a>
-  и <a href="https://github.com/boobser1488/Primitive/blob/master/plugins/README.md">plugins/README.md</a>;
-  сам контракт с документацией к каждой таблице — в
-  <a href="https://github.com/boobser1488/Primitive/blob/master/primitive_modapi/src/lib.rs">primitive_modapi/src/lib.rs</a>.</p>
+  <p>Полные руководства в репозитории:
+  <a href="https://github.com/boobser1488/Primitive/blob/master/docs/modding.md">docs/modding.md</a> (Rust-моды),
+  <a href="https://github.com/boobser1488/Primitive/blob/master/mods/README.md">mods/README.md</a> (C ABI),
+  <a href="https://github.com/boobser1488/Primitive/blob/master/plugins/README.md">plugins/README.md</a> (Rhai).
+  Как устроен сам код — на странице <a href="code">структуры кода</a>.</p>
 
 </div>
 

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Свой сервер — Primitive</title>
-<meta name="description" content="Свой сервер Primitive: настройки, команды, права оператора, нативные моды через C ABI и скриптовые плагины на Rhai.">
+<meta name="description" content="Свой сервер Primitive: настройки, команды, права оператора, античит, моды и плагины.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
@@ -31,7 +31,8 @@
 <div class="wrap">
 
   <h1>СВОЙ СЕРВЕР</h1>
-  <p class="lead">Как поднять выделенный сервер, что он умеет и как его расширять.</p>
+  <p class="lead">Как поднять выделенный сервер, что он умеет и как его расширять.
+  Всё ниже — про версию 1.5.2; что изменится в следующей, сказано отдельно.</p>
 
   <div class="toc">
     <ul>
@@ -41,9 +42,9 @@
       <li><a href="#commands">Команды</a></li>
       <li><a href="#players">Игроки и операторы</a></li>
       <li><a href="#anticheat">Античит</a></li>
-      <li><a href="#mods">Нативные моды</a></li>
-      <li><a href="#plugins">Плагины на Rhai</a></li>
+      <li><a href="#extend">Моды и плагины</a></li>
       <li><a href="#fly">Полёт: /fly</a></li>
+      <li><a href="#next">В следующей версии</a></li>
     </ul>
   </div>
 
@@ -55,25 +56,35 @@
   <code>settings.toml</code> со всеми значениями — правьте и перезапускайте.</p>
 
   <p>Чтобы игроки подключились снаружи, откройте выбранный порт в брандмауэре и пробросьте его
-  на роутере.</p>
+  на роутере. Клиент и сервер должны быть одной версии.</p>
 
   <p class="dim">Для одиночной игры сервер поднимать не нужно: клиент поднимает его внутри себя,
   на loopback и на порту, который выдаёт система.</p>
 
   <h2 id="settings">Настройки</h2>
 
+  <p>Чаще всего меняют:</p>
+
   <div class="tablewrap">
   <table>
-    <tr><th>Параметр</th><th>Смысл</th></tr>
-    <tr><td><code>bind_addr</code></td><td>адрес и порт (по умолчанию <code>0.0.0.0:7878</code>)</td></tr>
-    <tr><td><code>server_name</code></td><td>имя, которое видят игроки</td></tr>
-    <tr><td><code>world_seed</code></td><td>сид мира</td></tr>
-    <tr><td><code>max_players</code></td><td>предел игроков</td></tr>
-    <tr><td><code>view_distance_chunks</code></td><td>сколько сервер готов отдавать</td></tr>
-    <tr><td><code>world_dir</code></td><td>папка сохранения (пустая строка — не сохранять)</td></tr>
-    <tr><td><code>[anticheat]</code></td><td>секция целиком, включая <code>enabled</code></td></tr>
+    <tr><th>Параметр</th><th>По умолчанию</th><th>Смысл</th></tr>
+    <tr><td><code>bind_addr</code></td><td><code>0.0.0.0:7878</code></td><td>адрес и порт</td></tr>
+    <tr><td><code>server_name</code></td><td><code>Primitive</code></td><td>имя, которое видят игроки</td></tr>
+    <tr><td><code>world_seed</code></td><td><code>1337</code></td><td>сид мира</td></tr>
+    <tr><td><code>world_preset</code></td><td><code>normal</code></td><td>генератор: <code>normal</code> или <code>test</code> (тестовый мир)</td></tr>
+    <tr><td><code>world_zone</code></td><td><code>temperate</code></td><td>широта: <code>tropics</code>, <code>dry_belt</code>, <code>temperate</code>, <code>north</code></td></tr>
+    <tr><td><code>max_players</code></td><td><code>256</code></td><td>предел игроков; лишним отвечают «сервер полон»</td></tr>
+    <tr><td><code>view_distance_chunks</code></td><td><code>8</code></td><td>сколько чанков сервер готов отдавать</td></tr>
+    <tr><td><code>day_length_seconds</code></td><td><code>1800</code></td><td>длина суток в секундах — по ним идут и рост, и гниение, и огонь</td></tr>
+    <tr><td><code>world_dir</code></td><td><code>world</code></td><td>папка сохранения; пустая строка — не сохранять</td></tr>
+    <tr><td><code>autosave_interval_secs</code></td><td><code>120</code></td><td>как часто сохранять</td></tr>
+    <tr><td><code>plugin_dir</code>, <code>mod_dir</code></td><td><code>plugins</code>, <code>mods</code></td><td>откуда грузить; пустая строка выключает загрузчик</td></tr>
+    <tr><td><code>[anticheat]</code></td><td></td><td>секция целиком, включая <code>enabled</code></td></tr>
   </table>
   </div>
+
+  <p><strong>Сид, генератор и широту не меняют под миром с постройками:</strong> сохранение хранит
+  правки, а не чанки, и те же постройки окажутся на земле, которой никогда не было.</p>
 
   <h2 id="status">Статус серверов</h2>
 
@@ -102,31 +113,36 @@
 
   <h2 id="commands">Команды</h2>
 
-  <p>Вводятся в консоли сервера или в чат со слэшем:</p>
+  <p>Вводятся в консоли сервера (без слэша) или в чат со слэшем:</p>
 
 <pre class="lang-cmdlist"><code><span class="tok-cmd">help</span>                 <span class="tok-comment">список команд</span>
 <span class="tok-cmd">list</span>                 <span class="tok-comment">кто онлайн</span>
-<span class="tok-cmd">players</span>              <span class="tok-comment">все, кого сервер помнит: имя, UUID, где вышел</span>
+<span class="tok-cmd">players</span>              <span class="tok-comment">все, кого сервер помнит: имя и UUID</span>
 <span class="tok-cmd">where</span>                <span class="tok-comment">ваши координаты</span>
-<span class="tok-cmd">stats</span>                <span class="tok-comment">аптайм, тики, чанки, правки</span>
-<span class="tok-cmd">time</span> <span class="tok-arg">&lt;0.0-1.0&gt;</span>       <span class="tok-comment">время суток</span>
-<span class="tok-cmd">day</span> <span class="tok-lit">night</span> <span class="tok-lit">dawn</span> <span class="tok-lit">dusk</span> <span class="tok-lit">midnight</span>    <span class="tok-comment">то же, короче</span>
-<span class="tok-cmd">weather</span>              <span class="tok-comment">что в небе и сколько ещё</span>
-<span class="tok-cmd">weather</span> <span class="tok-lit">clear|rain|storm</span>        <span class="tok-comment">поставить и удержать (оператор)</span>
-<span class="tok-cmd">weather</span> <span class="tok-lit">auto</span>         <span class="tok-comment">вернуть небо миру (оператор)</span>
-<span class="tok-cmd">tp</span> <span class="tok-arg">&lt;x&gt;</span> <span class="tok-arg">&lt;y&gt;</span> <span class="tok-arg">&lt;z&gt;</span>       <span class="tok-comment">телепорт</span>
 <span class="tok-cmd">spawn</span>                <span class="tok-comment">на точку появления</span>
+<span class="tok-cmd">stats</span>                <span class="tok-comment">аптайм, тики, чанки, правки</span>
+<span class="tok-cmd">mods</span>                 <span class="tok-comment">загруженные плагины и моды</span>
+<span class="tok-cmd">time</span>                 <span class="tok-comment">который час</span>
+<span class="tok-cmd">time</span> <span class="tok-arg">&lt;0..1|day|night|dawn|dusk|noon|midnight&gt;</span>    <span class="tok-comment">поставить время (оператор)</span>
+<span class="tok-cmd">weather</span>              <span class="tok-comment">что в небе и сколько ещё</span>
+<span class="tok-cmd">weather</span> <span class="tok-arg">&lt;clear|rain|storm&gt;</span>      <span class="tok-comment">поставить и удержать (оператор)</span>
+<span class="tok-cmd">weather</span> <span class="tok-lit">auto</span>         <span class="tok-comment">вернуть небо миру (оператор)</span>
+<span class="tok-cmd">tp</span> <span class="tok-arg">&lt;x&gt;</span> <span class="tok-arg">&lt;y&gt;</span> <span class="tok-arg">&lt;z&gt;</span>       <span class="tok-comment">телепорт (оператор)</span>
+<span class="tok-cmd">biometp</span> <span class="tok-arg">&lt;биом&gt;</span>       <span class="tok-comment">в ближайший чанк названного биома (оператор)</span>
+<span class="tok-cmd">lightning</span> <span class="tok-arg">[&lt;x&gt;</span> <span class="tok-arg">&lt;z&gt;]</span>  <span class="tok-comment">бросить молнию (оператор)</span>
 <span class="tok-cmd">give</span> <span class="tok-arg">&lt;блок&gt;</span> <span class="tok-arg">[n]</span>      <span class="tok-comment">положить блоки себе в рюкзак (оператор)</span>
-<span class="tok-cmd">kick</span> <span class="tok-arg">&lt;имя&gt;</span> <span class="tok-arg">[причина]</span>
-<span class="tok-cmd">say</span> <span class="tok-arg">&lt;текст&gt;</span>          <span class="tok-comment">сообщение всем</span>
+<span class="tok-cmd">say</span> <span class="tok-arg">&lt;текст&gt;</span>          <span class="tok-comment">сообщение всем (оператор)</span>
+<span class="tok-cmd">kick</span> <span class="tok-arg">&lt;имя&gt;</span> <span class="tok-arg">[причина]</span>    <span class="tok-comment">отключить игрока (оператор)</span>
 <span class="tok-cmd">op</span> <span class="tok-arg">&lt;имя&gt;</span>             <span class="tok-comment">выдать права оператора (оператор)</span>
 <span class="tok-cmd">deop</span> <span class="tok-arg">&lt;имя&gt;</span>           <span class="tok-comment">забрать их обратно (оператор)</span>
-<span class="tok-cmd">save</span>                 <span class="tok-comment">сохранить мир</span>
-<span class="tok-cmd">stop</span>                 <span class="tok-comment">остановить сервер</span></code></pre>
+<span class="tok-cmd">save</span>                 <span class="tok-comment">сохранить мир, сундуки и игроков (оператор)</span>
+<span class="tok-cmd">stop</span>                 <span class="tok-comment">сохранить и остановить сервер (оператор)</span></code></pre>
 
-  <p>У команд есть синонимы (<code>who</code>, <code>tps</code>, <code>quit</code>) — полный список
-  даёт сама <code>help</code>. <code>give</code> берёт имя блока таким, каким игра его называет:
-  <code>give cobblestone 40</code>.</p>
+  <p>У команд есть синонимы (<code>who</code>, <code>tps</code>, <code>quit</code>,
+  <code>teleport</code>, <code>broadcast</code>) — полный список даёт сама <code>help</code>.
+  <code>give</code> берёт имя блока таким, каким игра его называет:
+  <code>give cobblestone 40</code>. <code>biometp</code> ищет до 96 чанков вокруг и понимает
+  имя биома так, как его пишет F3.</p>
 
   <h2 id="players">Игроки и операторы</h2>
 
@@ -138,80 +154,70 @@
   появляется там, где вышел, а не на точке появления. Всё это лежит в <code>players.bin</code>
   рядом с миром и пишется при выходе игрока, при автосохранении и при остановке сервера.</p>
 
-  <p><code>op &lt;имя&gt;</code> работает и по игроку, который сейчас офлайн: назначать оператора обычно
-  приходится как раз тогда, когда его нет на месте. Права появляются немедленно, со следующей же
-  введённой строки, без переподключения, и так же немедленно исчезают после <code>deop</code>.
-  Консоль разжаловать нельзя: у того, кто сидит за клавиатурой сервера, и так есть всё,
-  что мог бы отобрать <code>deop</code>.</p>
+  <p><code>op &lt;имя&gt;</code> работает и по игроку, который сейчас офлайн, если сервер его
+  знает. Права появляются немедленно, со следующей же введённой строки, и так же немедленно
+  исчезают после <code>deop</code>. Консоль — оператор по определению, и разжаловать её нельзя.</p>
 
   <h2 id="anticheat">Античит</h2>
 
-  <p>Он существует, чтобы клиент не врал серверу, которым не владеет: всё, что можно проверить,
-  проверяет сервер — дистанция удара, стены между бьющим и целью, подъём без касания земли.</p>
+  <p>Он существует, чтобы клиент не врал серверу, которым не владеет: клиент сам считает
+  движение, а сервер проверяет результат — скорость, подъём без касания земли, телепорт,
+  дальность удара, частоту сообщений. Пороги — в секции <code>[anticheat]</code>; нарушения
+  копятся и затухают, и кик идёт только за их сумму.</p>
 
-  <p>В одиночной игре его нет, и это не упущение: там клиент и сервер — один процесс,
-  и включённый античит мог бы только оттащить игрока назад из-за разногласия с самим собой.</p>
+  <p>В одиночной игре он выключен: там клиент и сервер — один процесс, и античит мог бы только
+  оттащить игрока назад из-за разногласия с самим собой.</p>
 
-  <h2 id="mods">Нативные моды</h2>
+  <h2 id="extend">Моды и плагины</h2>
 
-  <p>Крейт <code>primitive_modapi</code> — граница через <strong>настоящий C ABI</strong>:
-  мод — это динамическая библиотека, которая подписывается на события сервера и вызывает его функции.</p>
+  <p><strong>Плагины на Rhai</strong> — папка <code>plugins/</code>, по подпапке на плагин:
+  <code>plugin.toml</code> и скрипт. В архиве три примера. Плагины подхватываются при
+  запуске сервера и работают только на выделенном сервере: клиент собран без движка
+  скриптов.</p>
 
-  <p>В рабочем пространстве лежат три мода, и каждый существует по своей причине:</p>
-
-  <div class="grid">
-    <div class="panel">
-      <h3>greeter</h3>
-      <p>Доказывает, что граница работает. Изменение API, ломающее мод, ломает <em>сборку</em>.</p>
-    </div>
-    <div class="panel">
-      <h3>flight</h3>
-      <p>Доказывает, что граница несёт настоящую возможность: команда <code>/fly</code>.</p>
-    </div>
-    <div class="panel">
-      <h3>sandbox</h3>
-      <p>Вызывает всё подряд. Нашёл девять событий, которые API объявил, но сервер никогда не посылал,
-      и декоратор чанков, который ни разу не запускался.</p>
-    </div>
-  </div>
+  <p><strong>Нативные моды через C ABI</strong> — папка <code>mods/</code>: библиотека и
+  <code>mod.ron</code>. Их грузит и выделенный сервер, и одиночный мир.</p>
 
 <pre><code><span class="tok-cmd">cargo</span> build <span class="tok-flag">-p</span> flight <span class="tok-flag">--release</span>
 <span class="tok-cmd">copy</span> target\release\flight.dll mods\flight\      <span class="tok-comment"># Windows</span>
-<span class="tok-cmd">cp</span>    target/release/libflight.so mods/flight/   <span class="tok-comment"># Linux</span></code></pre>
+<span class="tok-cmd">cp</span> target/release/libflight.so mods/flight/      <span class="tok-comment"># Linux</span></code></pre>
 
-  <p>С 1.5 моды грузит и выделенный сервер, и одиночный мир.</p>
-
-  <div class="note">
-    <p>Здесь — то, что нужно знать <strong>администратору сервера</strong>. Как мод или
-    плагин написать: хуки, события, правила границы и разбор комплектных примеров —
-    на странице <a href="modding">разработки модов</a>.</p>
-  </div>
-
-  <h2 id="plugins">Плагины на Rhai</h2>
-
-  <p>Папка <code>plugins/</code>, по подпапке на плагин: <code>plugin.toml</code> с описанием
-  и скрипт на <a href="https://rhai.rs">Rhai</a>. В комплекте три примера. Что можно вызывать
-  из скрипта — в
-  <a href="https://github.com/boobser1488/Primitive/blob/master/plugins/README.md">plugins/README.md</a>.</p>
-
-  <p>Плагины подхватываются при <strong>запуске</strong> сервера. В одиночной игре их нет — и не
-  «отключены», а не собраны: клиент подключает <code>primitive_server</code>
-  с <code>default-features = false</code>, и движка скриптов в бинарнике игры нет вовсе.</p>
+  <p>Что загружено, показывает <code>/mods</code>. Как писать свои — на странице
+  <a href="modding">разработки модов</a>.</p>
 
   <h2 id="fly">Полёт: /fly</h2>
 
   <p>Команды <code>/fly</code> в игре нет — её добавляет мод <code>mods/flight</code>.
-  Это не мелочь, а позиция: <strong>возможность живёт в движке, а решение — в моде.</strong>
-  Сервер умеет разрешить игроку не падать; кому и когда это разрешено, решает мод.</p>
-
-  <p>Единственный игрок своего мира — оператор, так что <code>/fly</code> доступен ему сразу.
-  Мод сообщает античиту о выданном разрешении, поэтому за легальный полёт не кикает.
-  Проверить, что мод загружен, — <code>/mods</code>.</p>
+  <strong>Возможность живёт в движке, а решение — в моде:</strong> сервер умеет разрешить
+  игроку не падать, а кому и когда — решает мод. По умолчанию — только операторам
+  (<code>operators_only</code> в <code>mods/flight/mod.ron</code>). Мод сообщает античиту
+  о выданном разрешении, поэтому за легальный полёт не кикает. В одиночном мире
+  единственный игрок — оператор, и <code>/fly</code> доступен ему сразу.</p>
 
   <figure>
     <img src="img/players.png" alt="Четверо игроков на берегу, панель F3 с сетевой статистикой">
     <figcaption>Панель F3 показывает и сетевые цифры: входящие, исходящие, коррекции.</figcaption>
   </figure>
+
+  <h2 id="next">В следующей версии</h2>
+
+  <p class="dim">Уже в исходниках, но не в 1.5.2.</p>
+
+  <ul>
+    <li><strong>Файл настроек</strong> называется <code>server_settings.toml</code>; старый
+    <code>settings.toml</code> сервера переименуется сам при первом запуске.</li>
+    <li><strong>Соединение шифруется</strong>, у сервера может быть пароль
+    (<code>server_password</code> — при запуске он заменяется хешем), а плагин <code>auth</code>
+    спрашивает пароль у игроков. Новые команды <code>forgetdevices</code> и
+    <code>resetpassword</code>.</li>
+    <li><strong>Где вы, игроку не сообщают:</strong> <code>where</code>, <code>spawn</code>
+    и <code>weather</code> без аргументов — только для оператора; координаты в F3 — тоже.</li>
+    <li><strong>Земля движется сама</strong> — оползни, просадки, землетрясения — и засуха:
+    команды <code>quake</code>, <code>drought</code>, <code>events</code> и настройка
+    <code>ground_events</code>.</li>
+    <li><strong>Rust-моды</strong>: моды, которые меняют правила, должны стоять и у сервера,
+    и у игрока той же версии — иначе сервер не пустит и скажет, какого мода не хватает.</li>
+  </ul>
 
   <h2>Проверить, что всё живо</h2>
 
@@ -220,6 +226,9 @@
 <span class="tok-cmd">cargo</span> build <span class="tok-flag">-p</span> flight  <span class="tok-op">&amp;&amp;</span> <span class="tok-cmd">cargo</span> test <span class="tok-flag">-p</span> primitive_server <span class="tok-flag">--test</span> flight
 <span class="tok-cmd">cargo</span> build <span class="tok-flag">-p</span> sandbox <span class="tok-op">&amp;&amp;</span> <span class="tok-cmd">cargo</span> test <span class="tok-flag">-p</span> primitive_server <span class="tok-flag">--test</span> sandbox
 <span class="tok-cmd">cargo</span> run <span class="tok-flag">-p</span> primitive_server <span class="tok-flag">--example</span> verify_flight</code></pre>
+
+  <p class="dim"><code>verify_broadcast</code> и <code>verify_flight</code> ходят к уже запущенному
+  серверу через настоящий сокет.</p>
 
 </div>
 

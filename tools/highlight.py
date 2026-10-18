@@ -144,6 +144,46 @@ def highlight_cmdlist(body):
     return "\n".join(out_lines)
 
 
+# Rust, а заодно WGSL и RON — у всех трёх комментарий `//`, строка в
+# двойных кавычках и `fn`. Разбирать их как оболочку нельзя: там `#`
+# открывает комментарий, и `#[allow(...)]` посерел бы целиком, а `// ...`
+# не посерел бы вовсе.
+RUST_KEYWORDS = {
+    "fn", "pub", "mod", "use", "let", "mut", "const", "static", "struct",
+    "enum", "impl", "trait", "match", "if", "else", "for", "in", "while",
+    "loop", "return", "as", "where", "self", "Self", "crate", "true",
+    "false", "Some", "None", "Ok", "Err",
+}
+
+RE_RUST = re.compile(
+    r'(?P<comment>//[^\n]*)'
+    r'|(?P<str>"(?:[^"\\\n]|\\.)*")'
+    r'|(?P<attr>#!?\[[^\]\n]*\])'
+    r'|(?P<entity>&[a-z]+;)'
+    r'|(?P<macro>\b[A-Za-z_][A-Za-z0-9_]*!)'
+    r'|(?P<word>\b[A-Za-z_][A-Za-z0-9_]*\b)'
+)
+
+
+def highlight_rust(body):
+    """Rust, WGSL и RON: ключевые слова, макросы, строки, атрибуты, комментарии."""
+    def repl(m):
+        kind, text = m.lastgroup, m.group()
+        if kind == "comment":
+            return SPAN.format("comment", text)
+        if kind == "str":
+            return SPAN.format("str", text)
+        if kind == "attr":
+            return SPAN.format("arg", text)
+        if kind == "macro":
+            return SPAN.format("lit", text)
+        if kind == "word" and text in RUST_KEYWORDS:
+            return SPAN.format("cmd", text)
+        # Сущности (&amp;, &lt;) — как есть: «amp» внутри них не слово.
+        return text
+    return RE_RUST.sub(repl, body)
+
+
 def process(path):
     src = io.open(path, encoding="utf-8").read()
 
@@ -152,6 +192,8 @@ def process(path):
         attrs = m.group("attrs") or ""
         if "lang-cmdlist" in attrs:
             body = highlight_cmdlist(body)
+        elif "lang-rust" in attrs:
+            body = highlight_rust(body)
         else:
             body = highlight_shell(body, keywords="lang-rhai" in attrs)
         return m.group(1) + body + m.group(4)
