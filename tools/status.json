@@ -1,0 +1,14 @@
+{
+  "checked_unix": 1788546004.1329892,
+  "checked": "2026-09-04 18:20 UTC",
+  "servers": [
+    {
+      "name": "Локальный",
+      "host": "127.0.0.1",
+      "port": 7878,
+      "ok": false,
+      "latency_ms": null,
+      "reason": "соединение отклонено"
+    }
+  ]
+}

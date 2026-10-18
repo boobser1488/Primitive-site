@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Игра по сети - Primitive</title>
+<meta name="description" content="Как зайти на сервер Primitive, пароли серверов и окна входа, и как поднять свой сервер: порт 7878, server_settings.toml, операторы и команды.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<header class="top"><div class="wrap">
+<a class="brand" href="index.html">Primitive <small>вики</small></a>
+<a class="site" href="../../index.html">&larr; сайт</a>
+<div class="langs"><a href="../en/multiplayer.html" lang="en" hreflang="en">English</a><a href="../pl/multiplayer.html" lang="pl" hreflang="pl">Polski</a><span lang="ru">Русский</span><a href="../es/multiplayer.html" lang="es" hreflang="es">Español</a></div>
+</div></header>
+<nav class="pages" aria-label="Страницы"><div class="wrap"><ul>
+<li><a href="index.html">Оглавление</a></li>
+<li><a href="getting-started.html">Первые шаги</a></li>
+<li><a href="path.html">Путь</a></li>
+<li><a href="crafting.html">Ремесло</a></li>
+<li><a href="farming.html">Поле</a></li>
+<li><a href="survival.html">Выживание</a></li>
+<li><a href="animals.html">Звери</a></li>
+<li><a href="world.html">Мир</a></li>
+<li><a href="controls.html">Управление</a></li>
+<li><span aria-current="page">Сетевая игра</span></li>
+<li><a href="faq.html">Вопросы</a></li>
+</ul></div></nav>
+<main class="wrap">
+<h1>Игра по сети</h1>
+<p class="lead">Одиночная игра — это тот же сервер, только запущенный внутри игры, поэтому общий мир играется точно так же, как ваш собственный.</p>
+
+<h2>Как зайти на сервер</h2>
+<ol>
+<li><b>ПО СЕТИ</b> &rarr; <b>ДОБАВИТЬ</b> (или <kbd>A</kbd>).</li>
+<li>Дайте ему любое <b>ИМЯ</b> и <b>АДРЕС</b> в виде <code>host:port</code>. Если порт не указать, добавится <code>:7878</code>. Третье поле, <b>ПАРОЛЬ СЕРВЕРА</b>, нужно только для серверов, которые его спрашивают.</li>
+<li><b>СОХРАНИТЬ</b>, выберите сервер, <b>ИГРАТЬ</b>.</li>
+</ol>
+<p><kbd>E</kbd> изменяет сервер, <kbd>Del</kbd> удаляет его.</p>
+<figure><img src="../img/servers.jpg" width="1280" height="720" alt="Экран СЕРВЕРЫ с одной записью, Local server 127.0.0.1:7878, и кнопками ИГРАТЬ, ДОБАВИТЬ, ИЗМЕНИТЬ, УДАЛИТЬ и НАЗАД"><figcaption>Список серверов.</figcaption></figure>
+<ul>
+<li><b>Соединение всегда зашифровано</b> — и с общим сервером, и с вашим собственным миром.</li>
+<li><b>Ключ сервера.</b> В первый раз игра запоминает ключ сервера. Если тот же адрес потом отвечает другим ключом, игра отказывается подключаться и показывает <b>КЛЮЧ СЕРВЕРА СМЕНИЛСЯ</b> с обоими отпечатками. Доверяйте новому ключу, только если владелец сказал вам, что сменил его.</li>
+<li><b>Пароль сервера.</b> Закрытый сервер спрашивает пароль при подключении; можно войти один раз или войти и запомнить пароль.</li>
+<li><b>Окно входа.</b> Если на сервере работает плагин входа, окно в <b>синей рамке</b>, помеченное как собственное окно сервера, в первый раз просит придумать пароль для вашего имени, а потом спрашивает этот пароль. Синяя рамка значит, что пишет сервер, а не игра. После одного входа сервер выдаёт этому устройству ключ, так что пароль снова понадобится только на новом устройстве. <code>/forgetdevices</code> заставляет все ваши устройства снова спросить пароль; <code>/password</code> меняет его.</li>
+</ul>
+
+<h2>Чем отличается игра с другими людьми</h2>
+<ul>
+<li><b>Карта у каждого своя</b>: что видели другие, они расскажут вам сами.</li>
+<li>Других игроков видно <b>такими, как они одеты</b>, и с тем, что у них в руках.</li>
+<li>Игрока, упавшего без сил, может <b>поднять друг</b>: щёлкните по нему правой кнопкой с бинтом, шиной, едой или кувшином — тем, чего просит его отсчёт. Вещь тратится ваша.</li>
+<li>Тело погибшего игрока может открыть любой. На маленьком сервере первым обычно приходит друг, который был рядом.</li>
+<li>Следы <span class="new">в следующем обновлении</span> видны всем: кто придёт позже, увидит вашу тропу уже постаревшей.</li>
+<li>Панель F3 показывает координаты только операторам. Никому не говорят, где он; дорогу находят по приметам и по своей карте.</li>
+</ul>
+
+<h2>Свой сервер</h2>
+<p>Запустите <code>primitive_server.exe</code> из архива выпуска. При первом запуске он записывает рядом с собой <code>server_settings.toml</code> со всеми значениями; поправьте его и перезапустите. Обычно меняют вот что:</p>
+<div class="tbl"><table>
+<tr><th>Настройка</th><th>Значение</th></tr>
+<tr><td><code>bind_addr</code></td><td>адрес и порт, по умолчанию <code>0.0.0.0:7878</code></td></tr>
+<tr><td><code>server_name</code></td><td>имя, которое видят игроки</td></tr>
+<tr><td><code>world_seed</code></td><td>сид мира</td></tr>
+<tr><td><code>max_players</code></td><td>предел игроков</td></tr>
+<tr><td><code>view_distance_chunks</code></td><td>как далеко сервер отправляет мир</td></tr>
+<tr><td><code>world_dir</code></td><td>где сохраняется мир (пусто — не сохраняется)</td></tr>
+<tr><td><code>server_password</code></td><td>пароль сервера; при запуске он заменяется хешем</td></tr>
+<tr><td><code>[anticheat]</code></td><td>раздел античита, включая <code>enabled</code></td></tr>
+</table></div>
+<p>Чтобы зашли игроки не из вашей сети, откройте порт в брандмауэре и пробросьте его на роутере. Ключ сервера лежит в папке мира как <code>server.key</code>; переносите его вместе с миром, иначе каждому игроку скажут, что сервер подменили.</p>
+<p>Плагин входа (<code>plugins/auth</code>) по умолчанию выключен; поставьте <code>enabled = true</code> в его <code>plugin.toml</code> и перезапустите. Без него и без пароля журнал предупреждает, что личность игроков не проверяется: кто ввёл имя, тот под ним и играет.</p>
+
+<h3>Команды</h3>
+<p>Вводятся в консоли сервера или в чате с <code>/</code> впереди. <code>help</code> перечисляет все.</p>
+<div class="tbl"><table>
+<tr><th>Команда</th><th>Что делает</th></tr>
+<tr><td><code>list</code></td><td>кто в сети</td></tr>
+<tr><td><code>players</code></td><td>все, кого помнит сервер</td></tr>
+<tr><td><code>say &lt;text&gt;</code></td><td>сообщение всем</td></tr>
+<tr><td><code>time &lt;0.0-1.0&gt;</code>, <code>day</code>, <code>night</code>, <code>dawn</code>, <code>dusk</code></td><td>время суток</td></tr>
+<tr><td><code>weather clear|rain|storm|auto</code></td><td>задать погоду или отпустить её (оператор)</td></tr>
+<tr><td><code>tp &lt;x&gt; &lt;y&gt; &lt;z&gt;</code></td><td>телепорт (оператор)</td></tr>
+<tr><td><code>give &lt;block&gt; [n]</code></td><td>вещи в инвентарь (оператор), например <code>give cobblestone 40</code></td></tr>
+<tr><td><code>kick &lt;name&gt;</code>, <code>op &lt;name&gt;</code>, <code>deop &lt;name&gt;</code></td><td>выгнать, дать и снять права оператора</td></tr>
+<tr><td><code>save</code>, <code>stop</code></td><td>сохранить мир, остановить сервер</td></tr>
+</table></div>
+<p>Сервер помнит каждого игрока по идентификатору, сделанному из имени, вместе с его инвентарём, здоровьем и местом, где он вышел; вернувшийся игрок появляется там, где ушёл. В одиночной игре вы оператор, только если для этого мира включено <b>КОМАНДЫ И ТЕСТИРОВАНИЕ</b>.</p>
+<div class="pager"><a href="controls.html">&larr; Управление</a><a href="faq.html">Вопросы &rarr;</a></div>
+</main>
+<footer><div class="wrap">Руководство игрока по Primitive, сверенное с кодом игры, с кадрами из самой игры. Неофициальные заметки: игра меняется быстрее, чем они.</div></footer>
+</body>
+</html>

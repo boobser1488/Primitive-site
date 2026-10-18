@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Primeros pasos - Primitive</title>
+<meta name="description" content="La primera tarde en Primitive: crear un mundo, elegir dónde aterrizar, la primera piedra, la fibra y el sílex, las primeras herramientas, el fuego, la comida y el agua.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<header class="top"><div class="wrap">
+<a class="brand" href="index.html">Primitive <small>wiki</small></a>
+<a class="site" href="../../index.html">&larr; sitio</a>
+<div class="langs"><a href="../en/getting-started.html" lang="en" hreflang="en">English</a><a href="../pl/getting-started.html" lang="pl" hreflang="pl">Polski</a><a href="../ru/getting-started.html" lang="ru" hreflang="ru">Русский</a><span lang="es">Español</span></div>
+</div></header>
+<nav class="pages" aria-label="Páginas"><div class="wrap"><ul>
+<li><a href="index.html">Índice</a></li>
+<li><span aria-current="page">Primeros pasos</span></li>
+<li><a href="path.html">El camino</a></li>
+<li><a href="crafting.html">Artesanía</a></li>
+<li><a href="farming.html">Cultivo</a></li>
+<li><a href="survival.html">Supervivencia</a></li>
+<li><a href="animals.html">Animales</a></li>
+<li><a href="world.html">El mundo</a></li>
+<li><a href="controls.html">Controles</a></li>
+<li><a href="multiplayer.html">Multijugador</a></li>
+<li><a href="faq.html">Preguntas</a></li>
+</ul></div></nav>
+<main class="wrap">
+<h1>Primeros pasos</h1>
+<p class="lead">Despiertas sin nada. Esta página te lleva del menú hasta un fuego, un cuchillo y el estómago lleno.</p>
+
+<figure><img src="../img/menu.jpg" width="1280" height="720" alt="El menú principal: PRIMITIVE con SINGLEPLAYER, MULTIPLAYER, SETTINGS, CREDITS y QUIT junto a una puesta de sol sobre el mar"><figcaption>El menú principal.</figcaption></figure>
+
+<h2>Crear un mundo</h2>
+<p><b>SINGLEPLAYER</b> (un jugador) &rarr; <b>NEW</b> (nuevo). El formulario pide:</p>
+<ul>
+<li><b>NAME</b> (nombre) y <b>SEED</b> (semilla). La misma semilla da el mismo mundo a cualquiera que la escriba. Déjala vacía para que sea aleatoria; <b>ROLL</b> pone un número aleatorio que puedes ver.</li>
+<li><b>WORLD TYPE</b> (tipo de mundo): <b>NORMAL</b> es el juego. <b>TEST</b> es un campo llano con todas las estaciones, cultivos y animales ya colocados alrededor del punto de aparición, para probar cosas.</li>
+<li><b>GRASS DENSITY</b> (densidad de la hierba): lo espesa que crece la pradera. También decide cuántas matas de hierba puedes arrancar para sacar fibra.</li>
+<li><b>HOW BIG THE WORLD IS</b> (tamaño del mundo): un planeta que va de <b>THE EARTH 1:1</b> (la Tierra a escala real, la opción por defecto, unos 108 días para darle la vuelta a pie) hasta <b>SMALL</b> (pequeño, unas cuatro horas). En un planeta pequeño todos los climas quedan a un día de camino.</li>
+<li><b>THE GROUND MOVES</b> (el suelo se mueve): cada cuánto hay desprendimientos y terremotos.</li>
+<li><b>COMMANDS AND TESTING</b> (comandos y pruebas): desactivado por defecto. Si lo activas, eres el operador de tu propio mundo: funcionan <code>/time</code>, <code>/give</code>, <code>/tp</code> y el menú de objetos de la tecla <kbd>G</kbd>.</li>
+</ul>
+<figure><img src="../img/new-world.jpg" width="1280" height="720" alt="El formulario NEW WORLD con nombre, semilla, tipo de mundo, densidad de hierba, tamaño del mundo, sucesos del terreno y el interruptor de comandos" loading="lazy"><figcaption>El formulario de mundo nuevo.</figcaption></figure>
+
+<h2>Elegir dónde aterrizar</h2>
+<p>Un mundo nuevo es un planeta, y tú eliges en qué punto despiertas. El globo se gira arrastrando, se acerca con la rueda (o pellizcando la pantalla) y, al hacer clic sobre tierra, se marca una cruz. El panel de la derecha dice qué hay allí: el continente, el país, lo cálido y húmedo que es, a qué distancia está el ecuador y qué hay a un día de camino.</p>
+<ul>
+<li><b>LAND HERE</b> (aterrizar aquí) te hace empezar en la cruz (en el terreno llano y seco más cercano).</li>
+<li><b>ANYWHERE</b> (en cualquier parte) deja que el juego elija un punto en una costa.</li>
+</ul>
+<p>Es la única elección que no puedes deshacer caminando. Los trópicos son calurosos, húmedos y casi no tienen invierno. El cinturón seco es desierto y sabana, y allí el problema es el agua. El cinturón templado (robles, abedules, praderas, un invierno de verdad) es para el que se pensó el juego. El norte significa abetos, lagos helados y necesitar lana.</p>
+<figure><img src="../img/landing.jpg" width="1280" height="720" alt="La pantalla de aterrizaje: un globo pixelado con mares y bosques con nombre, una cruz sobre la tierra y un panel que describe el lugar" loading="lazy"><figcaption>WHERE TO LAND (dónde aterrizar): el panel describe el lugar que hay bajo la cruz.</figcaption></figure>
+<p><span class="new">próxima actualización</span> Un botón en la esquina inferior izquierda del globo cambia entre cuatro formas de dibujar el mismo planeta: píxeles, un globo liso e iluminado, celdas hexagonales y una carta antigua.</p>
+
+<h2>Las tres primeras cosas</h2>
+<p>Mientras no las hayas hecho, una línea encima del cinturón te dice el siguiente paso. Son tres, en cualquier orden, y la línea desaparece para siempre cuando las has hecho todas:</p>
+<ol>
+<li><b>Coge una piedra.</b> Hay guijarros (Pebble) sueltos por el suelo. Rompe uno (botón izquierdo del ratón) y va a tu fardo (el inventario, PACK en el juego).</li>
+<li><b>Arranca hierba alta para sacar fibra (Fibre).</b> Haz clic izquierdo en una mata de hierba alta. No todas dan fibra; los juncos de la orilla dan dos cada uno, así que la fibra sale más rápido junto a un río.</li>
+<li><b>Encuentra sílex (Flint) y talla lascas con él.</b></li>
+</ol>
+<figure><img src="../img/first-minutes.jpg" width="1280" height="720" alt="Vista en primera persona de una pradera soleada con árboles; la línea de pista de abajo dice «there are stones lying on the ground» (hay piedras en el suelo)" loading="lazy"><figcaption>La primera pista, en tu primer minuto.</figcaption></figure>
+<p>Después, abre el fardo (<kbd>I</kbd>) y mira su pestaña <b>LADDER</b> (la escalera de las edades). Muestra las siete edades, de las manos desnudas al hierro, en cuál estás, qué necesita la siguiente y en qué tipo de lugar se encuentra. Consulta <a href="path.html">El camino</a>.</p>
+
+<h2>Dónde está el sílex</h2>
+<p>El sílex son nódulos oscuros y angulosos. Búscalo en:</p>
+<ul>
+<li><b>La franja clara a lo largo de ríos y lagos.</b> La grava y los guijarros se acumulan en una banda de unos pocos bloques de ancho al borde del agua, y allí más o menos uno de cada tres guijarros es sílex. El mar no tiene esa franja.</li>
+<li><b>La roca desnuda y los pedregales</b> al pie de los acantilados, y <b>el suelo de las cuevas</b>, donde ha caído mucho desde la roca.</li>
+<li><b>La grava</b>: cuatro de grava se criban a mano en un sílex.</li>
+</ul>
+
+<h2 id="tools">Las primeras herramientas</h2>
+<p>Ninguna herramienta se hace con un solo clic. Todas salen de una cabeza, un mango y una atadura:</p>
+<div class="tbl"><table>
+<tr><th>Paso</th><th>Receta (a mano)</th><th>Nota</th></tr>
+<tr><td>Lascas de sílex (Flint flake)</td><td>1 sílex &rarr; 3 lascas</td><td>Más o menos uno de cada tres sílex se hace añicos y no da nada.</td></tr>
+<tr><td>Palo trabajado (Worked stick)</td><td>1 palo + 1 lasca</td><td>El mango. La lasca se gasta.</td></tr>
+<tr><td>Hoja de cuchillo de sílex (Flint knife head)</td><td>2 lascas</td><td>La mitad de los intentos se rompen.</td></tr>
+<tr><td>Cabeza de hacha de piedra (Stone axe head)</td><td>3 guijarros</td><td>Nunca falla.</td></tr>
+<tr><td>Cabeza de pico de piedra (Stone pick head)</td><td>4 guijarros</td><td>Nunca falla.</td></tr>
+<tr><td>Cuerda (Cord)</td><td>6 de fibra</td><td>Un puñado de hierba no sujeta nada hasta que se retuerce.</td></tr>
+<tr><td>Cuchillo de sílex / hacha de piedra / pico de piedra</td><td>cabeza + palo trabajado + cuerda</td><td>Un tendón (Sinew) de un cadáver puede sustituir a la cuerda.</td></tr>
+</table></div>
+<p>Cada herramienta hace su trabajo y nada más: el <b>pico</b> rompe piedra y mineral, el <b>hacha</b> tala árboles en pie y el <b>cuchillo</b> corta hierba, hojas y cadáveres. Cualquiera de ellas ayuda en los trabajos blandos, como cavar tierra.</p>
+<div class="note warn"><p><b>Un hacha recién atada no tala árboles.</b> La cabeza baila en su atadura: el hacha de piedra puede con troncos caídos y tablones, y el pico de piedra con tierra y grava, pero ninguno puede con un tronco en pie ni con la piedra. Primero hay que <b>acuñarla</b>: la herramienta + 2 clavijas (Peg), a mano. Las clavijas salen de un palo trabajado (1 &rarr; 4).</p></div>
+<p>Hasta que tengas un hacha acuñada, la madera sale de troncos caídos y de palos tirados por el suelo.</p>
+
+<h2 id="fire">El fuego</h2>
+<p>El primer fuego no necesita piedras ni receta. <b>Tira tres palos y un tronco en el mismo sitio</b> (<kbd>Q</kbd> suelta lo que tienes en la mano) y luego <b>haz clic derecho en el suelo, debajo de ellos, con sílex en la mano</b>. Eso es una fogata en el suelo (Firepit). Si falta algo, el juego te dice cuántos palos y troncos hay en el suelo.</p>
+<p>Más adelante puedes hacer una <b>hoguera</b> (Campfire) de verdad: 3 de piedra partida (Cobblestone) + 4 palos. Se puede recoger y llevar contigo; la fogata se queda donde se encendió. La piedra partida necesita un pico (acuñado).</p>
+<figure><img src="../img/campfire.jpg" width="1280" height="720" alt="Atardecer en el patio de una granja: una hoguera rodeada de piedras, un taburete y un caballo tumbado, detrás una casa con techo de paja" loading="lazy"><figcaption>Una hoguera en el patio al anochecer. La lluvia apaga un fuego al aire libre en menos de un minuto; un bloque justo encima lo mantiene vivo.</figcaption></figure>
+<ul>
+<li><b>Encender un fuego gasta un sílex</b> cada vez que de verdad prende.</li>
+<li><b>Haz clic derecho en un fuego</b> con cualquier cosa que no sea sílex para abrir su pantalla: cuatro casillas de entrada, una de combustible, dos de salida y una de ceniza. Funciona solo: lo cargas, lo enciendes y te vas.</li>
+<li>Un fuego encendido echa humo, y la columna de humo se ve desde lejos. Es la forma más fácil de volver a encontrar tu campamento.</li>
+<li>Estar dentro de un fuego te quema, cuatro puntos de salud por segundo. Sal de ahí.</li>
+</ul>
+
+<h2 id="water">El agua</h2>
+<p>Para beber, haz clic derecho en el agua con la mano vacía. No toda el agua es igual:</p>
+<ul>
+<li><b>El agua corriente</b> (ríos, arroyos, una zanja abierta desde un río) es segura.</li>
+<li><b>El agua estancada</b> (charcas, lagos, charcos) quita la sed, pero te enferma dos de cada cinco veces: más o menos un minuto y medio perdiendo salud poco a poco, sin que las heridas se curen. La enfermedad empieza unos dos minutos después de beber.</li>
+<li><b>El agua de mar</b> te da más sed, y su enfermedad dura el doble.</li>
+</ul>
+<p>Una jarra (Jug) de agua de charca puesta veinte segundos en un fogón encendido queda segura. El agua de mar no se puede potabilizar hirviéndola.</p>
+
+<h2>La comida</h2>
+<p>Come con <kbd>E</kbd> (el objeto de la casilla seleccionada). Las bayas y las raíces te mantienen hasta que tienes fuego; lo que de verdad alimenta es la carne y los campos. La carne asada llena <b>cuatro veces</b> más que la cruda, y la carne cruda te enferma durante 45 segundos. La carne solo sale de un cadáver con cuchillo: haz clic derecho en el cadáver con un cuchillo, un corte por clic.</p>
+<div class="tbl"><table>
+<tr><th>Comida</th><th>Cuánto llena</th></tr>
+<tr><td>Bayas</td><td>2</td></tr>
+<tr><td>Carne cruda</td><td>2.5</td></tr>
+<tr><td>Carne seca</td><td>7</td></tr>
+<tr><td>Pan</td><td>8</td></tr>
+<tr><td>Carne asada</td><td>10</td></tr>
+</table></div>
+<p>La barra de comida llega a 20. Quieto, apenas te entraría hambre; lo que la vacía es cavar, correr y saltar. Más en <a href="survival.html">Supervivencia</a>.</p>
+
+<h2>La primera noche</h2>
+<p>Las noches son oscuras y frías, y lo más frío llega justo antes del amanecer. Una <b>antorcha</b> (Torch) es un palo y fibra; sale apagada, y la enciendes haciendo clic derecho con ella en la mano sobre un fuego encendido. Una antorcha de hierba dura dos minutos y medio. Cualquier bloque opaco sobre tu cabeza reduce a la mitad el frío de la noche; un techo más paredes en tres lados quita cuatro quintas partes, y un fuego dentro de las paredes hace el resto.</p>
+<div class="pager"><a href="index.html">&larr; Índice</a><a href="path.html">El camino &rarr;</a></div>
+</main>
+<footer><div class="wrap">Guía de jugador de Primitive, escrita a partir del propio código del juego y con capturas tomadas dentro del juego. Notas no oficiales: el juego cambia más rápido que ellas.</div></footer>
+</body>
+</html>

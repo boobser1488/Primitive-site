@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Farming - Primitive</title>
+<meta name="description" content="Farming in Primitive: where seeds come from, making a hoe, tilling, watering, crop stages and times, frost, ash and tired soil, bread, cotton and millet.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<header class="top"><div class="wrap">
+<a class="brand" href="index.html">Primitive <small>wiki</small></a>
+<a class="site" href="../../index.html">&larr; site</a>
+<div class="langs"><span lang="en">English</span><a href="../pl/farming.html" lang="pl" hreflang="pl">Polski</a><a href="../ru/farming.html" lang="ru" hreflang="ru">Русский</a><a href="../es/farming.html" lang="es" hreflang="es">Español</a></div>
+</div></header>
+<nav class="pages" aria-label="Pages"><div class="wrap"><ul>
+<li><a href="index.html">Contents</a></li>
+<li><a href="getting-started.html">Getting started</a></li>
+<li><a href="path.html">The path</a></li>
+<li><a href="crafting.html">Crafting</a></li>
+<li><span aria-current="page">Farming</span></li>
+<li><a href="survival.html">Survival</a></li>
+<li><a href="animals.html">Animals</a></li>
+<li><a href="world.html">The world</a></li>
+<li><a href="controls.html">Controls</a></li>
+<li><a href="multiplayer.html">Multiplayer</a></li>
+<li><a href="faq.html">FAQ</a></li>
+</ul></div></nav>
+<main class="wrap">
+<h1>Farming</h1>
+<p class="lead">A field is the first food you make rather than find. The hunter eats better for one evening; the farmer eats every evening.</p>
+
+<h2>1. Seeds come from wild wheat</h2>
+<p>Grass does not drop seeds. Seeds come from <b>wild wheat</b>: clumps of grain in warm, dry, open country. Most often in the steppe, less often on meadows, now and then at a dry forest edge. It does not grow in the cold or the wet, so a player who starts in the north goes south for a first field. It looks like ripe wheat in a field; that silhouette means "grain" everywhere in the game. Wild wheat does not grow back once picked.</p>
+
+<h2>2. Make a hoe</h2>
+<div class="tbl"><table>
+<tr><th>Hoe</th><th>Recipe</th></tr>
+<tr><td>Hoe (flint)</td><td>2 flint flakes + 1 worked stick + 3 fibre, by hand</td></tr>
+<tr><td>Hoe (bone)</td><td>2 bones + 1 worked stick + 3 fibre, by hand. The same hoe, for those who settle far from flint.</td></tr>
+<tr><td>Copper hoe</td><td>copper hoe head (1 copper ingot cast in the mould at the kiln) + worked stick + sinew, by hand</td></tr>
+</table></div>
+<p>If you have knapped one knife, you have everything the flint hoe needs. The hoe is not counted as a digging tool: it breaks nothing and opens no rock. It wears out after about 120 tillings.</p>
+<div class="note warn"><p><b>Right-click with the hoe does nothing?</b> In version 1.5.2 a right-click with the hoe (and with a stake) never reached the server, so nothing was tilled. This is fixed in the next update.</p></div>
+
+<h2>3. Till the ground</h2>
+<p>Hold the hoe and <b>right-click grass or earth</b>. The block becomes <b>farmland</b>, and only farmland takes a crop. The cell above must be empty. Grass, dirt and the various soils (sandy soil, loam, chernozem, loess, rendzina and others) can all be tilled.</p>
+<p>The hoe tells you two things when it turns the soil: whether <b>water is close by</b>, and what kind of earth this is, if it is not ordinary (<i>rich</i> earth on floodplains, marsh edges and river banks grows things one and a half times faster; <i>poor</i> earth on sand, tundra, mountains and dry inland is one and a half times slower). The same message comes at most once a minute, so tilling a whole field gives one line, not eighty.</p>
+<figure><img src="../img/hoe.jpg" width="1280" height="720" alt="First-person view holding a copper hoe over a strip of tilled farmland by a ditch"><figcaption>A copper hoe over the field.</figcaption></figure>
+
+<h2>4. Water</h2>
+<p>A field is watered if there is water within <b>four blocks</b> of the farmland, at the same level or one block lower. The four blocks count as a square, diagonals included, so a ditch down the middle of a field nine wide waters it to the edges. A ditch dug from a river counts. A frozen ditch does not.</p>
+<p>A <b>dry field grows two and a half times slower</b>. Fill in the ditch and it slows at once.</p>
+<figure><img src="../img/field.jpg" width="1280" height="720" alt="A field of wheat and millet on a terrace, with a ditch leading off the river beside it" loading="lazy"><figcaption>A field with its own ditch off the river.</figcaption></figure>
+
+<h2>5. Sow, wait, harvest</h2>
+<ol>
+<li><b>Sow</b>: place seeds on farmland like any block.</li>
+<li><b>Wait</b>: two stages of <b>15 minutes</b> each when watered and warm: green stalks, then golden ears.</li>
+<li><b>Harvest</b>: break the ripe crop by hand. It gives <b>grain and one seed</b>. Unripe, it gives back the seed. The field resows itself; to make it bigger you go back to the wild wheat.</li>
+</ol>
+
+<h2>Warmth and frost</h2>
+<div class="tbl"><table>
+<tr><th>Crop</th><th>Grows from</th><th>Killed by frost at</th></tr>
+<tr><td>Wheat</td><td>4&deg;</td><td>&minus;6&deg;</td></tr>
+<tr><td>Millet</td><td>14&deg;</td><td>0&deg;</td></tr>
+<tr><td>Cotton</td><td>16&deg;</td><td>0&deg;</td></tr>
+</table></div>
+<p>Below its threshold a crop <b>stops but does not lose progress</b>; a cold night costs one night. The temperature is the one you would feel standing in that cell: season, height, hour, rain, a roof and a nearby fire all count. A frost-killed crop stays as <b>withered stalks</b> that give fibre and nothing else. A ripe crop is safe; its grain is already made.</p>
+<p>Sow wheat in spring and reap before the autumn nights. Millet and cotton on a temperate meadow are summer crops only. A fire by the field keeps the air over it warm on a frosty night, and a roof over a bed takes away the cold of the open sky.</p>
+
+<h2>Seasons</h2>
+<p>A day lasts <b>30 minutes</b>; a year is <b>40 days</b>, ten for each season. A new world opens at the end of spring, summer comes on day 4, and the first winter on day 24, roughly twelve hours of play in. Winter adds about &minus;10&deg; everywhere, summer about +6&deg;.</p>
+
+<h2>Ash, manure and tired soil</h2>
+<ul>
+<li>A harvest taken from farmland <b>without ash</b> leaves it <b>tired</b> (it turns pale, like burnt straw), and the next crop on it takes one and a half times as long.</li>
+<li><b>Ash</b>: right-click tilled ground with ash. The earth turns grey and the next crop grows a third faster; the ash is used up by that harvest. Ash comes from the hearth's ash slot, from a charcoal pit left open, and from burnt trees.</li>
+<li><b>Fallow</b>: bare farmland with nothing sown rests in half an hour.</li>
+<li><b>Manure</b> from kept animals, left on a furrow and picked up again, feeds it like ash.</li>
+</ul>
+<p>Two fields in turn, one growing and one resting, crop as often as one fresh field.</p>
+
+<h2>From grain to bread</h2>
+<ol>
+<li><b>Flour</b>: 3 grain + 1 pebble &rarr; 2 flour, by hand. The pebble comes back. (At the mason's block: 3 grain &rarr; 3 flour.)</li>
+<li><b>Dough</b>: 2 flour + a jug of water &rarr; dough. The jug comes back empty. River or pond water is fine; sea water is not.</li>
+<li><b>Bread</b>: dough at any fire.</li>
+</ol>
+<p>Bread fills 8, less than cooked meat (10) and more than almost anything else. It goes stale and mouldy in four days (eight in a cool cellar). Grain and flour never spoil, so the winter store is a barrel of grain, not a chest of bread.</p>
+
+<h2>Cotton and millet</h2>
+<p><b>Wild cotton</b> is a low bush with white bolls in the <b>savanna</b>. Pick it by hand for cotton and cotton seeds. Cotton needs warm air (from 16&deg;): a field of it grows in the savanna and hardly moves on a temperate meadow. Cloth woven from it is the only clothing that is cooler than none in the heat.</p>
+<p><b>Millet</b> grows faster than wheat (stages take 0.6 of the time) but wants warmth.</p>
+
+<h2>Stakes are not for crops</h2>
+<p>A <b>stake</b> (2 sticks + 1 flint flake &rarr; 2 stakes; the flake comes back) is a building piece, not a garden one. Drive it into the ground and weave 3 sticks onto it for a wattle panel, then daub it for a wall; stakes are also used for spike traps. Crops need nothing but farmland, water and warmth.</p>
+<div class="pager"><a href="crafting.html">&larr; Crafting</a><a href="survival.html">Survival &rarr;</a></div>
+</main>
+<footer><div class="wrap">A player's guide to Primitive, written from the game's own code and pictures taken in the game. Unofficial notes; the game changes faster than they do.</div></footer>
+</body>
+</html>

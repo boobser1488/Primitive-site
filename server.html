@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Свой сервер — Primitive</title>
+<meta name="description" content="Свой сервер Primitive: настройки, команды, права оператора, нативные моды через C ABI и скриптовые плагины на Rhai.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div class="head">
+    <a class="brand" href="index.html">PRIMITIVE</a>
+    <nav>
+      <a href="index.html">Обзор</a>
+      <a href="download.html">Скачать</a>
+      <a href="guide.html">Гайд</a>
+      <a href="server.html" class="on">Сервер</a>
+      <a href="code.html">Код</a>
+      <a href="modding.html">Моды</a>
+      <a href="wiki/index.html">Вики</a>
+      <a href="https://github.com/boobser1488/Primitive">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <h1>СВОЙ СЕРВЕР</h1>
+  <p class="lead">Как поднять выделенный сервер, что он умеет и как его расширять.</p>
+
+  <div class="toc">
+    <ul>
+      <li><a href="#run">Запуск</a></li>
+      <li><a href="#settings">Настройки</a></li>
+      <li><a href="#status">Статус серверов</a></li>
+      <li><a href="#commands">Команды</a></li>
+      <li><a href="#players">Игроки и операторы</a></li>
+      <li><a href="#anticheat">Античит</a></li>
+      <li><a href="#mods">Нативные моды</a></li>
+      <li><a href="#plugins">Плагины на Rhai</a></li>
+      <li><a href="#fly">Полёт: /fly</a></li>
+    </ul>
+  </div>
+
+  <h2 id="run">Запуск</h2>
+
+<pre><code><span class="tok-cmd">cargo</span> run <span class="tok-flag">--release</span> <span class="tok-flag">-p</span> primitive_server</code></pre>
+
+  <p>Или <code>primitive_server.exe</code> из архива релиза. При первом запуске рядом появится
+  <code>settings.toml</code> со всеми значениями — правьте и перезапускайте.</p>
+
+  <p>Чтобы игроки подключились снаружи, откройте выбранный порт в брандмауэре и пробросьте его
+  на роутере.</p>
+
+  <p class="dim">Для одиночной игры сервер поднимать не нужно: клиент поднимает его внутри себя,
+  на loopback и на порту, который выдаёт система.</p>
+
+  <h2 id="settings">Настройки</h2>
+
+  <div class="tablewrap">
+  <table>
+    <tr><th>Параметр</th><th>Смысл</th></tr>
+    <tr><td><code>bind_addr</code></td><td>адрес и порт (по умолчанию <code>0.0.0.0:7878</code>)</td></tr>
+    <tr><td><code>server_name</code></td><td>имя, которое видят игроки</td></tr>
+    <tr><td><code>world_seed</code></td><td>сид мира</td></tr>
+    <tr><td><code>max_players</code></td><td>предел игроков</td></tr>
+    <tr><td><code>view_distance_chunks</code></td><td>сколько сервер готов отдавать</td></tr>
+    <tr><td><code>world_dir</code></td><td>папка сохранения (пустая строка — не сохранять)</td></tr>
+    <tr><td><code>[anticheat]</code></td><td>секция целиком, включая <code>enabled</code></td></tr>
+  </table>
+  </div>
+
+  <h2 id="status">Статус серверов</h2>
+
+  <p>Список ниже обновляется скриптом <code>tools/ping.py</code>, который запускает
+  владелец сайта. Проверка — это открытое и тут же закрытое TCP-соединение:
+  <strong>ни одного байта серверу не отправляется</strong>, слот игрока не занимается,
+  рукопожатие не изображается.</p>
+
+<!-- ping:start -->
+  <div class="tablewrap">
+  <table>
+    <tr><th>Сервер</th><th>Адрес</th><th>Состояние</th><th>Задержка</th></tr>
+    <tr><td>Локальный</td><td><code>127.0.0.1:7878</code></td><td>не отвечает</td><td>соединение отклонено</td></tr>
+  </table>
+  </div>
+  <p class="dim">Проверено 2026-09-04 18:20 UTC. Проверка выполняется на стороне сайта, а не в вашем браузере: открывается TCP-соединение и сразу закрывается. Открытый порт означает, что машина отвечает, — но не то, что за ним именно Primitive нужной версии.</p>
+<!-- ping:end -->
+
+  <div class="note">
+    <p><strong>На странице нет поля «проверить адрес» — и это намеренно.</strong>
+    Форма, пингующая то, что ввёл посетитель, превращает сайт в сканер портов чужими
+    руками, а сам сайт — в того, от чьего имени этот скан идёт. Адреса берутся только
+    из локального <code>tools/servers.json</code>, порты ниже 1024 отклоняются,
+    и проверка не запускается чаще раза в минуту.</p>
+  </div>
+
+  <h2 id="commands">Команды</h2>
+
+  <p>Вводятся в консоли сервера или в чат со слэшем:</p>
+
+<pre class="lang-cmdlist"><code><span class="tok-cmd">help</span>                 <span class="tok-comment">список команд</span>
+<span class="tok-cmd">list</span>                 <span class="tok-comment">кто онлайн</span>
+<span class="tok-cmd">players</span>              <span class="tok-comment">все, кого сервер помнит: имя, UUID, где вышел</span>
+<span class="tok-cmd">where</span>                <span class="tok-comment">ваши координаты</span>
+<span class="tok-cmd">stats</span>                <span class="tok-comment">аптайм, тики, чанки, правки</span>
+<span class="tok-cmd">time</span> <span class="tok-arg">&lt;0.0-1.0&gt;</span>       <span class="tok-comment">время суток</span>
+<span class="tok-cmd">day</span> <span class="tok-lit">night</span> <span class="tok-lit">dawn</span> <span class="tok-lit">dusk</span> <span class="tok-lit">midnight</span>    <span class="tok-comment">то же, короче</span>
+<span class="tok-cmd">weather</span>              <span class="tok-comment">что в небе и сколько ещё</span>
+<span class="tok-cmd">weather</span> <span class="tok-lit">clear|rain|storm</span>        <span class="tok-comment">поставить и удержать (оператор)</span>
+<span class="tok-cmd">weather</span> <span class="tok-lit">auto</span>         <span class="tok-comment">вернуть небо миру (оператор)</span>
+<span class="tok-cmd">tp</span> <span class="tok-arg">&lt;x&gt;</span> <span class="tok-arg">&lt;y&gt;</span> <span class="tok-arg">&lt;z&gt;</span>       <span class="tok-comment">телепорт</span>
+<span class="tok-cmd">spawn</span>                <span class="tok-comment">на точку появления</span>
+<span class="tok-cmd">give</span> <span class="tok-arg">&lt;блок&gt;</span> <span class="tok-arg">[n]</span>      <span class="tok-comment">положить блоки себе в рюкзак (оператор)</span>
+<span class="tok-cmd">kick</span> <span class="tok-arg">&lt;имя&gt;</span> <span class="tok-arg">[причина]</span>
+<span class="tok-cmd">say</span> <span class="tok-arg">&lt;текст&gt;</span>          <span class="tok-comment">сообщение всем</span>
+<span class="tok-cmd">op</span> <span class="tok-arg">&lt;имя&gt;</span>             <span class="tok-comment">выдать права оператора (оператор)</span>
+<span class="tok-cmd">deop</span> <span class="tok-arg">&lt;имя&gt;</span>           <span class="tok-comment">забрать их обратно (оператор)</span>
+<span class="tok-cmd">save</span>                 <span class="tok-comment">сохранить мир</span>
+<span class="tok-cmd">stop</span>                 <span class="tok-comment">остановить сервер</span></code></pre>
+
+  <p>У команд есть синонимы (<code>who</code>, <code>tps</code>, <code>quit</code>) — полный список
+  даёт сама <code>help</code>. <code>give</code> берёт имя блока таким, каким игра его называет:
+  <code>give cobblestone 40</code>.</p>
+
+  <h2 id="players">Игроки и операторы</h2>
+
+  <p>Сервер помнит каждого, кто заходил, по <strong>UUID</strong>, а не по имени: имя — это то,
+  что игрок печатает, и его можно сменить. UUID выводится из имени (регистр не важен), так что
+  один и тот же ник всегда попадает в свою запись.</p>
+
+  <p>За записью хранятся рюкзак, здоровье и <strong>место выхода</strong> — вернувшийся игрок
+  появляется там, где вышел, а не на точке появления. Всё это лежит в <code>players.bin</code>
+  рядом с миром и пишется при выходе игрока, при автосохранении и при остановке сервера.</p>
+
+  <p><code>op &lt;имя&gt;</code> работает и по игроку, который сейчас офлайн: назначать оператора обычно
+  приходится как раз тогда, когда его нет на месте. Права появляются немедленно, со следующей же
+  введённой строки, без переподключения, и так же немедленно исчезают после <code>deop</code>.
+  Консоль разжаловать нельзя: у того, кто сидит за клавиатурой сервера, и так есть всё,
+  что мог бы отобрать <code>deop</code>.</p>
+
+  <h2 id="anticheat">Античит</h2>
+
+  <p>Он существует, чтобы клиент не врал серверу, которым не владеет: всё, что можно проверить,
+  проверяет сервер — дистанция удара, стены между бьющим и целью, подъём без касания земли.</p>
+
+  <p>В одиночной игре его нет, и это не упущение: там клиент и сервер — один процесс,
+  и включённый античит мог бы только оттащить игрока назад из-за разногласия с самим собой.</p>
+
+  <h2 id="mods">Нативные моды</h2>
+
+  <p>Крейт <code>primitive_modapi</code> — граница через <strong>настоящий C ABI</strong>:
+  мод — это динамическая библиотека, которая подписывается на события сервера и вызывает его функции.</p>
+
+  <p>В рабочем пространстве лежат три мода, и каждый существует по своей причине:</p>
+
+  <div class="grid">
+    <div class="panel">
+      <h3>greeter</h3>
+      <p>Доказывает, что граница работает. Изменение API, ломающее мод, ломает <em>сборку</em>.</p>
+    </div>
+    <div class="panel">
+      <h3>flight</h3>
+      <p>Доказывает, что граница несёт настоящую возможность: команда <code>/fly</code>.</p>
+    </div>
+    <div class="panel">
+      <h3>sandbox</h3>
+      <p>Вызывает всё подряд. Нашёл девять событий, которые API объявил, но сервер никогда не посылал,
+      и декоратор чанков, который ни разу не запускался.</p>
+    </div>
+  </div>
+
+<pre><code><span class="tok-cmd">cargo</span> build <span class="tok-flag">-p</span> flight <span class="tok-flag">--release</span>
+<span class="tok-cmd">copy</span> target\release\flight.dll mods\flight\      <span class="tok-comment"># Windows</span>
+<span class="tok-cmd">cp</span>    target/release/libflight.so mods/flight/   <span class="tok-comment"># Linux</span></code></pre>
+
+  <p>С 1.5 моды грузит и выделенный сервер, и одиночный мир.</p>
+
+  <div class="note">
+    <p>Здесь — то, что нужно знать <strong>администратору сервера</strong>. Как мод или
+    плагин написать: хуки, события, правила границы и разбор комплектных примеров —
+    на странице <a href="modding.html">разработки модов</a>.</p>
+  </div>
+
+  <h2 id="plugins">Плагины на Rhai</h2>
+
+  <p>Папка <code>plugins/</code>, по подпапке на плагин: <code>plugin.toml</code> с описанием
+  и скрипт на <a href="https://rhai.rs">Rhai</a>. В комплекте три примера. Что можно вызывать
+  из скрипта — в
+  <a href="https://github.com/boobser1488/Primitive/blob/master/plugins/README.md">plugins/README.md</a>.</p>
+
+  <p>Плагины подхватываются при <strong>запуске</strong> сервера. В одиночной игре их нет — и не
+  «отключены», а не собраны: клиент подключает <code>primitive_server</code>
+  с <code>default-features = false</code>, и движка скриптов в бинарнике игры нет вовсе.</p>
+
+  <h2 id="fly">Полёт: /fly</h2>
+
+  <p>Команды <code>/fly</code> в игре нет — её добавляет мод <code>mods/flight</code>.
+  Это не мелочь, а позиция: <strong>возможность живёт в движке, а решение — в моде.</strong>
+  Сервер умеет разрешить игроку не падать; кому и когда это разрешено, решает мод.</p>
+
+  <p>Единственный игрок своего мира — оператор, так что <code>/fly</code> доступен ему сразу.
+  Мод сообщает античиту о выданном разрешении, поэтому за легальный полёт не кикает.
+  Проверить, что мод загружен, — <code>/mods</code>.</p>
+
+  <figure>
+    <img src="img/players.png" alt="Четверо игроков на берегу, панель F3 с сетевой статистикой">
+    <figcaption>Панель F3 показывает и сетевые цифры: входящие, исходящие, коррекции.</figcaption>
+  </figure>
+
+  <h2>Проверить, что всё живо</h2>
+
+<pre><code><span class="tok-cmd">cargo</span> run <span class="tok-flag">-p</span> primitive_server <span class="tok-flag">--example</span> verify_broadcast
+<span class="tok-cmd">cargo</span> run <span class="tok-flag">-p</span> primitive_server <span class="tok-flag">--example</span> verify_broadcast <span class="tok-flag">--</span> 127.0.0.1:7899
+<span class="tok-cmd">cargo</span> build <span class="tok-flag">-p</span> flight  <span class="tok-op">&amp;&amp;</span> <span class="tok-cmd">cargo</span> test <span class="tok-flag">-p</span> primitive_server <span class="tok-flag">--test</span> flight
+<span class="tok-cmd">cargo</span> build <span class="tok-flag">-p</span> sandbox <span class="tok-op">&amp;&amp;</span> <span class="tok-cmd">cargo</span> test <span class="tok-flag">-p</span> primitive_server <span class="tok-flag">--test</span> sandbox
+<span class="tok-cmd">cargo</span> run <span class="tok-flag">-p</span> primitive_server <span class="tok-flag">--example</span> verify_flight</code></pre>
+
+</div>
+
+<footer>
+  <div class="wrap">
+    <p>Primitive · Текстуры: NYukichi.I · Код: Claude (Anthropic), George Perry Floyd Jr</p>
+    <p>Около 80 % игры сделано с использованием нейросетей.</p>
+    <p><a href="https://github.com/boobser1488/Primitive">github.com/boobser1488/Primitive</a> ·
+       <a href="https://github.com/boobser1488/Primitive/blob/master/LICENSE">Лицензия</a></p>
+  </div>
+</footer>
+
+</body>
+</html>

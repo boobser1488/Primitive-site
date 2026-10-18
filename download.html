@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Скачать — Primitive</title>
+<meta name="description" content="Скачать Primitive: сборки под Windows и Linux, сборка из исходников, Android APK.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div class="head">
+    <a class="brand" href="index.html">PRIMITIVE</a>
+    <nav>
+      <a href="index.html">Обзор</a>
+      <a href="download.html" class="on">Скачать</a>
+      <a href="guide.html">Гайд</a>
+      <a href="server.html">Сервер</a>
+      <a href="code.html">Код</a>
+      <a href="modding.html">Моды</a>
+      <a href="wiki/index.html">Вики</a>
+      <a href="https://github.com/boobser1488/Primitive">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <h1>СКАЧАТЬ</h1>
+  <p class="lead">Текущая версия — <strong>1.5.0</strong>. Все сборки лежат на странице релизов GitHub.</p>
+
+  <p>
+    <a class="btn" href="https://github.com/boobser1488/Primitive/releases/latest">Последний релиз</a>
+    <a class="btn ghost" href="https://github.com/boobser1488/Primitive/releases">Все релизы</a>
+  </p>
+
+  <h2>Готовые сборки</h2>
+
+  <div class="tablewrap">
+  <table>
+    <tr><th>Платформа</th><th>Файл</th><th>Что делать</th></tr>
+    <tr>
+      <td>Windows x64</td>
+      <td><code>primitive_win64.zip</code></td>
+      <td>Распаковать, запустить <code>primitive_client.exe</code></td>
+    </tr>
+    <tr>
+      <td>Linux x64</td>
+      <td><code>primitive_linux64.tar.gz</code></td>
+      <td>Распаковать, запустить <code>./primitive_client</code></td>
+    </tr>
+  </table>
+  </div>
+
+  <p>Обе платформы собираются нативно, а не кросс-компиляцией: клиент линкует настоящий графический
+  стек, и архивы делаются из дерева, которое <strong>прошло свои тесты</strong>, а не просто скомпилировалось.</p>
+
+  <h3>Что внутри архива</h3>
+
+  <div class="tablewrap">
+  <table>
+    <tr><td><code>primitive_client</code></td><td>игра</td></tr>
+    <tr><td><code>primitive_server</code></td><td>выделенный сервер для сетевой игры</td></tr>
+    <tr><td><code>assets/</code></td><td>текстуры — <em>не обязательны</em>, встроены в бинарник</td></tr>
+    <tr><td><code>plugins/</code></td><td>примеры скриптовых плагинов</td></tr>
+    <tr><td><code>README.md</code>, <code>GUIDE.md</code>, <code>CHANGELOG.md</code></td><td>документация</td></tr>
+  </table>
+  </div>
+
+  <p><strong>Файлов настроек в архиве нет намеренно.</strong> Оба бинарника пишут свои при первом
+  запуске — со всеми значениями по умолчанию. Конфиг с машины разработчика — это как релиз
+  навсегда указывает на <code>127.0.0.1</code>.</p>
+
+  <h2>Сборка из исходников</h2>
+
+  <p>Нужен <a href="https://rustup.rs">Rust</a> (стабильный). Больше ничего.</p>
+
+<pre><code><span class="tok-cmd">git</span> clone https://github.com/boobser1488/Primitive.git
+<span class="tok-cmd">cd</span> Primitive
+<span class="tok-cmd">cargo</span> run <span class="tok-flag">--release</span> <span class="tok-flag">-p</span> primitive_client</code></pre>
+
+  <p><strong>Обязательно <code>--release</code>.</strong> В отладочной сборке построение мира
+  в десять–двадцать раз медленнее, и играть в неё нельзя.</p>
+
+  <p>Отдельный сервер:</p>
+
+<pre><code><span class="tok-cmd">cargo</span> run <span class="tok-flag">--release</span> <span class="tok-flag">-p</span> primitive_server</code></pre>
+
+  <p>На Linux для линковки клиента нужны заголовки X11:</p>
+
+<pre><code><span class="tok-cmd">sudo</span> apt-get install <span class="tok-flag">-y</span> libx11-dev</code></pre>
+
+  <h3>Собрать архив, как это делает релиз</h3>
+
+<pre><code><span class="tok-cmd">pwsh</span> <span class="tok-flag">-File</span> package.ps1 <span class="tok-flag">-Zip</span>   <span class="tok-comment"># Windows -> dist\primitive_win64.zip</span>
+<span class="tok-cmd">bash</span> package.sh <span class="tok-flag">--tar</span>         <span class="tok-comment"># Linux   -> dist/primitive_linux64.tar.gz</span></code></pre>
+
+  <h2>Android</h2>
+
+  <p>APK под arm64 собирается скриптом <code>package-android.sh</code> — без Gradle, пятью командами
+  из Android SDK: <code>aapt2 link</code>, <code>d8</code>, zip, <code>zipalign</code>, <code>apksigner</code>.</p>
+
+<pre><code><span class="tok-cmd">./package-android.sh</span>   <span class="tok-comment"># -> dist/primitive-&lt;версия&gt;-android-arm64.apk</span></code></pre>
+
+  <p><strong>Это не релизный артефакт.</strong> APK подписан отладочным ключом — ключом, который есть
+  у всех, — так что Play Store его не примет. Установить можно через <code>adb install</code> или
+  тапом по файлу на устройстве, где разрешены неизвестные источники. Подпись для настоящего релиза
+  требует настоящего хранилища ключей, а оно принадлежит тому, кто игру выпускает.</p>
+
+  <h2>Проверки</h2>
+
+  <p>Всё, что можно запустить, чтобы убедиться, что сборка живая:</p>
+
+<pre><code><span class="tok-cmd">cargo</span> test <span class="tok-flag">--workspace</span>
+<span class="tok-cmd">cargo</span> run <span class="tok-flag">-p</span> primitive_server <span class="tok-flag">--example</span> verify_broadcast    <span class="tok-comment"># сервер должен быть запущен</span>
+<span class="tok-cmd">cargo</span> run <span class="tok-flag">-p</span> primitive_client <span class="tok-flag">--example</span> gen_placeholder_textures
+<span class="tok-cmd">cargo</span> run <span class="tok-flag">--release</span> <span class="tok-flag">-p</span> primitive_client <span class="tok-flag">--</span> <span class="tok-flag">--export-sounds</span> sounds
+<span class="tok-cmd">cargo</span> build <span class="tok-flag">-p</span> flight  <span class="tok-op">&amp;&amp;</span> <span class="tok-cmd">cargo</span> test <span class="tok-flag">-p</span> primitive_server <span class="tok-flag">--test</span> flight
+<span class="tok-cmd">cargo</span> build <span class="tok-flag">-p</span> sandbox <span class="tok-op">&amp;&amp;</span> <span class="tok-cmd">cargo</span> test <span class="tok-flag">-p</span> primitive_server <span class="tok-flag">--test</span> sandbox
+<span class="tok-cmd">cargo</span> run <span class="tok-flag">-p</span> primitive_server <span class="tok-flag">--example</span> verify_flight</code></pre>
+
+  <h2>Что нового в 1.5.0</h2>
+
+  <p>Мир перестал быть местом, где можно стоять вечно. Появился голод — и всё остальное в этом
+  выпуске существует потому, что он появился: еда, которую надо где-то брать; животные, за которыми
+  надо ходить; огонь, который делает мясо втрое сытнее; погода, которая этот огонь гасит;
+  и металл, ради которого огонь оказалось выгодно держать зажжённым.</p>
+
+  <ul>
+    <li><strong>Голод</strong> — тратит не время, а работа: удары, бег, прыжки</li>
+    <li><strong>Что растёт</strong> — ягоды, поле, семена и то, что из них едят</li>
+    <li><strong>Костёр</strong> — вместо печи: экран, а не строчка в меню</li>
+    <li><strong>Металл</strong> — девять инструментов, из которых наконец что-то делают</li>
+    <li><strong>Животные</strong> — приходят группами, обходят стены, по-разному отвечают на удар</li>
+    <li><strong>Погода</strong> — ясно, дождь, гроза; дождь гасит огонь</li>
+  </ul>
+
+  <p>Полный список изменений — в
+  <a href="https://github.com/boobser1488/Primitive/blob/master/CHANGELOG.md">CHANGELOG.md</a>.</p>
+
+  <h2>Системные требования</h2>
+
+  <div class="tablewrap">
+  <table>
+    <tr><td>ОС</td><td>Windows 10/11 x64, Linux x64, Android arm64</td></tr>
+    <tr><td>Видео</td><td>любая карта с Vulkan, DirectX 12 или Metal (через wgpu)</td></tr>
+    <tr><td>Место</td><td>несколько десятков мегабайт: игра — это один исполняемый файл</td></tr>
+    <tr><td>Главный рычаг FPS</td><td>RENDER DISTANCE в настройках</td></tr>
+  </table>
+  </div>
+
+</div>
+
+<footer>
+  <div class="wrap">
+    <p>Primitive · Текстуры: NYukichi.I · Код: Claude (Anthropic), George Perry Floyd Jr</p>
+    <p>Около 80 % игры сделано с использованием нейросетей.</p>
+    <p><a href="https://github.com/boobser1488/Primitive">github.com/boobser1488/Primitive</a> ·
+       <a href="https://github.com/boobser1488/Primitive/blob/master/LICENSE">Лицензия</a></p>
+  </div>
+</footer>
+
+</body>
+</html>

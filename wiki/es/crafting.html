@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fabricación y estaciones - Primitive</title>
+<meta name="description" content="Cómo se fabrica en Primitive: la lista de fabricación del fardo, el libro de recetas, los fuegos y su calor, el horno de arcilla y el horno bajo, los talleres, el horno de foso, la calidad y el desgaste de las herramientas.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<header class="top"><div class="wrap">
+<a class="brand" href="index.html">Primitive <small>wiki</small></a>
+<a class="site" href="../../index.html">&larr; sitio</a>
+<div class="langs"><a href="../en/crafting.html" lang="en" hreflang="en">English</a><a href="../pl/crafting.html" lang="pl" hreflang="pl">Polski</a><a href="../ru/crafting.html" lang="ru" hreflang="ru">Русский</a><span lang="es">Español</span></div>
+</div></header>
+<nav class="pages" aria-label="Páginas"><div class="wrap"><ul>
+<li><a href="index.html">Índice</a></li>
+<li><a href="getting-started.html">Primeros pasos</a></li>
+<li><a href="path.html">El camino</a></li>
+<li><span aria-current="page">Artesanía</span></li>
+<li><a href="farming.html">Cultivo</a></li>
+<li><a href="survival.html">Supervivencia</a></li>
+<li><a href="animals.html">Animales</a></li>
+<li><a href="world.html">El mundo</a></li>
+<li><a href="controls.html">Controles</a></li>
+<li><a href="multiplayer.html">Multijugador</a></li>
+<li><a href="faq.html">Preguntas</a></li>
+</ul></div></nav>
+<main class="wrap">
+<h1>Fabricación y estaciones</h1>
+<p class="lead">Una receta es un conjunto de ingredientes, no un dibujo en una cuadrícula. No hay que colocar nada.</p>
+
+<h2>Fabricar desde el fardo</h2>
+<p>Abre el fardo con <kbd>I</kbd>. En la pestaña <b>PACK</b> (fardo), la columna <b>CRAFTING</b> (fabricación) de la derecha enumera lo que puedes hacer con lo que llevas. <b>La fila elige, la ficha fabrica</b>: haz clic en una fila y la ficha bajo la lista muestra esa receta, lo que necesita y cuánto tienes de cada cosa (<code>5/1</code>, en verde si basta, en rojo si no). Luego pulsa <b>MAKE</b> (hacer) para fabricarla una vez o <b>MAKE ALL</b> (hacer todo) para fabricar todas las que puedas. Los botones no responden mientras falte algo.</p>
+<figure><img src="../img/pack.jpg" width="1280" height="720" alt="La pantalla del fardo: casillas de ropa y la figura del cuerpo a la izquierda, una cuadrícula con la fila del cinturón (azada de cobre, cuchillo de sílex, semillas, pan, una jarra, cuerda, sílex y palos) y, a la derecha, la lista CRAFTING con la ficha de Flint flakes y los botones MAKE y MAKE ALL"><figcaption>La pestaña PACK: a la izquierda lo que llevas puesto, en el centro lo que cargas, a la derecha lo que puedes fabricar.</figcaption></figure>
+
+<h2>El libro de recetas</h2>
+<p>Pulsa <kbd>B</kbd>, o el botón <b>RECIPES</b> (recetas) de la esquina inferior derecha del fardo. El libro guarda las recetas que <b>conoces</b>, no solo las que puedes hacer ahora mismo.</p>
+<ul>
+<li>Una receta pasa a ser conocida cuando <b>todos sus ingredientes han estado en tu fardo</b> en algún momento. Lo que fabricas también va a tu fardo, así que fabricar enseña por sí solo.</li>
+<li>Si falta <b>exactamente un</b> ingrediente, la receta ya está en el libro, con ese ingrediente dibujado como un <b>?</b>. Ten cobre en las manos y el libro te mostrará que el cobre y otra cosa más hacen bronce, sin decirte cuál. Para eso vas a las colinas. La búsqueda no lo revela.</li>
+<li>La parte izquierda enumera primero las recetas conocidas y después las que tienen un <b>?</b>. La parte derecha muestra la elegida: los ingredientes con lo que tienes (<code>3/4</code>, en verde si basta), dónde se hace (a mano, fuego, horno de arcilla, horno bajo o un taller), <b>qué temperatura</b> tiene que tener el fuego (como el color que usa un herrero), qué falta, qué se recupera (crisol, molde) y si puede fallar.</li>
+<li>Los botones de arriba filtran por lugar (<b>ALL</b>, <b>HANDS</b>, <b>WORKSHOP</b>...: todo, a mano, taller). Con teclado, basta con escribir para buscar por nombre.</li>
+<li>La última línea, <b>GOES INTO</b> (se usa en), es el libro leído al revés: para qué sirve este objeto. No existe ninguna receta llamada «sílex», pero de él salen cuchillos, lanzas y encendedores.</li>
+</ul>
+<p>Lo que sabes se guarda en tu perfil en el servidor y sobrevive a la muerte. <kbd>Tab</kbd> cambia entre el libro y el mapa (si llevas uno).</p>
+
+<h2>Dónde se hacen las cosas</h2>
+<div class="tbl"><table>
+<tr><th>Lugar</th><th>Qué es</th><th>Se hace con</th></tr>
+<tr><td>A mano</td><td>en cualquier sitio, desde el fardo</td><td>&mdash;</td></tr>
+<tr><td>Fuego</td><td>cualquier hoguera, fogata, horno de arcilla u horno bajo encendido: cocinar, carbón vegetal, fundir cobre y estaño</td><td>fogata en el suelo (Firepit): 3 palos + 1 tronco tirados al suelo y golpeados con sílex; hoguera (Campfire): 3 de piedra partida + 4 palos</td></tr>
+<tr><td>Horno de arcilla (Kiln)</td><td>un horno hecho de arcilla: cocer cerámica y ladrillos, bronce, fundir en molde y forjar metal, acero</td><td>8 de arcilla + 4 de piedra partida</td></tr>
+<tr><td>Horno bajo (Bloomery)</td><td>lupias de hierro y lingotes de hierro</td><td>16 ladrillos + 4 de argamasa + 8 de piedra partida</td></tr>
+<tr><td>Banco de trabajo (Workbench)</td><td>muebles, bastidores</td><td>1 tronco + 4 palos + 4 clavijas</td></tr>
+<tr><td>Bloque de cantero (Mason's block)</td><td>martillo de piedra, harina de molino de mano, piedras de afilar</td><td>4 de piedra partida + 1 tronco</td></tr>
+<tr><td>Torno de alfarero (Potter's wheel)</td><td>crisoles, jarras y cuencos con menos arcilla</td><td>3 tablones + 2 clavijas + 1 de piedra partida</td></tr>
+<tr><td>Banco de talabartero (Leather bench)</td><td>mochila, mapa, silla de montar y alforjas con menos cuero</td><td>2 tablones + 4 palos + 1 cuero + 1 cuerda</td></tr>
+</table></div>
+<p>Los cuatro talleres fabrican al momento desde tu fardo, siempre que estés a su alcance. Los tres fuegos son <b>fogones</b>: los cargas y la tanda lleva su tiempo.</p>
+<figure><img src="../img/interior.jpg" width="1280" height="720" alt="El interior de una casa con techo de paja al atardecer: un fuego en el centro, un banco de trabajo y un torno de alfarero junto a las paredes" loading="lazy"><figcaption>Dentro de una granja: un fogón, un banco de trabajo y un torno de alfarero.</figcaption></figure>
+
+<h2>Fogones y calor</h2>
+<p>Haz clic derecho en un fogón (sin sílex en la mano) para abrirlo: cuatro casillas de entrada arriba a la izquierda, una de combustible debajo, dos de salida a la derecha y una de ceniza abajo a la derecha. Una barra de color muestra el calor, con una marca para lo que necesita la tanda, y una flecha muestra el avance. Funciona solo; puedes irte.</p>
+<p>La <b>temperatura</b> de un fuego decide lo que puede hacer, y la temperatura depende del combustible. Con el mismo combustible, el horno de arcilla arde 150&deg; más caliente que una hoguera, y el horno bajo, 250&deg; más.</p>
+<div class="tbl"><table>
+<tr><th>Combustible</th><th>Calor en una hoguera</th></tr>
+<tr><td>Carbón vegetal (Coal)</td><td>1350, blanco</td></tr>
+<tr><td>Palos, grasa</td><td>800, rojo vivo</td></tr>
+<tr><td>Tronco de roble, tablones</td><td>728, rojo oscuro</td></tr>
+<tr><td>Madera de abedul y de abeto</td><td>652, rojo oscuro</td></tr>
+<tr><td>Turba</td><td>600, rojo oscuro</td></tr>
+</table></div>
+<div class="tbl"><table>
+<tr><th>Tanda</th><th>Calor que necesita</th><th>Tiempo</th></tr>
+<tr><td>Cocinar, pan</td><td>200</td><td>8 s en una hoguera</td></tr>
+<tr><td>Carbón vegetal (3 troncos &rarr; 1)</td><td>400</td><td>75 s</td></tr>
+<tr><td>Cocer cerámica y ladrillos</td><td>700</td><td>110 s</td></tr>
+<tr><td>Lingote de cobre, bronce, piezas de cobre fundidas</td><td>1080 (naranja)</td><td>75 s desde mineral, 40 s fundiendo</td></tr>
+<tr><td>Lingote de estaño</td><td>1100 (amarillo)</td><td>75 s</td></tr>
+<tr><td>Lupia de hierro</td><td>1200</td><td>5 min</td></tr>
+<tr><td>Lingote de hierro a partir de lupia</td><td>unos 1230</td><td>2 min</td></tr>
+<tr><td>Acero</td><td>950</td><td>5 min</td></tr>
+</table></div>
+<p>La regla que sale de aquí: <b>solo el carbón vegetal calienta un fogón lo bastante para el cobre o el estaño.</b> La leña es para la cena y la cerámica; el carbón vegetal, para el metal. Cuando una tanda se atasca, la línea bajo el fuego dice que el calor es demasiado bajo y qué color necesita.</p>
+<ul>
+<li><b>La lluvia enfría el fuego</b> al aire libre: 300&deg; menos en una tormenta, y lo apaga; un bloque justo encima del fogón lo protege.</li>
+<li><b>La cena se quema.</b> La comida terminada que se queda en las casillas de salida con calor naranja o más se convierte en ceniza.</li>
+<li><b>Los troncos recién cortados están húmedos</b> y arden más fríos y menos tiempo. Con ellos no se puede hacer ni cerámica ni metal. Apila los troncos en una leñera (<kbd>Shift</kbd> + clic derecho con un tronco) y se secan en tres días.</li>
+<li>Fundir mineral deja <b>escoria</b> (Slag) junto al metal. Si las casillas de salida están llenas, la tanda no empieza.</li>
+</ul>
+<figure><img src="../img/hearths.jpg" width="1280" height="720" alt="Hogueras, hornos de arcilla y hornos bajos en dos filas, encendidos y apagados, una fila bajo techo" loading="lazy"><figcaption>Los tres fogones: hoguera, horno de arcilla, horno bajo.</figcaption></figure>
+
+<h2 id="pit-kiln">El horno de foso</h2>
+<p>Las vasijas se pueden cocer sin horno de arcilla y sin carbón vegetal, en un agujero en el suelo: el horno de foso (Pit kiln). Es lento, pero solo necesita tierra, fibra y madera, así que el primer crisol se puede cocer la primera tarde junto al río.</p>
+<ol>
+<li><b>Cava un agujero de un bloque de hondo.</b> El fondo y los cuatro lados tienen que ser de tierra, arena, grava, piedra o ladrillo. La madera arde y no cuenta.</li>
+<li><b>Mete las piezas crudas</b>: haz clic derecho en el fondo con un crisol, un molde, una jarra o un ladrillo crudos. Hasta <b>cuatro</b>.</li>
+<li><b>Pon 8 de fibra</b> encima, un clic derecho cada vez.</li>
+<li><b>Pon 8 troncos</b> encima de todo.</li>
+<li><b>Enciéndelo</b> con sílex.</li>
+<li>Arde durante <b>15 minutos de tiempo real</b> (no horas del juego). Después saca las piezas cocidas con la mano vacía.</li>
+</ol>
+<p>La lluvia sobre un foso descubierto lo apaga en menos de veinte segundos. Un techo solo ayuda si está por lo menos dos bloques por encima del foso; un bloque puesto directamente sobre los troncos lo ahoga. Todo se cuece solo al final, así que un foso que se apaga antes de tiempo no cuece nada.</p>
+
+<h2>La carbonera</h2>
+<p>En una hoguera, el carbón vegetal sale a 3 troncos por 1. Una carbonera da más con la misma madera, pero tarda 15 minutos:</p>
+<ol>
+<li><kbd>Shift</kbd> + clic derecho en el suelo con un tronco para empezar una pila de troncos (Log pile); haz clic derecho en la pila con más troncos, hasta ocho.</li>
+<li>Cúbrela por todos los lados con tierra, arena, grava o piedra (un agujero cavado lo pone fácil).</li>
+<li>Enciende con sílex la última cara abierta y ciérrala antes de 30 segundos.</li>
+<li>Pasados 15 minutos, la pila es un montón de carbón: ocho troncos dan cuatro de carbón vegetal. Rómpelo para recogerlo.</li>
+</ol>
+<p>Si dejas una cara abierta más de 30 segundos, la pila arde hasta quedar en ceniza.</p>
+
+<h2>Calidad, desgaste y afilado</h2>
+<ul>
+<li>La <b>calidad</b> se decide una vez, al fabricar la cosa. Depende de tu estado (cansancio, comodidad, salud, hambre), de si estabas en el taller adecuado, de la herramienta que tenías en la mano y, en el yunque y el torno de alfarero, de lo bien que acertaste la marca. Quien está descansado trabaja parejo; quien está agotado saca cualquier cosa. Bajo el nombre pone <i>poor work</i> (trabajo pobre), <i>plain work</i> (trabajo sencillo), <i>good work</i> (buen trabajo) o <i>fine work</i> (trabajo fino). Dos objetos de distinta calidad no se apilan.</li>
+<li><b>Las herramientas se gastan.</b> Un golpe solo cuenta cuando rompe un bloque o da a un animal. Una barra bajo el icono pasa de verde a amarillo y a rojo; cuando se acaba, la herramienta desaparece. Un cuchillo de sílex aguanta unos 70 golpes; un hacha de cobre, 180; de bronce, 320; de hierro, 550.</li>
+<li><b>Los filos se embotan</b> por pasos (afilado, algo romo, romo, sin filo), y una herramienta sin filo trabaja a la mitad de velocidad. Una <b>piedra de afilar</b> (Whetstone; 1 de arenisca &rarr; 2) afila la herramienta más roma de un tipo; la piedra se recupera. Un cuchillo de sílex no se puede afilar: el sílex se desportilla, no se embota.</li>
+</ul>
+<p>El <b>yunque</b> (Anvil; 5 lingotes de bronce + 1 tronco, en el horno de arcilla) y el <b>torno de alfarero</b> tienen un pequeño juego de ritmo: golpea en la marca para sacar una pieza mejor.</p>
+<div class="pager"><a href="path.html">&larr; El camino</a><a href="farming.html">Cultivo &rarr;</a></div>
+</main>
+<footer><div class="wrap">Guía de jugador de Primitive, escrita a partir del propio código del juego y con capturas tomadas dentro del juego. Notas no oficiales: el juego cambia más rápido que ellas.</div></footer>
+</body>
+</html>

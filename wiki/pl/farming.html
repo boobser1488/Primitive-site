@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rolnictwo - Primitive</title>
+<meta name="description" content="Rolnictwo w Primitive: skąd wziąć nasiona, jak zrobić motykę, oranie, nawadnianie, fazy wzrostu i czasy, mróz, popiół i zmęczona ziemia, chleb, bawełna i proso.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<header class="top"><div class="wrap">
+<a class="brand" href="index.html">Primitive <small>wiki</small></a>
+<a class="site" href="../../index.html">&larr; strona</a>
+<div class="langs"><a href="../en/farming.html" lang="en" hreflang="en">English</a><span lang="pl">Polski</span><a href="../ru/farming.html" lang="ru" hreflang="ru">Русский</a><a href="../es/farming.html" lang="es" hreflang="es">Español</a></div>
+</div></header>
+<nav class="pages" aria-label="Strony"><div class="wrap"><ul>
+<li><a href="index.html">Spis treści</a></li>
+<li><a href="getting-started.html">Pierwsze kroki</a></li>
+<li><a href="path.html">Droga</a></li>
+<li><a href="crafting.html">Rzemiosło</a></li>
+<li><span aria-current="page">Uprawa</span></li>
+<li><a href="survival.html">Przetrwanie</a></li>
+<li><a href="animals.html">Zwierzęta</a></li>
+<li><a href="world.html">Świat</a></li>
+<li><a href="controls.html">Sterowanie</a></li>
+<li><a href="multiplayer.html">Gra wieloosobowa</a></li>
+<li><a href="faq.html">FAQ</a></li>
+</ul></div></nav>
+<main class="wrap">
+<h1>Rolnictwo</h1>
+<p class="lead">Pole to pierwsze jedzenie, które wytwarzasz, a nie znajdujesz. Myśliwy je lepiej przez jeden wieczór. Rolnik je co wieczór.</p>
+
+<h2>1. Nasiona daje dzika pszenica</h2>
+<p>Trawa nie daje nasion. Nasiona pochodzą z <b>dzikiej pszenicy</b>: kęp zboża w ciepłym, suchym, otwartym terenie. Najczęściej w stepie, rzadziej na łąkach, czasem na suchym skraju lasu. Nie rośnie w zimnie ani w wilgoci, więc kto zaczyna na północy, po pierwsze pole idzie na południe. Wygląda jak dojrzała pszenica na polu. Ta sylwetka w całej grze oznacza „zboże”. Zerwana dzika pszenica nie odrasta.</p>
+
+<h2>2. Zrób motykę</h2>
+<div class="tbl"><table>
+<tr><th>Motyka</th><th>Przepis</th></tr>
+<tr><td>Motyka (krzemienna)</td><td>2 odłupki krzemienne + 1 obrobiony kij + 3 włókna, ręcznie</td></tr>
+<tr><td>Motyka kościana</td><td>2 kości + 1 obrobiony kij + 3 włókna, ręcznie. Ta sama motyka, dla tych, którzy osiedlą się daleko od krzemienia.</td></tr>
+<tr><td>Miedziana motyka</td><td>miedziane ostrze motyki (1 sztabka miedzi odlana w formie w piecu) + obrobiony kij + ścięgno, ręcznie</td></tr>
+</table></div>
+<p>Jeśli zrobiłeś choć jeden nóż, masz wszystko, czego trzeba na krzemienną motykę. Motyka nie liczy się jako narzędzie do kopania: niczego nie rozbija i nie otwiera skały. Zużywa się po około 120 oraniach.</p>
+<div class="note warn"><p><b>Prawy klik motyką nic nie robi?</b> W wersji 1.5.2 prawy klik motyką (i palikiem) nigdy nie docierał do serwera, więc nic się nie zaorywało. Naprawione w następnej aktualizacji.</p></div>
+
+<h2>3. Zaoraj ziemię</h2>
+<p>Trzymaj motykę i <b>kliknij prawym darń albo ziemię</b>. Blok staje się <b>polem uprawnym</b>, a uprawy przyjmuje tylko pole uprawne. Komórka nad nim musi być pusta. Zaorać możesz darń, ziemię i różne gleby (piaszczystą glebę, glebę gliniastą, czarnoziem, less, rędzinę i inne).</p>
+<p>Motyka, odwracając ziemię, mówi ci dwie rzeczy: czy <b>woda jest blisko</b> i jaka to ziemia, jeśli nie jest zwyczajna (<i>żyzna</i> ziemia na terenach zalewowych, skrajach mokradeł i brzegach rzek daje wzrost półtora raza szybszy; <i>jałowa</i> ziemia na piasku, tundrze, w górach i na suchym interiorze półtora raza wolniejszy). Ta sama wiadomość pojawia się najwyżej raz na minutę, więc oranie całego pola daje jedną linijkę, a nie osiemdziesiąt.</p>
+<figure><img src="../img/hoe.jpg" width="1280" height="720" alt="Widok z pierwszej osoby z miedzianą motyką nad pasem zaoranego pola przy rowie"><figcaption>Miedziana motyka nad polem.</figcaption></figure>
+
+<h2>4. Woda</h2>
+<p>Pole jest nawodnione, jeśli w promieniu <b>czterech bloków</b> od pola uprawnego jest woda, na tej samej wysokości albo blok niżej. Cztery bloki liczą się jako kwadrat, po przekątnej też, więc rów przez środek pola szerokiego na dziewięć bloków nawadnia je do samych brzegów. Rów wykopany od rzeki się liczy. Zamarznięty rów nie.</p>
+<p><b>Suche pole rośnie dwa i pół raza wolniej.</b> Zasyp rów, a pole od razu zwolni.</p>
+<figure><img src="../img/field.jpg" width="1280" height="720" alt="Pole pszenicy i prosa na tarasie, obok rów odchodzący od rzeki" loading="lazy"><figcaption>Pole z własnym rowem od rzeki.</figcaption></figure>
+
+<h2>5. Siej, czekaj, zbieraj</h2>
+<ol>
+<li><b>Siej</b>: postaw nasiona na polu uprawnym jak każdy blok.</li>
+<li><b>Czekaj</b>: dwie fazy po <b>15 minut</b> każda, gdy jest woda i ciepło: zielone źdźbła, potem złote kłosy.</li>
+<li><b>Zbieraj</b>: rozbij dojrzałą uprawę ręką. Daje <b>ziarno i jedno nasiono</b>. Niedojrzała oddaje samo nasiono. Pole obsiewa się samo, a żeby je powiększyć, wracasz do dzikiej pszenicy.</li>
+</ol>
+
+<h2>Ciepło i mróz</h2>
+<div class="tbl"><table>
+<tr><th>Uprawa</th><th>Rośnie od</th><th>Ginie od mrozu przy</th></tr>
+<tr><td>Pszenica</td><td>4&deg;</td><td>&minus;6&deg;</td></tr>
+<tr><td>Proso</td><td>14&deg;</td><td>0&deg;</td></tr>
+<tr><td>Bawełna</td><td>16&deg;</td><td>0&deg;</td></tr>
+</table></div>
+<p>Poniżej swojego progu uprawa <b>staje, ale nie traci postępu</b>. Zimna noc kosztuje jedną noc. Liczy się temperatura, jaką czułbyś, stojąc w tej komórce: pora roku, wysokość, godzina, deszcz, dach i pobliski ogień. Uprawa zabita mrozem zostaje jako <b>uschnięte źdźbła</b>, które dają włókno i nic więcej. Dojrzała uprawa jest bezpieczna: jej ziarno już jest gotowe.</p>
+<p>Pszenicę siej wiosną i zbierz przed jesiennymi nocami. Proso i bawełna na łące w pasie umiarkowanym to uprawy wyłącznie letnie. Ogień przy polu utrzymuje ciepłe powietrze nad nim w mroźną noc, a dach nad grządką zabiera zimno otwartego nieba.</p>
+
+<h2>Pory roku</h2>
+<p>Doba trwa <b>30 minut</b>, rok to <b>40 dni</b>, po dziesięć na każdą porę roku. Nowy świat zaczyna się pod koniec wiosny, lato przychodzi 4. dnia, a pierwsza zima 24. dnia, czyli po mniej więcej dwunastu godzinach gry. Zima dodaje wszędzie około &minus;10&deg;, lato około +6&deg;.</p>
+
+<h2>Popiół, nawóz i zmęczona ziemia</h2>
+<ul>
+<li>Zbiór z pola uprawnego <b>bez popiołu</b> zostawia je <b>zmęczone</b> (blednie jak spalona słoma), a następna uprawa rośnie na nim półtora raza dłużej.</li>
+<li><b>Popiół</b>: kliknij prawym zaoraną ziemię z popiołem w ręce. Ziemia szarzeje, a następna uprawa rośnie o jedną trzecią szybciej. Popiół zużywa się przy tym zbiorze. Popiół bierzesz z miejsca na popiół w ogniu, z mielerza zostawionego otwartym i ze spalonych drzew.</li>
+<li><b>Ugór</b>: gołe pole uprawne, na którym nic nie posiano, odpoczywa w pół godziny.</li>
+<li><b>Nawóz</b> (łajno) od hodowanych zwierząt, zostawiony na bruździe i potem podniesiony, odżywia ziemię tak jak popiół.</li>
+</ul>
+<p>Dwa pola na zmianę, jedno rośnie, drugie odpoczywa, dają plon tak często jak jedno świeże pole.</p>
+
+<h2>Od ziarna do chleba</h2>
+<ol>
+<li><b>Mąka</b>: 3 ziarna + 1 kamyk &rarr; 2 mąki, ręcznie. Kamyk wraca. (Na bloku kamieniarskim: 3 ziarna &rarr; 3 mąki.)</li>
+<li><b>Ciasto</b>: 2 mąki + dzban wody &rarr; ciasto. Dzban wraca pusty. Woda z rzeki albo ze stawu jest w porządku, morska nie.</li>
+<li><b>Chleb</b>: ciasto w dowolnym ogniu.</li>
+</ol>
+<p>Chleb syci 8, mniej niż pieczone mięso (10) i więcej niż prawie wszystko inne. Czerstwieje i pleśnieje w cztery dni (w chłodnej piwnicy w osiem). Ziarno i mąka nigdy się nie psują, więc zapas na zimę to beczka ziarna, a nie skrzynia chleba.</p>
+
+<h2>Bawełna i proso</h2>
+<p><b>Dzika bawełna</b> to niski krzew z białymi torebkami na <b>sawannie</b>. Zbierasz ją ręką: daje bawełnę i nasiona bawełny. Bawełna potrzebuje ciepłego powietrza (od 16&deg;): jej pole rośnie na sawannie, a na łące w pasie umiarkowanym prawie stoi w miejscu. Tkanina z niej to jedyne ubranie, w którym w upale jest chłodniej niż bez niczego.</p>
+<p><b>Proso</b> rośnie szybciej niż pszenica (fazy trwają 0,6 czasu), ale potrzebuje ciepła.</p>
+
+<h2>Paliki nie są do upraw</h2>
+<p><b>Palik</b> (2 patyki + 1 odłupek krzemienny &rarr; 2 paliki; odłupek wraca) to element budowlany, a nie ogrodowy. Wbij go w ziemię i wpleć w niego 3 patyki, a powstanie plecionka. Oblep ją polepą i masz ścianę. Paliki służą też do pułapek z kolcami. Uprawy nie potrzebują niczego poza polem uprawnym, wodą i ciepłem.</p>
+<div class="pager"><a href="crafting.html">&larr; Rzemiosło</a><a href="survival.html">Przetrwanie &rarr;</a></div>
+</main>
+<footer><div class="wrap">Poradnik gracza do Primitive, spisany z kodu gry, ze zrzutami zrobionymi w samej grze. Notatki nieoficjalne; gra zmienia się szybciej niż one.</div></footer>
+</body>
+</html>

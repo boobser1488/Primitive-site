@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Multijugador - Primitive</title>
+<meta name="description" content="Entrar en un servidor de Primitive, contraseñas de servidor y ventanas de inicio de sesión, y montar tu propio servidor: el puerto 7878, server_settings.toml, operadores y comandos.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<header class="top"><div class="wrap">
+<a class="brand" href="index.html">Primitive <small>wiki</small></a>
+<a class="site" href="../../index.html">&larr; sitio</a>
+<div class="langs"><a href="../en/multiplayer.html" lang="en" hreflang="en">English</a><a href="../pl/multiplayer.html" lang="pl" hreflang="pl">Polski</a><a href="../ru/multiplayer.html" lang="ru" hreflang="ru">Русский</a><span lang="es">Español</span></div>
+</div></header>
+<nav class="pages" aria-label="Páginas"><div class="wrap"><ul>
+<li><a href="index.html">Índice</a></li>
+<li><a href="getting-started.html">Primeros pasos</a></li>
+<li><a href="path.html">El camino</a></li>
+<li><a href="crafting.html">Artesanía</a></li>
+<li><a href="farming.html">Cultivo</a></li>
+<li><a href="survival.html">Supervivencia</a></li>
+<li><a href="animals.html">Animales</a></li>
+<li><a href="world.html">El mundo</a></li>
+<li><a href="controls.html">Controles</a></li>
+<li><span aria-current="page">Multijugador</span></li>
+<li><a href="faq.html">Preguntas</a></li>
+</ul></div></nav>
+<main class="wrap">
+<h1>Multijugador</h1>
+<p class="lead">Jugar en solitario es el mismo servidor funcionando dentro del juego, así que un mundo compartido se juega exactamente igual que el tuyo.</p>
+
+<h2>Entrar en un servidor</h2>
+<ol>
+<li><b>MULTIPLAYER</b> (multijugador) &rarr; <b>ADD</b> (añadir; o la tecla <kbd>A</kbd>).</li>
+<li>Ponle cualquier <b>NAME</b> (nombre) y una <b>ADDRESS</b> (dirección) con la forma <code>host:port</code>. Si no pones el puerto, se añade <code>:7878</code>. El tercer campo, <b>SERVER PASSWORD</b> (contraseña del servidor), es solo para los servidores que la piden.</li>
+<li><b>SAVE</b> (guardar), elige el servidor y pulsa <b>PLAY</b> (jugar).</li>
+</ol>
+<p><kbd>E</kbd> edita un servidor y <kbd>Del</kbd> lo borra.</p>
+<figure><img src="../img/servers.jpg" width="1280" height="720" alt="La pantalla SERVERS con una entrada, Local server 127.0.0.1:7878, y los botones PLAY, ADD, EDIT, DELETE y BACK"><figcaption>La lista de servidores.</figcaption></figure>
+<ul>
+<li><b>La conexión siempre va cifrada</b>, tanto a un servidor compartido como a tu propio mundo.</li>
+<li><b>La clave del servidor.</b> La primera vez, el juego recuerda la clave del servidor. Si más tarde la misma dirección responde con otra clave, el juego se niega a conectar y muestra <b>SERVER KEY CHANGED</b> (la clave del servidor ha cambiado) con las dos huellas digitales. Acepta la nueva solo si el dueño te ha dicho que la cambió.</li>
+<li><b>La contraseña del servidor.</b> Un servidor cerrado te pide su contraseña al conectar; puedes entrar una sola vez o entrar y que la recuerde.</li>
+<li><b>La ventana de inicio de sesión.</b> Si el servidor usa el plugin de inicio de sesión, una ventana con un <b>marco azul</b>, marcada como ventana propia del servidor, te pide la primera vez que inventes una contraseña para tu nombre, y después esa contraseña. El marco azul significa que quien escribe es el servidor, no el juego. Tras iniciar sesión una vez, el servidor le da una clave a este dispositivo, así que solo vuelves a necesitar la contraseña en un dispositivo nuevo. <code>/forgetdevices</code> hace que todos tus dispositivos vuelvan a pedirla; <code>/password</code> la cambia.</li>
+</ul>
+
+<h2>Qué cambia con otra gente</h2>
+<ul>
+<li>El <b>mapa es personal</b>: lo que han visto los demás te lo tienen que contar ellos.</li>
+<li>A los demás jugadores se les ve <b>vestidos como van</b> y con lo que llevan en la mano.</li>
+<li>A un jugador derribado <b>lo puede levantar un amigo</b>: haz clic derecho sobre él con una venda, una férula, comida o una jarra, lo que pida su cuenta atrás. Se gasta tu objeto.</li>
+<li>El cuerpo de un jugador muerto lo puede abrir cualquiera. En un servidor pequeño, el primero en llegar suele ser el amigo que estaba allí.</li>
+<li>Las huellas <span class="new">próxima actualización</span> las ve todo el mundo: quien llegue después verá tu rastro ya envejecido.</li>
+<li>El panel F3 solo muestra coordenadas a los operadores. A nadie se le dice dónde está; te orientas con referencias del paisaje y con tu propio mapa.</li>
+</ul>
+
+<h2>Montar tu propio servidor</h2>
+<p>Ejecuta <code>primitive_server.exe</code> del archivo de la versión publicada. La primera vez que arranca escribe a su lado <code>server_settings.toml</code> con todos los valores; edítalo y reinicia. Los que se suelen cambiar:</p>
+<div class="tbl"><table>
+<tr><th>Ajuste</th><th>Significado</th></tr>
+<tr><td><code>bind_addr</code></td><td>dirección y puerto, <code>0.0.0.0:7878</code> por defecto</td></tr>
+<tr><td><code>server_name</code></td><td>el nombre que ven los jugadores</td></tr>
+<tr><td><code>world_seed</code></td><td>la semilla del mundo</td></tr>
+<tr><td><code>max_players</code></td><td>límite de jugadores</td></tr>
+<tr><td><code>view_distance_chunks</code></td><td>hasta dónde envía el servidor el mundo</td></tr>
+<tr><td><code>world_dir</code></td><td>dónde se guarda el mundo (vacío: no se guarda)</td></tr>
+<tr><td><code>server_password</code></td><td>una contraseña para el servidor; al arrancar se sustituye por un hash</td></tr>
+<tr><td><code>[anticheat]</code></td><td>la sección del antitrampas, incluido <code>enabled</code></td></tr>
+</table></div>
+<p>Para jugadores de fuera de tu red, abre el puerto en el cortafuegos y redirígelo en el router. La clave del servidor está en la carpeta del mundo como <code>server.key</code>; muévela con el mundo, o a todos los jugadores se les dirá que el servidor ha sido sustituido.</p>
+<p>El plugin de inicio de sesión (<code>plugins/auth</code>) está desactivado por defecto; pon <code>enabled = true</code> en su <code>plugin.toml</code> y reinicia. Sin él y sin contraseña, el registro avisa de que no se comprueba la identidad de los jugadores: quien escribe un nombre juega con él.</p>
+
+<h3>Comandos</h3>
+<p>Se escriben en la consola del servidor, o en el chat con una <code>/</code> delante. <code>help</code> los enumera todos.</p>
+<div class="tbl"><table>
+<tr><th>Comando</th><th>Qué hace</th></tr>
+<tr><td><code>list</code></td><td>quién está conectado</td></tr>
+<tr><td><code>players</code></td><td>todos los que recuerda el servidor</td></tr>
+<tr><td><code>say &lt;text&gt;</code></td><td>mensaje para todos</td></tr>
+<tr><td><code>time &lt;0.0-1.0&gt;</code>, <code>day</code>, <code>night</code>, <code>dawn</code>, <code>dusk</code></td><td>hora del día</td></tr>
+<tr><td><code>weather clear|rain|storm|auto</code></td><td>fijar el tiempo o dejarlo libre (operador)</td></tr>
+<tr><td><code>tp &lt;x&gt; &lt;y&gt; &lt;z&gt;</code></td><td>teletransportarse (operador)</td></tr>
+<tr><td><code>give &lt;block&gt; [n]</code></td><td>objetos a tu fardo (operador), por ejemplo <code>give cobblestone 40</code></td></tr>
+<tr><td><code>kick &lt;name&gt;</code>, <code>op &lt;name&gt;</code>, <code>deop &lt;name&gt;</code></td><td>expulsar, dar y quitar derechos de operador</td></tr>
+<tr><td><code>save</code>, <code>stop</code></td><td>guardar el mundo, parar el servidor</td></tr>
+</table></div>
+<p>El servidor recuerda a cada jugador por un identificador hecho a partir del nombre, con su fardo, su salud y el sitio donde se desconectó; un jugador que vuelve aparece donde lo dejó. En solitario solo eres operador si <b>COMMANDS AND TESTING</b> (comandos y pruebas) está activado en ese mundo.</p>
+<div class="pager"><a href="controls.html">&larr; Controles</a><a href="faq.html">Preguntas &rarr;</a></div>
+</main>
+<footer><div class="wrap">Guía de jugador de Primitive, escrita a partir del propio código del juego y con capturas tomadas dentro del juego. Notas no oficiales: el juego cambia más rápido que ellas.</div></footer>
+</body>
+</html>

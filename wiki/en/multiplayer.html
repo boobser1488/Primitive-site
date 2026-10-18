@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Multiplayer - Primitive</title>
+<meta name="description" content="Joining a Primitive server, server passwords and login windows, and running your own server: port 7878, server_settings.toml, operators and commands.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<header class="top"><div class="wrap">
+<a class="brand" href="index.html">Primitive <small>wiki</small></a>
+<a class="site" href="../../index.html">&larr; site</a>
+<div class="langs"><span lang="en">English</span><a href="../pl/multiplayer.html" lang="pl" hreflang="pl">Polski</a><a href="../ru/multiplayer.html" lang="ru" hreflang="ru">Русский</a><a href="../es/multiplayer.html" lang="es" hreflang="es">Español</a></div>
+</div></header>
+<nav class="pages" aria-label="Pages"><div class="wrap"><ul>
+<li><a href="index.html">Contents</a></li>
+<li><a href="getting-started.html">Getting started</a></li>
+<li><a href="path.html">The path</a></li>
+<li><a href="crafting.html">Crafting</a></li>
+<li><a href="farming.html">Farming</a></li>
+<li><a href="survival.html">Survival</a></li>
+<li><a href="animals.html">Animals</a></li>
+<li><a href="world.html">The world</a></li>
+<li><a href="controls.html">Controls</a></li>
+<li><span aria-current="page">Multiplayer</span></li>
+<li><a href="faq.html">FAQ</a></li>
+</ul></div></nav>
+<main class="wrap">
+<h1>Multiplayer</h1>
+<p class="lead">Singleplayer is the same server running inside the game, so a shared world plays exactly like your own.</p>
+
+<h2>Joining a server</h2>
+<ol>
+<li><b>MULTIPLAYER</b> &rarr; <b>ADD</b> (or <kbd>A</kbd>).</li>
+<li>Give it any <b>NAME</b> and an <b>ADDRESS</b> as <code>host:port</code>. If you leave out the port, <code>:7878</code> is added. The third field, <b>SERVER PASSWORD</b>, is only for servers that ask for one.</li>
+<li><b>SAVE</b>, pick the server, <b>PLAY</b>.</li>
+</ol>
+<p><kbd>E</kbd> edits a server, <kbd>Del</kbd> removes it.</p>
+<figure><img src="../img/servers.jpg" width="1280" height="720" alt="The SERVERS screen with one entry, Local server 127.0.0.1:7878, and PLAY, ADD, EDIT, DELETE and BACK buttons"><figcaption>The server list.</figcaption></figure>
+<ul>
+<li><b>The connection is always encrypted</b>, to a shared server and to your own world alike.</li>
+<li><b>Server key.</b> The first time, the game remembers the server's key. If the same address later answers with a different key, the game refuses and shows <b>SERVER KEY CHANGED</b> with both fingerprints. Trust the new one only if the owner told you they changed it.</li>
+<li><b>Server password.</b> A closed server asks for its password when you connect; you can log in once or log in and remember it.</li>
+<li><b>Login window.</b> If the server runs the login plugin, a window in a <b>blue frame</b>, marked as the server's own window, asks you to make up a password for your name the first time, and for that password after. The blue frame means the server is writing, not the game. After one login the server gives this device a key, so you only need the password again on a new device. <code>/forgetdevices</code> makes all your devices ask again; <code>/password</code> changes it.</li>
+</ul>
+
+<h2>What is different with other people</h2>
+<ul>
+<li>The <b>map is personal</b>: what others have seen, they tell you themselves.</li>
+<li>Other players are seen <b>as they are dressed</b>, with what they hold.</li>
+<li>A downed player can be <b>picked up by a friend</b>: right-click them with a bandage, splint, food or a jug, whatever their countdown asks for. It uses your item.</li>
+<li>A dead player's body can be opened by anyone. On a small server the first to arrive is usually the friend who was there.</li>
+<li>Footprints <span class="new">next update</span> are seen by everyone: whoever comes later sees your trail already aged.</li>
+<li>The F3 panel shows coordinates only to operators. Nobody is told where they are; you find your way by landmarks and your own map.</li>
+</ul>
+
+<h2>Running your own server</h2>
+<p>Start <code>primitive_server.exe</code> from the release archive. On first start it writes <code>server_settings.toml</code> beside itself with every value; edit it and restart. The ones usually changed:</p>
+<div class="tbl"><table>
+<tr><th>Setting</th><th>Meaning</th></tr>
+<tr><td><code>bind_addr</code></td><td>address and port, <code>0.0.0.0:7878</code> by default</td></tr>
+<tr><td><code>server_name</code></td><td>the name players see</td></tr>
+<tr><td><code>world_seed</code></td><td>the world's seed</td></tr>
+<tr><td><code>max_players</code></td><td>player limit</td></tr>
+<tr><td><code>view_distance_chunks</code></td><td>how far the server sends the world</td></tr>
+<tr><td><code>world_dir</code></td><td>where the world is saved (empty: not saved)</td></tr>
+<tr><td><code>server_password</code></td><td>a password for the server; on start it is replaced by a hash</td></tr>
+<tr><td><code>[anticheat]</code></td><td>the anticheat section, including <code>enabled</code></td></tr>
+</table></div>
+<p>For players outside your network, open the port in the firewall and forward it on the router. The server's key lives in the world folder as <code>server.key</code>; move it with the world, or every player will be told the server was swapped.</p>
+<p>The login plugin (<code>plugins/auth</code>) is off by default; set <code>enabled = true</code> in its <code>plugin.toml</code> and restart. Without it and without a password, the log warns that players' identities are not checked: whoever types a name plays as it.</p>
+
+<h3>Commands</h3>
+<p>Typed in the server console, or in chat with a <code>/</code> in front. <code>help</code> lists them all.</p>
+<div class="tbl"><table>
+<tr><th>Command</th><th>What it does</th></tr>
+<tr><td><code>list</code></td><td>who is online</td></tr>
+<tr><td><code>players</code></td><td>everyone the server remembers</td></tr>
+<tr><td><code>say &lt;text&gt;</code></td><td>message to everyone</td></tr>
+<tr><td><code>time &lt;0.0-1.0&gt;</code>, <code>day</code>, <code>night</code>, <code>dawn</code>, <code>dusk</code></td><td>time of day</td></tr>
+<tr><td><code>weather clear|rain|storm|auto</code></td><td>set or release the weather (operator)</td></tr>
+<tr><td><code>tp &lt;x&gt; &lt;y&gt; &lt;z&gt;</code></td><td>teleport (operator)</td></tr>
+<tr><td><code>give &lt;block&gt; [n]</code></td><td>items into your pack (operator), e.g. <code>give cobblestone 40</code></td></tr>
+<tr><td><code>kick &lt;name&gt;</code>, <code>op &lt;name&gt;</code>, <code>deop &lt;name&gt;</code></td><td>kick, grant and remove operator rights</td></tr>
+<tr><td><code>save</code>, <code>stop</code></td><td>save the world, stop the server</td></tr>
+</table></div>
+<p>The server remembers each player by an ID made from the name, with their pack, health and where they logged out; a returning player appears where they left. In singleplayer you are the operator only if <b>COMMANDS AND TESTING</b> is on for that world.</p>
+<div class="pager"><a href="controls.html">&larr; Controls</a><a href="faq.html">FAQ &rarr;</a></div>
+</main>
+<footer><div class="wrap">A player's guide to Primitive, written from the game's own code and pictures taken in the game. Unofficial notes; the game changes faster than they do.</div></footer>
+</body>
+</html>

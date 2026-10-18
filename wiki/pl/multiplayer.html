@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gra wieloosobowa - Primitive</title>
+<meta name="description" content="Dołączanie do serwera Primitive, hasła serwera i okna logowania oraz stawianie własnego serwera: port 7878, server_settings.toml, operatorzy i komendy.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<header class="top"><div class="wrap">
+<a class="brand" href="index.html">Primitive <small>wiki</small></a>
+<a class="site" href="../../index.html">&larr; strona</a>
+<div class="langs"><a href="../en/multiplayer.html" lang="en" hreflang="en">English</a><span lang="pl">Polski</span><a href="../ru/multiplayer.html" lang="ru" hreflang="ru">Русский</a><a href="../es/multiplayer.html" lang="es" hreflang="es">Español</a></div>
+</div></header>
+<nav class="pages" aria-label="Strony"><div class="wrap"><ul>
+<li><a href="index.html">Spis treści</a></li>
+<li><a href="getting-started.html">Pierwsze kroki</a></li>
+<li><a href="path.html">Droga</a></li>
+<li><a href="crafting.html">Rzemiosło</a></li>
+<li><a href="farming.html">Uprawa</a></li>
+<li><a href="survival.html">Przetrwanie</a></li>
+<li><a href="animals.html">Zwierzęta</a></li>
+<li><a href="world.html">Świat</a></li>
+<li><a href="controls.html">Sterowanie</a></li>
+<li><span aria-current="page">Gra wieloosobowa</span></li>
+<li><a href="faq.html">FAQ</a></li>
+</ul></div></nav>
+<main class="wrap">
+<h1>Gra wieloosobowa</h1>
+<p class="lead">Gra jednoosobowa to ten sam serwer, tylko uruchomiony wewnątrz gry, więc wspólny świat gra się dokładnie tak samo jak własny.</p>
+
+<h2>Dołączanie do serwera</h2>
+<ol>
+<li><b>GRA WIELOOSOBOWA</b> &rarr; <b>DODAJ</b> (albo <kbd>A</kbd>).</li>
+<li>Wpisz dowolną <b>NAZWĘ</b> i <b>ADRES</b> w postaci <code>host:port</code>. Jeśli pominiesz port, gra dopisze <code>:7878</code>. Trzecie pole, <b>HASŁO SERWERA</b>, wypełniasz tylko dla serwerów, które go wymagają.</li>
+<li><b>ZAPISZ</b>, wybierz serwer, <b>GRAJ</b>.</li>
+</ol>
+<p><kbd>E</kbd> edytuje serwer, <kbd>Del</kbd> go usuwa.</p>
+<figure><img src="../img/servers.jpg" width="1280" height="720" alt="Ekran SERWERY z jednym wpisem, Local server 127.0.0.1:7878, i przyciskami GRAJ, DODAJ, EDYTUJ, USUŃ i WSTECZ"><figcaption>Lista serwerów.</figcaption></figure>
+<ul>
+<li><b>Połączenie jest zawsze szyfrowane</b>, zarówno ze wspólnym serwerem, jak i z twoim własnym światem.</li>
+<li><b>Klucz serwera.</b> Za pierwszym razem gra zapamiętuje klucz serwera. Jeśli ten sam adres odpowie później innym kluczem, gra odmówi połączenia i pokaże <b>KLUCZ SERWERA SIĘ ZMIENIŁ</b> z oboma odciskami. Zaufaj nowemu kluczowi tylko wtedy, gdy właściciel powiedział ci, że go zmienił.</li>
+<li><b>Hasło serwera.</b> Zamknięty serwer pyta o hasło przy łączeniu. Możesz wejść raz albo wejść i zapamiętać hasło.</li>
+<li><b>Okno logowania.</b> Jeśli serwer ma włączoną wtyczkę logowania, okno w <b>niebieskiej ramce</b>, oznaczone jako własne okno serwera, za pierwszym razem prosi, żebyś wymyślił hasło dla swojego imienia, a potem pyta o to hasło. Niebieska ramka znaczy, że pisze serwer, a nie gra. Po jednym logowaniu serwer daje temu urządzeniu klucz, więc hasła potrzebujesz znowu dopiero na nowym urządzeniu. <code>/forgetdevices</code> sprawia, że wszystkie twoje urządzenia znowu zapytają o hasło. <code>/password</code> je zmienia.</li>
+</ul>
+
+<h2>Co się zmienia, gdy grasz z innymi</h2>
+<ul>
+<li><b>Mapa jest osobista</b>: to, co widzieli inni, muszą ci opowiedzieć sami.</li>
+<li>Innych graczy widzisz <b>tak, jak są ubrani</b>, z tym, co trzymają w rękach.</li>
+<li>Powalonego gracza <b>może podnieść przyjaciel</b>: kliknij go prawym z bandażem, szyną, jedzeniem albo dzbanem, czymkolwiek, o co prosi jego odliczanie. Zużywa to twój przedmiot.</li>
+<li>Ciało zmarłego gracza może otworzyć każdy. Na małym serwerze pierwszy na miejscu jest zwykle przyjaciel, który był obok.</li>
+<li>Ślady stóp <span class="new">w następnej aktualizacji</span> widzą wszyscy: kto przyjdzie później, zobaczy twój trop już postarzały.</li>
+<li>Panel F3 pokazuje współrzędne tylko operatorom. Nikt nie dostaje informacji, gdzie jest. Drogę odnajdujesz po punktach orientacyjnych i własnej mapie.</li>
+</ul>
+
+<h2>Własny serwer</h2>
+<p>Uruchom <code>primitive_server.exe</code> z archiwum wydania. Przy pierwszym starcie zapisuje obok siebie <code>server_settings.toml</code> ze wszystkimi wartościami. Edytuj go i uruchom serwer ponownie. Najczęściej zmieniane ustawienia:</p>
+<div class="tbl"><table>
+<tr><th>Ustawienie</th><th>Znaczenie</th></tr>
+<tr><td><code>bind_addr</code></td><td>adres i port, domyślnie <code>0.0.0.0:7878</code></td></tr>
+<tr><td><code>server_name</code></td><td>nazwa, którą widzą gracze</td></tr>
+<tr><td><code>world_seed</code></td><td>ziarno świata</td></tr>
+<tr><td><code>max_players</code></td><td>limit graczy</td></tr>
+<tr><td><code>view_distance_chunks</code></td><td>jak daleko serwer wysyła świat</td></tr>
+<tr><td><code>world_dir</code></td><td>gdzie zapisywany jest świat (puste: świat się nie zapisuje)</td></tr>
+<tr><td><code>server_password</code></td><td>hasło serwera; przy starcie zastępuje je skrót (hash)</td></tr>
+<tr><td><code>[anticheat]</code></td><td>sekcja anticheatu, w tym <code>enabled</code></td></tr>
+</table></div>
+<p>Żeby wpuścić graczy spoza twojej sieci, otwórz port w zaporze i przekieruj go na routerze. Klucz serwera leży w folderze świata jako <code>server.key</code>. Przenoś go razem ze światem, inaczej każdy gracz usłyszy, że serwer został podmieniony.</p>
+<p>Wtyczka logowania (<code>plugins/auth</code>) jest domyślnie wyłączona. Ustaw <code>enabled = true</code> w jej <code>plugin.toml</code> i uruchom serwer ponownie. Bez niej i bez hasła dziennik ostrzega, że tożsamość graczy nie jest sprawdzana: kto wpisze imię, ten gra jako ta osoba.</p>
+
+<h3>Komendy</h3>
+<p>Wpisujesz je w konsoli serwera albo na czacie z <code>/</code> na początku. <code>help</code> wyświetla je wszystkie.</p>
+<div class="tbl"><table>
+<tr><th>Komenda</th><th>Co robi</th></tr>
+<tr><td><code>list</code></td><td>kto jest online</td></tr>
+<tr><td><code>players</code></td><td>wszyscy, których serwer pamięta</td></tr>
+<tr><td><code>say &lt;text&gt;</code></td><td>wiadomość do wszystkich</td></tr>
+<tr><td><code>time &lt;0.0-1.0&gt;</code>, <code>day</code>, <code>night</code>, <code>dawn</code>, <code>dusk</code></td><td>pora dnia</td></tr>
+<tr><td><code>weather clear|rain|storm|auto</code></td><td>ustawia albo zwalnia pogodę (operator)</td></tr>
+<tr><td><code>tp &lt;x&gt; &lt;y&gt; &lt;z&gt;</code></td><td>teleport (operator)</td></tr>
+<tr><td><code>give &lt;block&gt; [n]</code></td><td>przedmioty do twojej torby (operator), np. <code>give cobblestone 40</code></td></tr>
+<tr><td><code>kick &lt;name&gt;</code>, <code>op &lt;name&gt;</code>, <code>deop &lt;name&gt;</code></td><td>wyrzucenie gracza, nadanie i odebranie praw operatora</td></tr>
+<tr><td><code>save</code>, <code>stop</code></td><td>zapis świata, zatrzymanie serwera</td></tr>
+</table></div>
+<p>Serwer pamięta każdego gracza po identyfikatorze utworzonym z imienia, razem z jego torbą, zdrowiem i miejscem, w którym się wylogował. Powracający gracz pojawia się tam, gdzie skończył. W grze jednoosobowej jesteś operatorem tylko wtedy, gdy w danym świecie włączone są <b>KOMENDY I TESTY</b>.</p>
+<div class="pager"><a href="controls.html">&larr; Sterowanie</a><a href="faq.html">FAQ &rarr;</a></div>
+</main>
+<footer><div class="wrap">Poradnik gracza do Primitive, spisany z kodu gry, ze zrzutami zrobionymi w samej grze. Notatki nieoficjalne; gra zmienia się szybciej niż one.</div></footer>
+</body>
+</html>

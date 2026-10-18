@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wytwarzanie i stanowiska - Primitive</title>
+<meta name="description" content="Jak działa wytwarzanie w Primitive: lista wyrobów w torbie, księga przepisów, ogień i jego żar, piec i dymarka, warsztaty, piec dołowy, jakość i zużycie narzędzi.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<header class="top"><div class="wrap">
+<a class="brand" href="index.html">Primitive <small>wiki</small></a>
+<a class="site" href="../../index.html">&larr; strona</a>
+<div class="langs"><a href="../en/crafting.html" lang="en" hreflang="en">English</a><span lang="pl">Polski</span><a href="../ru/crafting.html" lang="ru" hreflang="ru">Русский</a><a href="../es/crafting.html" lang="es" hreflang="es">Español</a></div>
+</div></header>
+<nav class="pages" aria-label="Strony"><div class="wrap"><ul>
+<li><a href="index.html">Spis treści</a></li>
+<li><a href="getting-started.html">Pierwsze kroki</a></li>
+<li><a href="path.html">Droga</a></li>
+<li><span aria-current="page">Rzemiosło</span></li>
+<li><a href="farming.html">Uprawa</a></li>
+<li><a href="survival.html">Przetrwanie</a></li>
+<li><a href="animals.html">Zwierzęta</a></li>
+<li><a href="world.html">Świat</a></li>
+<li><a href="controls.html">Sterowanie</a></li>
+<li><a href="multiplayer.html">Gra wieloosobowa</a></li>
+<li><a href="faq.html">FAQ</a></li>
+</ul></div></nav>
+<main class="wrap">
+<h1>Wytwarzanie i stanowiska</h1>
+<p class="lead">Przepis to zestaw składników, a nie wzór na siatce. Niczego nie trzeba układać.</p>
+
+<h2>Wytwarzanie z torby</h2>
+<p>Otwórz torbę klawiszem <kbd>I</kbd>. Na karcie <b>TORBA</b> kolumna <b>WYTWARZANIE</b> po prawej pokazuje, co możesz zrobić z tego, co niesiesz. <b>Wiersz wybiera, karta wykonuje</b>: kliknij wiersz, a karta pod listą pokaże ten przepis, czego wymaga i ile czego masz (<code>5/1</code>, na zielono, gdy wystarczy, na czerwono, gdy nie). Potem naciśnij <b>ZRÓB</b>, żeby zrobić go raz, albo <b>WSZYSTKO</b>, żeby zrobić tyle, ile się da. Dopóki czegoś brakuje, przyciski nie działają.</p>
+<figure><img src="../img/pack.jpg" width="1280" height="720" alt="Ekran torby: kwadraty na noszone ubranie i postać po lewej, siatka z rzędem paska, na którym są miedziana motyka, krzemienny nóż, nasiona, chleb, dzban, sznur, krzemień i patyki, a po prawej lista WYTWARZANIE z kartą odłupków krzemiennych i przyciskami ZRÓB i WSZYSTKO"><figcaption>Karta TORBA: po lewej to, co masz na sobie, pośrodku to, co niesiesz, po prawej to, co możesz zrobić.</figcaption></figure>
+
+<h2>Księga przepisów</h2>
+<p>Naciśnij <kbd>B</kbd> albo przycisk <b>PRZEPISY</b> w prawym dolnym rogu torby. Księga zawiera przepisy, które <b>znasz</b>, a nie tylko te, które możesz zrobić w tej chwili.</p>
+<ul>
+<li>Przepis staje się znany, gdy <b>każdy jego składnik choć raz był w twojej torbie</b>. To, co zrobisz, też trafia do torby, więc wytwarzanie samo cię uczy.</li>
+<li>Jeśli brakuje <b>dokładnie jednego</b> składnika, przepis już jest w księdze, a brakujący składnik jest narysowany jako <b>?</b>. Weź do rąk miedź, a księga pokaże, że miedź i jeszcze jedna rzecz dają brąz, nie mówiąc jaka. Po to właśnie idziesz w góry. Wyszukiwanie tego nie zdradza.</li>
+<li>Lewa strona wymienia najpierw znane przepisy, potem te z <b>?</b>. Prawa pokazuje wybrany przepis: składniki z tym, ile masz (<code>3/4</code>, na zielono, gdy wystarczy), gdzie się go robi (ręce, ogień, piec, dymarka albo warsztat), <b>jak gorący</b> musi być ogień (w barwie żaru, jak u kowala), czego brakuje, co wraca (tygiel, forma) i czy może się nie udać.</li>
+<li>Przyciski u góry filtrują według miejsca (<b>WSZYSTKO</b>, <b>RĘCE</b>, <b>WARSZTAT</b>...). Na klawiaturze po prostu pisz, żeby szukać po nazwie.</li>
+<li>Ostatnia linijka, <b>IDZIE NA</b>, to księga czytana od tyłu: do czego służy ten przedmiot. Nie ma przepisu „krzemień”, ale wychodzą z niego noże, włócznie i krzesiwa.</li>
+</ul>
+<p>To, co znasz, jest zapisane w twoim profilu na serwerze i przetrwa śmierć. <kbd>Tab</kbd> przełącza między księgą a mapą (jeśli ją masz).</p>
+
+<h2>Gdzie się co robi</h2>
+<div class="tbl"><table>
+<tr><th>Miejsce</th><th>Co to jest</th><th>Z czego</th></tr>
+<tr><td>Ręce</td><td>wszędzie, z torby</td><td>&mdash;</td></tr>
+<tr><td>Ogień</td><td>każde rozpalone ognisko, palenisko, piec albo dymarka: gotowanie, węgiel drzewny, wytapianie miedzi i cyny</td><td>palenisko: 3 patyki + 1 kłoda rzucone na ziemię i podpalone krzemieniem; ognisko: 3 bruku + 4 patyki</td></tr>
+<tr><td>Piec</td><td>gliniany piec: wypalanie ceramiki i cegieł, brąz, odlewanie i kucie metalu, stal</td><td>8 gliny + 4 bruku</td></tr>
+<tr><td>Dymarka</td><td>łupa żelaza i sztabki żelaza</td><td>16 cegieł + 4 zaprawy + 8 bruku</td></tr>
+<tr><td>Warsztat</td><td>meble, ramy</td><td>1 kłoda + 4 patyki + 4 kołki</td></tr>
+<tr><td>Blok kamieniarski</td><td>kamienny młot, mąka z żaren, osełki</td><td>4 bruku + 1 kłoda</td></tr>
+<tr><td>Koło garncarskie</td><td>tygle, dzbany i miski z mniejszej ilości gliny</td><td>3 deski + 2 kołki + 1 bruk</td></tr>
+<tr><td>Stół rymarski</td><td>plecak, mapa, siodło i juki z mniejszej ilości skóry</td><td>2 deski + 4 patyki + 1 skóra garbowana + 1 sznur</td></tr>
+</table></div>
+<p>Cztery warsztaty robią rzeczy od razu z twojej torby, o ile stoisz w zasięgu. Trzy rodzaje ognia, czyli ognisko, piec i dymarka, działają <b>na wsad</b>: ładujesz je, a wsad potrzebuje czasu.</p>
+<figure><img src="../img/interior.jpg" width="1280" height="720" alt="Wnętrze domu krytego strzechą wieczorem: ogień pośrodku, warsztat i koło garncarskie przy ścianach" loading="lazy"><figcaption>Wnętrze zagrody: ogień, warsztat i koło garncarskie.</figcaption></figure>
+
+<h2>Ogień i żar</h2>
+<p>Kliknij prawym ognisko, piec albo dymarkę (bez krzemienia w ręce), żeby je otworzyć: cztery miejsca na składniki u góry po lewej, pod nimi miejsce na paliwo, dwa miejsca na wynik po prawej i miejsce na popiół w prawym dolnym rogu. Kolorowy pasek pokazuje żar, ze znacznikiem tego, czego wymaga wsad, a strzałka pokazuje postęp. Ogień pracuje sam, możesz odejść.</p>
+<p>O tym, co ogień potrafi, decyduje jego <b>temperatura</b>, a temperatura zależy od paliwa. Piec na tym samym paliwie daje żar o 150&deg; wyższy niż ognisko, dymarka o 250&deg; wyższy.</p>
+<div class="tbl"><table>
+<tr><th>Paliwo</th><th>Żar w ognisku</th></tr>
+<tr><td>Węgiel drzewny</td><td>1350, biały</td></tr>
+<tr><td>Patyki, łój</td><td>800, jasnoczerwony</td></tr>
+<tr><td>Dębowa kłoda, deski</td><td>728, ciemnoczerwony</td></tr>
+<tr><td>Drewno brzozy i świerku</td><td>652, ciemnoczerwony</td></tr>
+<tr><td>Torf</td><td>600, ciemnoczerwony</td></tr>
+</table></div>
+<div class="tbl"><table>
+<tr><th>Wsad</th><th>Potrzebny żar</th><th>Czas</th></tr>
+<tr><td>Gotowanie, chleb</td><td>200</td><td>8 s w ognisku</td></tr>
+<tr><td>Węgiel drzewny (3 kłody &rarr; 1)</td><td>400</td><td>75 s</td></tr>
+<tr><td>Wypalanie ceramiki i cegieł</td><td>700</td><td>110 s</td></tr>
+<tr><td>Sztabka miedzi, brąz, odlewy z miedzi</td><td>1080 (pomarańczowy)</td><td>75 s z rudy, 40 s przetapiania</td></tr>
+<tr><td>Sztabka cyny</td><td>1100 (żółty)</td><td>75 s</td></tr>
+<tr><td>Łupa żelaza</td><td>1200</td><td>5 min</td></tr>
+<tr><td>Sztabka żelaza z łupy</td><td>około 1230</td><td>2 min</td></tr>
+<tr><td>Stal</td><td>950</td><td>5 min</td></tr>
+</table></div>
+<p>Wynika z tego jedna zasada: <b>tylko węgiel drzewny rozgrzeje jakikolwiek ogień do miedzi albo cyny.</b> Drewno jest do kolacji i ceramiki, węgiel drzewny do metalu. Gdy wsad stoi, linijka pod ogniem mówi, że żar jest za słaby i jakiej barwy potrzeba.</p>
+<ul>
+<li><b>Deszcz studzi ogień</b> pod gołym niebem, w burzy o 300&deg;, i w końcu go gasi. Blok tuż nad ogniem go chroni.</li>
+<li><b>Kolacja się przypala.</b> Gotowe jedzenie zostawione w miejscach na wynik przy pomarańczowym żarze albo wyższym zamienia się w popiół.</li>
+<li><b>Świeże kłody są mokre</b>, palą się chłodniej i krócej. Ceramiki ani metalu nie zrobisz na nich wcale. Ułóż kłody w stos drewna (<kbd>Shift</kbd> + prawy klik z kłodą), a wyschną w trzy dni.</li>
+<li>Wytapianie rudy zostawia obok metalu <b>żużel</b>. Jeśli miejsca na wynik są pełne, wsad się nie zacznie.</li>
+</ul>
+<figure><img src="../img/hearths.jpg" width="1280" height="720" alt="Ogniska, piece i dymarki w dwóch rzędach, rozpalone i zgaszone, jeden rząd pod dachem" loading="lazy"><figcaption>Trzy rodzaje ognia: ognisko, piec, dymarka.</figcaption></figure>
+
+<h2 id="pit-kiln">Piec dołowy</h2>
+<p>Naczynia możesz wypalić bez pieca i bez węgla drzewnego, w dole w ziemi. To powolne, ale wymaga tylko ziemi, włókna i drewna, więc pierwszy tygiel wypalisz już pierwszego wieczoru nad rzeką.</p>
+<ol>
+<li><b>Wykop dół głęboki na jeden blok.</b> Dno i wszystkie cztery ściany muszą być z ziemi, piasku, żwiru, kamienia albo cegły. Drewno się pali i nie liczy się.</li>
+<li><b>Włóż surowe sztuki</b>: kliknij prawym dno, trzymając surowy tygiel, formę, dzban albo cegłę. Najwyżej <b>cztery</b>.</li>
+<li><b>Połóż na nich 8 włókna</b>, po jednym prawym kliknięciu.</li>
+<li><b>Na wierzch połóż 8 kłód.</b></li>
+<li><b>Podpal</b> krzemieniem.</li>
+<li>Pali się <b>15 minut prawdziwego czasu</b> (nie godzin w grze). Potem wyjmij wypalone sztuki pustą ręką.</li>
+</ol>
+<p>Deszcz nad odkrytym dołem gasi go w ciągu dwudziestu sekund. Dach pomaga tylko wtedy, gdy jest co najmniej dwa bloki nad dołem. Blok leżący wprost na kłodach dusi ogień. Wszystko wypala się dopiero na końcu, więc dół, który zgaśnie wcześniej, nie wypali nic.</p>
+
+<h2>Mielerz</h2>
+<p>W ognisku węgiel drzewny to 3 kłody za 1 węgiel. Mielerz daje więcej z tego samego drewna, ale trwa 15 minut:</p>
+<ol>
+<li><kbd>Shift</kbd> + prawy klik na ziemi z kłodą zaczyna stos drewna. Klikaj prawym stos kolejnymi kłodami, najwyżej do ośmiu.</li>
+<li>Obłóż go ze wszystkich stron ziemią, piaskiem, żwirem albo kamieniem (w wykopanym dole idzie to łatwo).</li>
+<li>Podpal ostatnią odkrytą ścianę krzemieniem i zamknij ją w ciągu 30 sekund.</li>
+<li>Po 15 minutach stos zamienia się w stos węgla drzewnego: osiem kłód daje cztery węgle. Rozbij go, żeby zebrać węgiel.</li>
+</ol>
+<p>Zostaw ścianę odkrytą dłużej niż 30 sekund, a stos spłonie na popiół.</p>
+
+<h2>Jakość, zużycie i ostrzenie</h2>
+<ul>
+<li><b>Jakość</b> ustala się raz, w chwili wyrobu. Zależy od twojego stanu (zmęczenie, wygoda, zdrowie, głód), od tego, czy stałeś przy właściwym warsztacie, od narzędzia w ręce, a na kowadle i kole garncarskim od tego, jak dobrze trafiasz w znak. Wypoczęty rzemieślnik pracuje równo, wyczerpanemu wychodzi byle co. Pod nazwą przedmiotu widnieje <i>licha robota</i>, <i>zwykła robota</i>, <i>dobra robota</i> albo <i>wyborna robota</i>. Dwie rzeczy różnej jakości nie łączą się w stos.</li>
+<li><b>Narzędzia się zużywają.</b> Liczy się tylko zamach, który rozbije blok albo trafi zwierzę. Pasek pod ikoną przechodzi z zielonego w żółty i czerwony, a gdy się skończy, narzędzia już nie ma. Krzemienny nóż wytrzymuje około 70 zamachów, miedziany topór 180, brązowy 320, żelazny 550.</li>
+<li><b>Ostrza tępią się</b> stopniami (ostre, przytępione, tępe, całkiem tępe), a całkiem tępe narzędzie pracuje o połowę wolniej. <b>Osełka</b> (1 piaskowiec &rarr; 2) ostrzy najbardziej stępione narzędzie danego rodzaju, a sama wraca. Krzemiennego noża nie naostrzysz: krzemień się wyszczerbia, a nie tępi.</li>
+</ul>
+<p><b>Kowadło</b> (5 sztabek brązu + 1 kłoda, w piecu) i <b>koło garncarskie</b> mają małą grę na wyczucie czasu: uderz w znak, a sztuka wyjdzie lepsza.</p>
+<div class="pager"><a href="path.html">&larr; Droga</a><a href="farming.html">Uprawa &rarr;</a></div>
+</main>
+<footer><div class="wrap">Poradnik gracza do Primitive, spisany z kodu gry, ze zrzutami zrobionymi w samej grze. Notatki nieoficjalne; gra zmienia się szybciej niż one.</div></footer>
+</body>
+</html>

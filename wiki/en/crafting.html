@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Crafting and stations - Primitive</title>
+<meta name="description" content="How crafting works in Primitive: the making list in the pack, the recipe book, fires and their heat, the kiln and bloomery, workshops, the pit kiln, quality and tool wear.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<header class="top"><div class="wrap">
+<a class="brand" href="index.html">Primitive <small>wiki</small></a>
+<a class="site" href="../../index.html">&larr; site</a>
+<div class="langs"><span lang="en">English</span><a href="../pl/crafting.html" lang="pl" hreflang="pl">Polski</a><a href="../ru/crafting.html" lang="ru" hreflang="ru">Русский</a><a href="../es/crafting.html" lang="es" hreflang="es">Español</a></div>
+</div></header>
+<nav class="pages" aria-label="Pages"><div class="wrap"><ul>
+<li><a href="index.html">Contents</a></li>
+<li><a href="getting-started.html">Getting started</a></li>
+<li><a href="path.html">The path</a></li>
+<li><span aria-current="page">Crafting</span></li>
+<li><a href="farming.html">Farming</a></li>
+<li><a href="survival.html">Survival</a></li>
+<li><a href="animals.html">Animals</a></li>
+<li><a href="world.html">The world</a></li>
+<li><a href="controls.html">Controls</a></li>
+<li><a href="multiplayer.html">Multiplayer</a></li>
+<li><a href="faq.html">FAQ</a></li>
+</ul></div></nav>
+<main class="wrap">
+<h1>Crafting and stations</h1>
+<p class="lead">A recipe is a set of ingredients, not a pattern on a grid. Nothing has to be arranged.</p>
+
+<h2>Making things from the pack</h2>
+<p>Open the pack with <kbd>I</kbd>. On the <b>PACK</b> tab the <b>CRAFTING</b> column on the right lists what you can make from what you carry. <b>A row chooses, the card makes</b>: click a row and the card under the list shows that recipe, what it needs and how much of each you have (<code>5/1</code>, green when there is enough, red when not). Then press <b>MAKE</b> to make it once or <b>MAKE ALL</b> to make as many as you can. The buttons stay dead while something is missing.</p>
+<figure><img src="../img/pack.jpg" width="1280" height="720" alt="The pack screen: worn-clothing squares and a body figure on the left, a grid with the belt row holding a copper hoe, a flint knife, seeds, bread, a jug, cord, flint and sticks, and on the right a CRAFTING list with the card for Flint flakes and MAKE and MAKE ALL buttons"><figcaption>The PACK tab: what you wear on the left, what you carry in the middle, what you can make on the right.</figcaption></figure>
+
+<h2>The recipe book</h2>
+<p>Press <kbd>B</kbd>, or the <b>RECIPES</b> button in the lower right corner of the pack. The book holds the recipes you <b>know</b>, not only those you can make right now.</p>
+<ul>
+<li>A recipe becomes known when <b>every one of its ingredients has been in your pack</b> at some point. What you make goes into your pack too, so crafting teaches itself.</li>
+<li>If <b>exactly one</b> ingredient is still missing, the recipe is already in the book, with that ingredient drawn as a <b>?</b>. Hold copper and the book shows that copper and one more thing make bronze, without saying what. That is what you go to the hills for. Search does not reveal it.</li>
+<li>The left side lists known recipes first, then those with a <b>?</b>. The right side shows the chosen one: ingredients with what you have (<code>3/4</code>, green when enough), where it is made (hands, fire, kiln, bloomery or a workshop), <b>how hot</b> the fire must be (as a smith's colour), what is missing, what comes back (crucible, mould) and whether it can fail.</li>
+<li>The buttons at the top filter by place (<b>ALL</b>, <b>HANDS</b>, <b>WORKSHOP</b>...). On a keyboard just type to search by name.</li>
+<li>The last line, <b>GOES INTO</b>, is the book read backwards: what this item is used for. There is no recipe called "flint", but knives, spears and fire strikers come out of it.</li>
+</ul>
+<p>What you know is kept in your profile on the server and survives death. <kbd>Tab</kbd> switches between the book and the map (if you carry one).</p>
+
+<h2>Where things are made</h2>
+<div class="tbl"><table>
+<tr><th>Place</th><th>What it is</th><th>Made from</th></tr>
+<tr><td>Hands</td><td>anywhere, from the pack</td><td>&mdash;</td></tr>
+<tr><td>Fire</td><td>any lit campfire, firepit, kiln or bloomery: cooking, charcoal, smelting copper and tin</td><td>firepit: 3 sticks + 1 log dropped and struck; campfire: 3 cobblestone + 4 sticks</td></tr>
+<tr><td>Kiln</td><td>the clay furnace: firing pottery and bricks, bronze, casting and forging metal, steel</td><td>8 clay + 4 cobblestone</td></tr>
+<tr><td>Bloomery</td><td>iron bloom and iron ingots</td><td>16 bricks + 4 mortar + 8 cobblestone</td></tr>
+<tr><td>Workbench</td><td>furniture, frames</td><td>1 log + 4 sticks + 4 pegs</td></tr>
+<tr><td>Mason's block</td><td>stone hammer, quern flour, whetstones</td><td>4 cobblestone + 1 log</td></tr>
+<tr><td>Potter's wheel</td><td>crucibles, jugs and bowls with less clay</td><td>3 planks + 2 pegs + 1 cobblestone</td></tr>
+<tr><td>Leather bench</td><td>rucksack, map, saddle and saddlebags for less leather</td><td>2 planks + 4 sticks + 1 leather + 1 cord</td></tr>
+</table></div>
+<p>The four workshops make things at once from your pack, as long as you stand within reach. The three fires are <b>hearths</b>: you load them and the batch takes time.</p>
+<figure><img src="../img/interior.jpg" width="1280" height="720" alt="Inside a thatched house at evening: a fire in the middle, a workbench and a potter&#x27;s wheel by the walls" loading="lazy"><figcaption>Inside a homestead: a hearth, a workbench and a potter's wheel.</figcaption></figure>
+
+<h2>Hearths and heat</h2>
+<p>Right-click a hearth (without flint in your hand) to open it: four input slots top left, a fuel slot under them, two output slots on the right and an ash slot bottom right. A coloured bar shows the heat, with a mark for what the batch needs, and an arrow shows the progress. It runs by itself; you can leave.</p>
+<p>A fire's <b>temperature</b> decides what it can do, and the temperature comes from the fuel. The kiln burns 150&deg; hotter than a campfire on the same fuel, the bloomery 250&deg; hotter.</p>
+<div class="tbl"><table>
+<tr><th>Fuel</th><th>Heat on a campfire</th></tr>
+<tr><td>Charcoal</td><td>1350, white</td></tr>
+<tr><td>Sticks, fat</td><td>800, bright red</td></tr>
+<tr><td>Oak log, planks</td><td>728, dark red</td></tr>
+<tr><td>Birch and spruce wood</td><td>652, dark red</td></tr>
+<tr><td>Peat</td><td>600, dark red</td></tr>
+</table></div>
+<div class="tbl"><table>
+<tr><th>Batch</th><th>Heat it needs</th><th>Time</th></tr>
+<tr><td>Cooking, bread</td><td>200</td><td>8 s at a campfire</td></tr>
+<tr><td>Charcoal (3 logs &rarr; 1)</td><td>400</td><td>75 s</td></tr>
+<tr><td>Firing pottery and bricks</td><td>700</td><td>110 s</td></tr>
+<tr><td>Copper ingot, bronze, copper castings</td><td>1080 (orange)</td><td>75 s from ore, 40 s melting</td></tr>
+<tr><td>Tin ingot</td><td>1100 (yellow)</td><td>75 s</td></tr>
+<tr><td>Iron bloom</td><td>1200</td><td>5 min</td></tr>
+<tr><td>Iron ingot from bloom</td><td>about 1230</td><td>2 min</td></tr>
+<tr><td>Steel</td><td>950</td><td>5 min</td></tr>
+</table></div>
+<p>The rule that follows: <b>nothing but charcoal gets any hearth hot enough for copper or tin.</b> Wood is for supper and pottery; charcoal is for metal. When a batch stalls, the line under the fire says the heat is too low and which colour it needs.</p>
+<ul>
+<li><b>Rain cools a fire</b> in the open by 300&deg; in a storm and puts it out; a block straight over the hearth protects it.</li>
+<li><b>Supper burns.</b> Finished food left in the output slots at orange heat or above turns to ash.</li>
+<li><b>Fresh logs are wet</b> and burn cooler and shorter. Pottery and metal cannot be done on them at all. Stack logs into a woodpile (<kbd>Shift</kbd> + right-click with a log) and they dry in three days.</li>
+<li>Ore smelting leaves <b>slag</b> next to the metal. If the output slots are full, the batch does not start.</li>
+</ul>
+<figure><img src="../img/hearths.jpg" width="1280" height="720" alt="Campfires, kilns and bloomeries in two rows, lit and unlit, one row under a roof" loading="lazy"><figcaption>The three hearths: campfire, kiln, bloomery.</figcaption></figure>
+
+<h2 id="pit-kiln">The pit kiln</h2>
+<p>Pots can be fired with no kiln and no charcoal, in a hole in the ground. It is slow, but needs only earth, fibre and wood, so the first crucible can be fired on the first evening by the river.</p>
+<ol>
+<li><b>Dig a hole one block deep.</b> The floor and all four sides must be earth, sand, gravel, stone or brick. Wood burns and does not count.</li>
+<li><b>Put the raw pieces in</b>: right-click the floor with a raw crucible, mould, jug or brick. Up to <b>four</b>.</li>
+<li><b>Lay 8 fibre</b> on them, one right-click at a time.</li>
+<li><b>Lay 8 logs</b> on top.</li>
+<li><b>Light it</b> with flint.</li>
+<li>It burns for <b>15 minutes of real time</b> (not game hours). Then take the fired pieces out with an empty hand.</li>
+</ol>
+<p>Rain over an open pit puts it out within twenty seconds. A roof helps only if it is at least two blocks above the pit; a block lying right on the logs smothers it. Everything is fired only at the end, so a pit that goes out early fires nothing.</p>
+
+<h2>The charcoal pit</h2>
+<p>Charcoal at a campfire is 3 logs for 1 charcoal. A charcoal pit gives more for the wood but takes 15 minutes:</p>
+<ol>
+<li><kbd>Shift</kbd> + right-click the ground with a log to start a log pile; right-click the pile with more logs, up to eight.</li>
+<li>Cover it on every side with earth, sand, gravel or stone (a dug hole makes this easy).</li>
+<li>Light the last open face with flint and close it within 30 seconds.</li>
+<li>After 15 minutes the pile is a charcoal heap: eight logs give four charcoal. Break it to collect.</li>
+</ol>
+<p>Leave a face open longer than 30 seconds and the pile burns to ash.</p>
+
+<h2>Quality, wear and sharpening</h2>
+<ul>
+<li><b>Quality</b> is set once, when you make a thing. It comes from your state (tiredness, comfort, health, hunger), whether you stood at the right workshop, the tool in hand, and on the anvil and potter's wheel how well you hit the mark. The rested maker works evenly; the exhausted one gets anything. Under the name it says <i>poor work</i>, <i>plain work</i>, <i>good work</i> or <i>fine work</i>. Two items of different quality do not stack.</li>
+<li><b>Tools wear out.</b> A swing counts only when it breaks a block or hits an animal. A bar under the icon goes green, yellow, red; when it runs out the tool is gone. A flint knife lasts about 70 swings, a copper axe 180, bronze 320, iron 550.</li>
+<li><b>Edges go dull</b> in steps (sharp, slightly dull, dull, blunt), and a blunt tool works at half speed. A <b>whetstone</b> (1 sandstone &rarr; 2) sharpens the dullest tool of a kind; the stone comes back. A flint knife cannot be sharpened: flint chips, it does not dull.</li>
+</ul>
+<p>The <b>anvil</b> (5 bronze ingots + 1 log, at the kiln) and the <b>potter's wheel</b> have a small timing game: strike on the mark for a better piece.</p>
+<div class="pager"><a href="path.html">&larr; The path</a><a href="farming.html">Farming &rarr;</a></div>
+</main>
+<footer><div class="wrap">A player's guide to Primitive, written from the game's own code and pictures taken in the game. Unofficial notes; the game changes faster than they do.</div></footer>
+</body>
+</html>

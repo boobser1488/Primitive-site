@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agricultura - Primitive</title>
+<meta name="description" content="La agricultura en Primitive: de dónde salen las semillas, cómo hacer una azada, arar, regar, las fases y tiempos de los cultivos, las heladas, la ceniza y la tierra cansada, el pan, el algodón y el mijo.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<header class="top"><div class="wrap">
+<a class="brand" href="index.html">Primitive <small>wiki</small></a>
+<a class="site" href="../../index.html">&larr; sitio</a>
+<div class="langs"><a href="../en/farming.html" lang="en" hreflang="en">English</a><a href="../pl/farming.html" lang="pl" hreflang="pl">Polski</a><a href="../ru/farming.html" lang="ru" hreflang="ru">Русский</a><span lang="es">Español</span></div>
+</div></header>
+<nav class="pages" aria-label="Páginas"><div class="wrap"><ul>
+<li><a href="index.html">Índice</a></li>
+<li><a href="getting-started.html">Primeros pasos</a></li>
+<li><a href="path.html">El camino</a></li>
+<li><a href="crafting.html">Artesanía</a></li>
+<li><span aria-current="page">Cultivo</span></li>
+<li><a href="survival.html">Supervivencia</a></li>
+<li><a href="animals.html">Animales</a></li>
+<li><a href="world.html">El mundo</a></li>
+<li><a href="controls.html">Controles</a></li>
+<li><a href="multiplayer.html">Multijugador</a></li>
+<li><a href="faq.html">Preguntas</a></li>
+</ul></div></nav>
+<main class="wrap">
+<h1>Agricultura</h1>
+<p class="lead">Un campo es la primera comida que produces en vez de encontrarla. El cazador come mejor una noche; el agricultor come todas las noches.</p>
+
+<h2>1. Las semillas salen del trigo silvestre</h2>
+<p>La hierba no suelta semillas. Las semillas salen del <b>trigo silvestre</b> (Wild wheat): matas de grano en terreno cálido, seco y abierto. Sobre todo en la estepa, menos en las praderas y de vez en cuando en el borde seco de un bosque. No crece con frío ni con humedad, así que quien empieza en el norte tiene que bajar al sur para su primer campo. Parece trigo maduro en un campo; esa silueta significa «grano» en todo el juego. El trigo silvestre no vuelve a crecer una vez recogido.</p>
+
+<h2>2. Haz una azada</h2>
+<div class="tbl"><table>
+<tr><th>Azada</th><th>Receta</th></tr>
+<tr><td>Azada (de sílex)</td><td>2 lascas de sílex + 1 palo trabajado + 3 de fibra, a mano</td></tr>
+<tr><td>Azada (de hueso)</td><td>2 huesos + 1 palo trabajado + 3 de fibra, a mano. La misma azada, para quien se asienta lejos del sílex.</td></tr>
+<tr><td>Azada de cobre (Copper hoe)</td><td>hoja de azada de cobre (1 lingote de cobre fundido en el molde en el horno de arcilla) + palo trabajado + tendón, a mano</td></tr>
+</table></div>
+<p>Si ya has tallado un cuchillo, tienes todo lo que pide la azada (Hoe) de sílex. La azada no cuenta como herramienta de cavar: no rompe nada ni abre la roca. Se gasta después de unas 120 aradas.</p>
+<div class="note warn"><p><b>¿El clic derecho con la azada no hace nada?</b> En la versión 1.5.2, el clic derecho con la azada (y con una estaca) nunca llegaba al servidor, así que no se araba nada. Está corregido en la próxima actualización.</p></div>
+
+<h2>3. Ara la tierra</h2>
+<p>Sujeta la azada y <b>haz clic derecho en hierba o tierra</b>. El bloque se convierte en <b>tierra de cultivo</b> (Farmland), y solo la tierra de cultivo admite un cultivo. La celda de encima tiene que estar vacía. Se pueden arar la hierba, la tierra y los distintos suelos (suelo arenoso, franco, chernozem, loess, rendzina y otros).</p>
+<p>Al remover el suelo, la azada te dice dos cosas: si hay <b>agua cerca</b> y qué tipo de tierra es, si no es la normal. La tierra <i>rich</i> (rica), la de las llanuras de inundación, los bordes de los pantanos y las orillas de los ríos, hace crecer las cosas una vez y media más rápido; la tierra <i>poor</i> (pobre), la de la arena, la tundra, las montañas y el interior seco, una vez y media más despacio. El mismo mensaje sale como mucho una vez por minuto, así que arar un campo entero da una línea, no ochenta.</p>
+<figure><img src="../img/hoe.jpg" width="1280" height="720" alt="Vista en primera persona sujetando una azada de cobre sobre una franja de tierra de cultivo junto a una zanja"><figcaption>Una azada de cobre sobre el campo.</figcaption></figure>
+
+<h2>4. El agua</h2>
+<p>Un campo está regado si hay agua a <b>cuatro bloques</b> o menos de la tierra de cultivo, al mismo nivel o un bloque más abajo. Los cuatro bloques cuentan como un cuadrado, diagonales incluidas, así que una zanja por el centro de un campo de nueve de ancho lo riega hasta los bordes. Una zanja abierta desde un río cuenta. Una zanja helada, no.</p>
+<p>Un <b>campo seco crece dos veces y media más despacio</b>. Si rellenas la zanja, se ralentiza al instante.</p>
+<figure><img src="../img/field.jpg" width="1280" height="720" alt="Un campo de trigo y mijo en una terraza, con una zanja que sale del río a su lado" loading="lazy"><figcaption>Un campo con su propia zanja desde el río.</figcaption></figure>
+
+<h2>5. Siembra, espera, cosecha</h2>
+<ol>
+<li><b>Siembra</b>: coloca las semillas en la tierra de cultivo como cualquier bloque.</li>
+<li><b>Espera</b>: dos fases de <b>15 minutos</b> cada una si hay riego y calor: tallos verdes y luego espigas doradas.</li>
+<li><b>Cosecha</b>: rompe el cultivo maduro a mano. Da <b>grano y una semilla</b>. Si no está maduro, devuelve la semilla. El campo se resiembra solo; para agrandarlo hay que volver al trigo silvestre.</li>
+</ol>
+
+<h2>Calor y heladas</h2>
+<div class="tbl"><table>
+<tr><th>Cultivo</th><th>Crece desde</th><th>La helada lo mata a</th></tr>
+<tr><td>Trigo</td><td>4&deg;</td><td>&minus;6&deg;</td></tr>
+<tr><td>Mijo</td><td>14&deg;</td><td>0&deg;</td></tr>
+<tr><td>Algodón</td><td>16&deg;</td><td>0&deg;</td></tr>
+</table></div>
+<p>Por debajo de su umbral, un cultivo <b>se detiene pero no pierde lo avanzado</b>; una noche fría cuesta una noche. La temperatura es la que sentirías de pie en esa celda: cuentan la estación, la altura, la hora, la lluvia, un techo y un fuego cercano. Un cultivo muerto por la helada se queda como <b>tallos marchitos</b> (Withered crop), que dan fibra y nada más. Un cultivo maduro está a salvo; su grano ya está hecho.</p>
+<p>Siembra el trigo en primavera y cósechalo antes de las noches de otoño. En una pradera templada, el mijo y el algodón son solo cultivos de verano. Un fuego junto al campo mantiene caliente el aire sobre él en una noche de helada, y un techo sobre un bancal quita el frío del cielo abierto.</p>
+
+<h2>Las estaciones</h2>
+<p>Un día dura <b>30 minutos</b>; un año son <b>40 días</b>, diez por estación. Un mundo nuevo empieza al final de la primavera, el verano llega el día 4 y el primer invierno el día 24, más o menos a las doce horas de juego. El invierno suma unos &minus;10&deg; en todas partes; el verano, unos +6&deg;.</p>
+
+<h2>Ceniza, estiércol y tierra cansada</h2>
+<ul>
+<li>Una cosecha sacada de tierra de cultivo <b>sin ceniza</b> la deja <b>cansada</b> (se pone pálida, como paja quemada), y el siguiente cultivo en ella tarda una vez y media más.</li>
+<li><b>Ceniza</b> (Ash): haz clic derecho con ceniza en la tierra arada. La tierra se vuelve gris y el siguiente cultivo crece un tercio más rápido; esa cosecha gasta la ceniza. La ceniza sale de la casilla de ceniza del fogón, de una carbonera que se dejó abierta y de los árboles quemados.</li>
+<li><b>Barbecho</b>: la tierra de cultivo desnuda, sin nada sembrado, descansa en media hora.</li>
+<li>El <b>estiércol</b> (Manure) de los animales que crías, dejado en un surco y recogido de nuevo, la abona igual que la ceniza.</li>
+</ul>
+<p>Dos campos que se turnan, uno creciendo y otro descansando, dan cosecha tan a menudo como un campo nuevo.</p>
+
+<h2>Del grano al pan</h2>
+<ol>
+<li><b>Harina</b> (Flour): 3 de grano + 1 guijarro &rarr; 2 de harina, a mano. El guijarro se recupera. (En el bloque de cantero: 3 de grano &rarr; 3 de harina).</li>
+<li><b>Masa</b> (Dough): 2 de harina + una jarra de agua &rarr; masa. La jarra vuelve vacía. Vale el agua de río o de charca; la de mar, no.</li>
+<li><b>Pan</b> (Bread): la masa en cualquier fuego.</li>
+</ol>
+<p>El pan llena 8, menos que la carne asada (10) y más que casi todo lo demás. Se pone duro y mohoso en cuatro días (ocho en una bodega fresca). El grano y la harina no se estropean nunca, así que la reserva de invierno es un barril de grano, no un cofre de pan.</p>
+
+<h2>Algodón y mijo</h2>
+<p>El <b>algodón silvestre</b> (Wild cotton) es un arbusto bajo con cápsulas blancas que crece en la <b>sabana</b>. Recógelo a mano para obtener algodón y semillas de algodón. El algodón necesita aire cálido (desde 16&deg;): un campo de algodón crece en la sabana y apenas avanza en una pradera templada. La tela (Cloth) tejida con él es la única ropa que da más fresco que ir sin nada cuando hace calor.</p>
+<p>El <b>mijo</b> (Millet) crece más rápido que el trigo (sus fases tardan 0.6 del tiempo), pero pide calor.</p>
+
+<h2>Las estacas no son para los cultivos</h2>
+<p>Una <b>estaca</b> (Stake; 2 palos + 1 lasca de sílex &rarr; 2 estacas; la lasca se recupera) es una pieza de construcción, no de huerto. Clávala en el suelo y teje 3 palos en ella para hacer un panel de zarzo (Wattle); luego embárralo (Daub) para hacer una pared. Las estacas también sirven para trampas de pinchos. Los cultivos no necesitan más que tierra de cultivo, agua y calor.</p>
+<div class="pager"><a href="crafting.html">&larr; Artesanía</a><a href="survival.html">Supervivencia &rarr;</a></div>
+</main>
+<footer><div class="wrap">Guía de jugador de Primitive, escrita a partir del propio código del juego y con capturas tomadas dentro del juego. Notas no oficiales: el juego cambia más rápido que ellas.</div></footer>
+</body>
+</html>
