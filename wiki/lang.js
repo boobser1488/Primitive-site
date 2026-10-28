@@ -11,7 +11,7 @@
   for (var i = 0; i < langs.length; i++) {
     var code = String(langs[i] || "").slice(0, 2).toLowerCase();
     if (have.indexOf(code) >= 0) {
-      location.replace(code + "/index.html");
+      location.replace(code + "/");
       return;
     }
   }

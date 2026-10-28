@@ -46,4 +46,10 @@ for page in dest.rglob("*.html"):
     page.write_text(text, encoding="utf-8")
     pages += 1
 
+# The game keeps `.html` in its links, so the wiki also opens from a folder
+# on disk; the site serves pages without it (`clean_urls`).
+sys.path.insert(0, str(SITE / "tools"))
+import clean_urls  # noqa: E402
+clean_urls.main([str(dest)])
+
 print(f"copied {SOURCE} -> {dest}, {pages} pages")
