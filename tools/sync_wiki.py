@@ -43,6 +43,13 @@ for page in dest.rglob("*.html"):
         text = text.replace(
             "</main>",
             '<p><a class="site" href="../index.html">&larr; сайт &middot; site</a></p>\n</main>', 1)
+    # The site's icon, the game's kiln: the wiki in the game's repository
+    # has none of its own, so every copy takes it here.
+    if 'rel="icon"' not in text:
+        up = "../" * (len(page.relative_to(SITE).parts) - 1)
+        text = text.replace("</title>", "</title>
+<link rel=\"icon\" type=\"image/png\" href=\"" + up + "img/favicon.png\">
+<link rel=\"apple-touch-icon\" href=\"" + up + "img/apple-touch-icon.png\">", 1)
     page.write_text(text, encoding="utf-8")
     pages += 1
 
